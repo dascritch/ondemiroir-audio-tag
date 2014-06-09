@@ -24,13 +24,21 @@ function TimecodeHash() {
 		return seconds;
 	}
 
-
 	this.jumpElementAt = function(hash,timecode) {
 		var el = document.getElementById(hash);
 		if ((el === undefined) || (el.currentTime === undefined)) {
 			return false;
 		}
 		el.currentTime = this.convertTimeInSeconds(timecode);
+		el.play();
+	}
+
+	this.hashOrder = function(hashcode){
+		if (!/@/.test(hashcode)) {
+			return ;
+		}
+		var atoms = hashcode.split('@');
+		this.jumpElementAt(atoms[0],atoms[1]);
 	}
 }
 
