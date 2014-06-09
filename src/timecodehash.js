@@ -50,7 +50,7 @@ function TimecodeHash(hashcode) {
 			this.jumpElementAt(atoms[0],atoms[1]);
 		}
 	};
-	
+
 	if (hashcode !== undefined) {
 		funcs.hashOrder(hashcode);
 	}
@@ -58,16 +58,18 @@ function TimecodeHash(hashcode) {
 	return funcs;
 }
 
-function addEvent(element, event, fn) {
-	// gono too fast, ^c^v from http://stackoverflow.com/questions/15564029/adding-to-window-onload-event
-    if (element.addEventListener) {
-        element.addEventListener(event, fn, false);
-    } else { 
-    	if (element.attachEvent) element.attachEvent('on' + event, fn);
+(function(window,TimecodeHash){
+	function addEvent(element, event, fn) {
+		// gono too fast, ^c^v from http://stackoverflow.com/questions/15564029/adding-to-window-onload-event
+	    if (element.addEventListener) {
+	        element.addEventListener(event, fn, false);
+	    } else { 
+	    	if (element.attachEvent) element.attachEvent('on' + event, fn);
+		}
 	}
-}
 
-addEvent(window, 'load', TimecodeHash);
-if ("onhashchange" in window) {
-	addEvent(window, 'hashchange', TimecodeHash);
-}
+	addEvent(window, 'load', TimecodeHash);
+	if ("onhashchange" in window) {
+		addEvent(window, 'hashchange', TimecodeHash);
+	}
+})(window,TimecodeHash);
