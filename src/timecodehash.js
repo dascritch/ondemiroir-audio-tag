@@ -23,5 +23,14 @@ function TimecodeHash() {
 		}
 		return seconds;
 	}
+
+
+	this.jumpElementAt = function(hash,timecode) {
+		var el = document.getElementById(hash);
+		if ((el === undefined) || (el.currentTime === undefined)) {
+			return false;
+		}
+		el.currentTime = this.convertTimeInSeconds(timecode);
+	}
 }
 
