@@ -49,8 +49,8 @@ function TimecodeHash(hashcode) {
 			var atoms = hashcode.split('@');
 			this.jumpElementAt(atoms[0],atoms[1]);
 		}
-	}; 
-
+	};
+	
 	if (hashcode !== undefined) {
 		funcs.hashOrder(hashcode);
 	}
@@ -68,4 +68,6 @@ function addEvent(element, event, fn) {
 }
 
 addEvent(window, 'load', TimecodeHash);
-addEvent(window, 'hashchange', TimecodeHash);
+if ("onhashchange" in window) {
+	addEvent(window, 'hashchange', TimecodeHash);
+}
