@@ -14,13 +14,27 @@ function TimecodeHash(hashcode) {
 			if (/^\d+$/.test(givenTime)) {
 				seconds = Number(givenTime);
 			} else {
-				for(var key in this._units) {
-					if ( (this._units.hasOwnProperty(key)) && (givenTime.indexOf(key) !== -1) ) {
-						var atoms = givenTime.split(key);
-						seconds += Number(atoms[0].replace(/\D*/g,'' )) * this._units[key];
-						givenTime = atoms[1];
-					}
+				seconds = givenTime.indexOf(':') === -1 ? this.convertSubunitTimeInSeconds(givenTime) : this.convertColonTimeInSeconds(givenTime) ;
+			}
+			return seconds;
+		},
+		convertSubunitTimeInSeconds : function(givenTime) {
+			var seconds = 0;
+			for(var key in this._units) {
+				if ( (this._units.hasOwnProperty(key)) && (givenTime.indexOf(key) !== -1) ) {
+					var atoms = givenTime.split(key);
+					seconds += Number(atoms[0].replace(/\D*/g,'' )) * this._units[key];
+					givenTime = atoms[1];
 				}
+			}
+			return seconds;
+		},
+		convertColonTimeInSeconds : function(givenTime) {
+			var seconds = 0;
+			var atoms = givenTime.split(':');
+			var convert = [ 1 , 60 , 3600 , 86400 ]
+			for (var pos = 0 ; pos < atoms.length ; pos++ ) {
+				seconds += Number(atoms[pos]) * convert[((atoms.length-1) - pos)];
 			}
 			return seconds;
 		},
