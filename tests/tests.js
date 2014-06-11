@@ -70,3 +70,22 @@ hashtest('#track@30',		30,		'named is at 30 seconds' );
 hashtest('#track@25s',		25,		'named is at 25 seconds' );
 hashtest('#track@10m10s',	610,	'is at 10 minutes and 10 seconds');
 hashtest('#@10s',			10,		'unnamed is at 10 seconds');
+
+test( "TimecodeHash.hashOrder with other separator", function() {
+	var tch = new TimecodeHash();
+	var $track = document.getElementById('track');
+	tch.separator = '‣'
+	tch.hashOrder('track‣10');
+	ok($track.currentTime === 10, 'is at 10 seconds' );
+	tch.hashOrder('track@30');
+	ok($track.currentTime === 10, 'original separator ignored');
+
+	tch.hashOrder('track‣1h2m4s');
+	ok($track.currentTime === 3724, 'is at one hour, 2 minutes and 4 seconds' );
+
+	tch.hashOrder('‣40');
+	ok($track.currentTime === 40, 'unnammed track is at 40 seconds' );
+
+	tch.hashOrder('‣20s');
+	ok($track.currentTime === 20, 'unnammed track is at 20 seconds' );
+});

@@ -1,22 +1,23 @@
 "use strict";
 
 function TimecodeHash(hashcode) {
-	var units = { 
+	var funcs = {
+		_units : { 
 				'd' : 86400,
 				'h' : 3600,
 				'm' : 60,
 				's' : 1
-			};
-	var funcs = {
+		},
+		separator : '@',
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
 			if (/^\d+$/.test(givenTime)) {
 				seconds = Number(givenTime);
 			} else {
-				for(var key in units) {
-					if ( (units.hasOwnProperty(key)) && (givenTime.indexOf(key) !== -1) ) {
+				for(var key in this._units) {
+					if ( (this._units.hasOwnProperty(key)) && (givenTime.indexOf(key) !== -1) ) {
 						var atoms = givenTime.split(key);
-						seconds += Number(atoms[0].replace(/\D*/g,'' )) * units[key];
+						seconds += Number(atoms[0].replace(/\D*/g,'' )) * this._units[key];
 						givenTime = atoms[1];
 					}
 				}
@@ -42,11 +43,11 @@ function TimecodeHash(hashcode) {
 				hashcode = window.location.hash.substr(1);
 			}
 
-			if (!/@/.test(hashcode)) {
+			if (hashcode.indexOf(this.separator) === -1) {
 				return ;
 			}
 
-			var atoms = hashcode.split('@');
+			var atoms = hashcode.split(this.separator);
 			this.jumpElementAt(atoms[0],atoms[1]);
 		}
 	};
