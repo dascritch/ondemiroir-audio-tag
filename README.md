@@ -13,8 +13,13 @@ This is an hashtag extention for `<audio></video>`, permits to do a hotlink or a
 How to
 ------
 
-Just link as you usualy do to a named anchor, then add `@` and the timecode you want the player to jump to.
-By example, going to `page.html#player@100` will start any playable element of page.html named "player" at the 100th second.
+First, call the library as usual in your html where you want to address your players, preferably in the `<head>` section :
+```
+<script src="timecodehash.js"></script>
+```
+
+Just link as you usually do to a named anchor, then add `@` and the timecode you want the player to jump to.
+By example, triggering `<a href="page.html#player@100">` will start any playable element of page.html named "player" at the 100th second. The referred page.html should have a call to the library, the referrent doesn't need it.
 
 Permitted notations
 -------------------
