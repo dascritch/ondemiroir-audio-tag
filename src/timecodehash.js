@@ -74,6 +74,7 @@ function TimecodeHash(hashcode) {
 }
 
 (function(window,TimecodeHash){
+
 	function addEvent(element, event, fn) {
 		// gono too fast, ^c^v from http://stackoverflow.com/questions/15564029/adding-to-window-onload-event
 	    if (element.addEventListener) {
