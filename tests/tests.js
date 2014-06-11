@@ -1,6 +1,13 @@
 
 window.location = '#';
 
+
+QUnit.testDone(function( ) {
+	var $track = document.getElementById('track');
+	window.location = '#';
+	$track.pause();
+});
+
 test( "hello TimecodeHash", function() {
 	ok( typeof TimecodeHash === "function", "Passed!" );
 
@@ -46,22 +53,20 @@ test( "TimecodeHash.hashOrder", function() {
 	ok($track.currentTime === 20, 'unnammed track is at 20 seconds' );
 });
 
-/* sorry, can't test correctly this part
-test( "on hash change", function() {
+/* sorry, can't test correctly this part */
+
+function hashtest(hash,expects,describ) {
 	var $track = document.getElementById('track');
-	window.location = '#track@30';
-	ok($track.currentTime === 30, 'named is at 30 seconds' );
-
-	window.location = '#track@25s';
-	ok($track.currentTime === 25, 'named is at 25 seconds' );
-
-	window.location = '#track@10m10s';
-	ok($track.currentTime === 610, 'is at 10 minutes and 10 seconds' );
-
-	window.location = '#@10s';
-	ok($track.currentTime === 10, 'unnamed is at 10 seconds' );
-
-	window.location = '#';
-	$track.pause();
-});
-*/
+	QUnit.asyncTest('on hash change : '+describ, function(assert) {
+		expect(1);
+		window.location = hash;
+		setTimeout(function() {
+			assert.ok($track.currentTime === expects);
+			QUnit.start();
+		}, 20);		
+	});
+}
+hashtest('#track@30',		30,		'named is at 30 seconds' );
+hashtest('#track@25s',		25,		'named is at 25 seconds' );
+hashtest('#track@10m10s',	610,	'is at 10 minutes and 10 seconds');
+hashtest('#@10s',			10,		'unnamed is at 10 seconds');
