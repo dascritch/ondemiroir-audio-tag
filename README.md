@@ -39,5 +39,5 @@ Use it and deploy it as you want : i've done too much closed source before.
 
 Versions
 --------
-October 2012 : first version, trashed
-June 2014 : 0.2 , public release
+* October 2012 : first version, trashed
+* June 2014 : 0.2 , public release
