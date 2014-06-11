@@ -26,10 +26,10 @@ Permitted notations
 
 For the timecode, you can use
 * seconds without unit : `page.html#player@7442`
-* pofessionnal timecodes as `02:04:02` (2 hours, 4 minutes and 2 seconds) : `page.html#player@02:04:02`
+* professionnal timecodes as `02:04:02` (2 hours, 4 minutes and 2 seconds) : `page.html#player@02:04:02`
 * human-readable units as in `page.html#player@2h4m2s` for the previous example. Sub-units availables : `s`econds, `m`inutes, `h`ours and `d`ays
 
-Note : if no named anchor is given and a timecode , as in `href="#@13h37m"`, the very first `<audio>`/`<video>` element of the document will be started and placed at this time.
+Note : if a timecode without named anchor is given, as in `href="#@13h37m"`, the very first `<audio>`/`<video>` element of the document will be started and placed at this time.
 
 Example page : http://dascritch.github.io/timecodehash/index.html
 
