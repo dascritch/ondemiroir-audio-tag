@@ -29,13 +29,38 @@
 
 function TimecodeHash(hashcode) {
 	var funcs = {
-		_units : { 
+		_units : {
 				'd' : 86400,
 				'h' : 3600,
 				'm' : 60,
 				's' : 1
 		},
 		separator : '@',
+		selector : 'audio,video',
+		menuId : 'menu-timecodehash',
+		locale : {
+			label : 'Copier l\'URL de cette position',
+		},
+		_buildMenu : function() {
+			if ( (document.getElementById(this.menuId) !== null) || (document.body.insertAdjacentHTML === undefined) || (document.querySelectorAll === undefined) ) {
+				return;
+			}
+			document.body.insertAdjacentHTML('beforeend',
+				'<menu type="context" id="'+this.menuId+'">'+
+					'<li>'+
+						'<menu label="'+this.locale.label+'">'+
+						'</menu>'+
+					'</li>'+
+				'</menu>'
+				);
+			var self=this;
+			[].forEach.call(	// explication de cette construction : https://coderwall.com/p/jcmzxw
+				  document.querySelectorAll(self.selector),
+				  function(el){
+				    el.contextMenu = self.menuId;
+				  }
+				);
+		},
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
 			if (/^\d+$/.test(givenTime)) {
@@ -65,13 +90,30 @@ function TimecodeHash(hashcode) {
 			}
 			return seconds;
 		},
+		convertSecondsInTime : function(givenSeconds) {
+			var converted = '';
+			for(var key in this._units) {
+				if (this._units.hasOwnProperty(key)) {
+					var multiply = this._units[key];
+					if (givenSeconds >= multiply) {
+						var digits = Math.floor(givenSeconds / multiply);
+						converted += digits + key;
+						givenSeconds -= digits * multiply;
+					}
+				}
+			}
+			if (converted === '') {
+				converted = '0s';
+			}
+			return converted;
+		},
 		jumpElementAt : function(hash,timecode) {
 			var el;
 
 			if (hash !== '') {
 				el = document.getElementById(hash);
 			} else {
-				el = (document.querySelector !== undefined) ? document.querySelector('audio,video') : undefined;
+				el = (document.querySelector !== undefined) ? document.querySelector(this.selector) : undefined;
 			}
 			if ((el === undefined) || (el.currentTime === undefined)) {
 				return false;
@@ -96,23 +138,16 @@ function TimecodeHash(hashcode) {
 	if (hashcode !== undefined) {
 		funcs.hashOrder(hashcode);
 	}
+	funcs._buildMenu();
 
 	return funcs;
 }
 
-(function(window,TimecodeHash){
-
-	function addEvent(element, event, fn) {
-		// gono too fast, ^c^v from http://stackoverflow.com/questions/15564029/adding-to-window-onload-event
-	    if (element.addEventListener) {
-	        element.addEventListener(event, fn, false);
-	    } else { 
-	    	if (element.attachEvent) element.attachEvent('on' + event, fn);
+(function(window,TimecodeHash) {
+	if (window.addEventListener!== undefined) {
+		window.addEventListener( 'load', TimecodeHash ,false);
+		if ("onhashchange" in window) {
+			window.addEventListener( 'hashchange', TimecodeHash , false);
 		}
-	}
-
-	addEvent(window, 'load', TimecodeHash);
-	if ("onhashchange" in window) {
-		addEvent(window, 'hashchange', TimecodeHash);
 	}
 })(window,TimecodeHash);

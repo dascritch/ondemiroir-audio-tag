@@ -33,6 +33,16 @@ test( "TimecodeHash.convertColonTimeInSeconds", function() {
 	ok(tch.convertColonTimeInSeconds('1:02:01:34') === (7294 + 86400), 'got one day, two hours, one minute and 34 seconds' );
 });
 
+test( "TimecodeHash.convertSecondsInTime", function() {
+	var tch = new TimecodeHash();
+	ok(tch.convertSecondsInTime(0) === '0s', 'got zero' );
+	ok(tch.convertSecondsInTime(1) === '1s', 'got one' );
+	ok(tch.convertSecondsInTime(20) === '20s', 'got twenty seconds' );
+	ok(tch.convertSecondsInTime(60) === '1m', 'got one minute' );
+	ok(tch.convertSecondsInTime(61) === '1m1s', 'got one minute and one second' );
+	ok(tch.convertSecondsInTime(7442) === '2h4m2s', 'got 2 hours, 4 minutes and 2 seconds' );
+});
+
 test( "TimecodeHash.jumpElementAt existing", function() {
 	var $track = document.getElementById('track');
 	var tch = new TimecodeHash();
