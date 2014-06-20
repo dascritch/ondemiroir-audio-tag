@@ -10,6 +10,11 @@ Purpose
 
 This is an hashtag extention for `<audio></video>`, permits to do a hotlink or a deeplink.
 
+Features
+--------
+
+Link to an hash with a timecode to point the media player to the desired time.
+
 How to
 ------
 
