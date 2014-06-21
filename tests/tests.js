@@ -109,7 +109,7 @@ function hashtest(hash,expects,describ) {
 		setTimeout(function() {
 			assert.ok($track.currentTime === expects);
 			QUnit.start();
-		}, 20);		
+		}, 1);	
 	});
 }
 hashtest('#track@30',		30,		'named is at 30 seconds' );
