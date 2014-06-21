@@ -23,9 +23,7 @@
 	professional : http://dascritch.com
     blog : http://dascritch.net
 
-
  */
-
 
 function TimecodeHash(hashcode) {
 	var funcs = {
@@ -37,7 +35,7 @@ function TimecodeHash(hashcode) {
 		},
 		separator : '@',
 		selector : 'audio,video',
-		menuId : 'menu-timecodehash',
+		menuId : 'timecodehash-menu',
 		locale : {
 			label : 'Copier l\'URL de cette position',
 		},
@@ -47,19 +45,22 @@ function TimecodeHash(hashcode) {
 			}
 			document.body.insertAdjacentHTML('beforeend',
 				'<menu type="context" id="'+this.menuId+'">'+
-					'<li>'+
-						'<menu label="'+this.locale.label+'">'+
-						'</menu>'+
-					'</li>'+
+					'<menuitem label="'+this.locale.label+'"></menuitem>'+
 				'</menu>'
 				);
+			//document.getElementById(this.menuId).querySelector('menuitem').addEventListener('click',this.onMenu);
 			var self=this;
 			[].forEach.call(	// explication de cette construction : https://coderwall.com/p/jcmzxw
-				  document.querySelectorAll(self.selector),
-				  function(el){
-				    el.contextMenu = self.menuId;
-				  }
+					document.querySelectorAll(self.selector),
+					function(el){
+				    	el.setAttribute('contextmenu',self.menuId);
+				    	el.addEventListener('contextmenu',self.onMenu);
+					}
 				);
+		},
+		onMenu : function(ev,ctx) {
+			console.log('ONMENU',this,ev,ctx);
+
 		},
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
