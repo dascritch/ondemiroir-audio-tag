@@ -39,7 +39,7 @@ function TimecodeHash(hashcode) {
 		selector : 'audio,video',
 		menuId : 'timecodehash-menu',
 		locale : {
-			label : 'Copier l\'URL de cette position',
+			label : 'URL de cette position',
 		},
 		_buildMenu : function() {
 			if ( (document.getElementById(this.menuId) !== null) || (document.body.insertAdjacentHTML === undefined) || (document.querySelectorAll === undefined) ) {
@@ -64,7 +64,11 @@ function TimecodeHash(hashcode) {
 			console.log('ON PRE MENU',this,ev,ctx);
 		},
 		onMenu : function(ev,ctx) {
-			console.log('ONMENU',this,ev,ctx);
+			var self = TimecodeHash();
+			var el = document.querySelector(self.selector);
+			var retour = document.location.href.split('#')[0];
+			retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
+			window.prompt(self.locale.label,retour);
 
 		},
 		convertTimeInSeconds : function(givenTime) {
@@ -129,7 +133,7 @@ function TimecodeHash(hashcode) {
 		},
 		hashOrder : function(hashcode){
 			if (typeof hashcode !== 'string') {
-				hashcode = window.location.hash.substr(1);
+				hashcode = document.location.hash.substr(1);
 			}
 
 			if (hashcode.indexOf(this.separator) === -1) {
