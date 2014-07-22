@@ -128,7 +128,9 @@ function TimecodeHash(hashcode) {
 			if ((el === undefined) || (el.currentTime === undefined)) {
 				return false;
 			}
-			el.currentTime = this.convertTimeInSeconds(timecode);
+			//el.currentTime = this.convertTimeInSeconds(timecode);
+console.log(el.src , el.src.split('#')[0] + '#t=' + this.convertTimeInSeconds(timecode))
+			el.src = el.src.split('#')[0] + '#t=' + this.convertTimeInSeconds(timecode);
 			el.play();
 		},
 		hashOrder : function(hashcode){
