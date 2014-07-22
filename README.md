@@ -13,7 +13,7 @@ This is an hashtag extention for `<audio></video>`, permits to do a hotlink or a
 Features
 --------
 
-Link to an hash with a timecode to point the media player to the desired time.
+Link to an hash with a timecode to point the media player to the desired time. The main difference with standard media fragment is to permit external link to your page at a precise moment of your media.
 
 How to
 ------
