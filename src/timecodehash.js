@@ -128,9 +128,13 @@ function TimecodeHash(hashcode) {
 			if ((el === undefined) || (el.currentTime === undefined)) {
 				return false;
 			}
-			//el.currentTime = this.convertTimeInSeconds(timecode);
-console.log(el.src , el.src.split('#')[0] + '#t=' + this.convertTimeInSeconds(timecode))
-			el.src = el.src.split('#')[0] + '#t=' + this.convertTimeInSeconds(timecode);
+
+			var secs = this.convertTimeInSeconds(timecode);
+			try {
+				el.currentTime = secs;
+			} catch(e) {
+				el.src = el.src.split('#')[0] + '#t=' + secs;
+			}
 			el.play();
 		},
 		hashOrder : function(hashcode){
