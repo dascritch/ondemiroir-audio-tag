@@ -5,7 +5,7 @@ Author :  [Xavier "dascritch" Mouton-Dubosc](http://dascritch.com)
 
 Version : 1
 
-Thank you [Thomas Parisot](https://oncletom.io/) for suggesitons
+Thank you to my lovely friends [Thomas Parisot](https://oncletom.io/) for suggestions and [Loïc Gerbaud](https://github.com/chibani) for corrections.
 
 Purpose
 -------
