@@ -43,7 +43,9 @@ Via the API and only for the API at this time, you can change the separator from
 Production notes
 ----------------
 
-Firefox do large media seeking without any problems. But Chrome is not handling very easily. So TDD tests where switched laterly in async mode and `.jumpElementAt` has a callback function to test it properly.
+Firefox do large media seeking without any problems. But Chrome is not handling very easily. So TDD tests where switched laterly in async mode and `.jumpElementAt` and `hashOrder` have a callback function to test it properly.
+
+A contrario, Firefox seems doing a refresh loading when I use media frangment.
 
 Licence
 -------

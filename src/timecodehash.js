@@ -138,31 +138,38 @@ function TimecodeHash(hashcode) {
 			function do_element_play(e) {
 				var tag = e.target;
 				tag.play();
-				tag.removeEventListener('canplay', do_element_play, true);
+				if (e.notRealEvent === undefined) {
+					tag.removeEventListener('canplay', do_element_play, true);
+				}
+
 				if (typeof callback_fx === 'function') {
 					// this is needed for testing, as we now run in async tests
 					callback_fx();
 				}
 			}
-console.log(el.readyState)
+
 			if (el.readyState >= 2)  {
-				do_element_play( { target : el } );
+				do_element_play({ target : el , notRealEvent : true });
 			} else {
 				el.addEventListener('canplay', do_element_play, true);
 			}
 
 		},
-		hashOrder : function(hashcode){
+		hashOrder : function(hashcode,callback_fx){
 			if (typeof hashcode !== 'string') {
 				hashcode = document.location.hash.substr(1);
 			}
 
 			if (hashcode.indexOf(this.separator) === -1) {
+				if (typeof callback_fx === 'function') {
+					// this is needed for testing, as we now run in async tests
+					callback_fx();
+				}
 				return ;
 			}
 
 			var atoms = hashcode.split(this.separator);
-			this.jumpElementAt(atoms[0],atoms[1]);
+			this.jumpElementAt(atoms[0],atoms[1],callback_fx);
 		}
 	};
 
