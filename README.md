@@ -40,6 +40,11 @@ Example page : http://dascritch.github.io/timecodehash/index.html
 
 Via the API and only for the API at this time, you can change the separator from `@` to any accepted unicode character, p.e. `;`, `‣` or `♪`.
 
+Production notes
+----------------
+
+Firefox do large media seeking without any problems. But Chrome is not handling very easily. So TDD tests where switched laterly in async mode and `.jumpElementAt` has a callback function to test it properly.
+
 Licence
 -------
 
