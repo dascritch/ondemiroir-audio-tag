@@ -43,15 +43,26 @@ test( "TimecodeHash.convertSecondsInTime", function() {
 	ok(tch.convertSecondsInTime(7442) === '2h4m2s', 'got 2 hours, 4 minutes and 2 seconds' );
 });
 
-test( "TimecodeHash.jumpElementAt existing", function() {
+
+QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( assert ) {
+	expect( 2 );
 	var $track = document.getElementById('track');
 	var tch = new TimecodeHash();
-	tch.jumpElementAt('track',0)
-	ok($track.currentTime === 0, 'is at start' );
-	ok(!$track.paused, 'not paused afterwards' );
+	tch.jumpElementAt('track',0, function() {
+		assert.ok($track.currentTime === 0, 'is at start' );
+		assert.ok(!$track.paused, 'not paused afterwards' );
+		QUnit.start();
+	});
+});
 
-	tch.jumpElementAt('track',600);
-	ok($track.currentTime === 600, 'is at 10mn' );
+QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at 600 secs", function( assert ) {
+	expect( 1 );
+	var $track = document.getElementById('track');
+	var tch = new TimecodeHash();
+	tch.jumpElementAt('track',600, function() {
+		assert.ok($track.currentTime === 600, 'is at 10mn' );
+		QUnit.start();
+	});
 });
 
 test( "TimecodeHash.hashOrder", function() {
@@ -109,7 +120,7 @@ function hashtest(hash,expects,describ) {
 		setTimeout(function() {
 			assert.ok($track.currentTime === expects);
 			QUnit.start();
-		}, 1);	
+		}, 1);
 	});
 }
 hashtest('#track@30',		30,		'named is at 30 seconds' );

@@ -58,12 +58,8 @@ function TimecodeHash(hashcode) {
 					document.querySelectorAll(self.selector),
 					function(el){
 				    	el.setAttribute('contextmenu',self.menuId);
-				    	el.addEventListener('contextmenu',self.onPreMenu);
 					}
 				);
-		},
-		onPreMenu : function(ev,ctx) {
-			console.log('ON PRE MENU',this,ev,ctx);
 		},
 		onMenu : function(ev,ctx) {
 			var self = TimecodeHash();
@@ -119,7 +115,7 @@ function TimecodeHash(hashcode) {
 			}
 			return converted;
 		},
-		jumpElementAt : function(hash,timecode) {
+		jumpElementAt : function(hash,timecode,callback_fx) {
 			var el;
 
 			if (hash !== '') {
@@ -132,20 +128,28 @@ function TimecodeHash(hashcode) {
 			}
 
 			var secs = this.convertTimeInSeconds(timecode);
-			// NOT GOOD, yes i know
+			// NOT GOOD, yes i know , but el.fastSeek(secs); is not available on chrome
 			try {
 				el.currentTime = secs;
 			} catch(e) {
 				el.src = el.src.split('#')[0] + '#t=' + secs;
 			}
 
-			function made_element_play(e) {
+			function do_element_play(e) {
 				var tag = e.target;
 				tag.play();
-				tag.removeEventListener('canplay', made_element_play, true);
+				tag.removeEventListener('canplay', do_element_play, true);
+				if (typeof callback_fx === 'function') {
+					// this is needed for testing, as we now run in async tests
+					callback_fx();
+				}
 			}
-
-			el.addEventListener('canplay', made_element_play, true);
+console.log(el.readyState)
+			if (el.readyState >= 2)  {
+				do_element_play( { target : el } );
+			} else {
+				el.addEventListener('canplay', do_element_play, true);
+			}
 
 		},
 		hashOrder : function(hashcode){
