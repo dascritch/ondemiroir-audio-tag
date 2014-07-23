@@ -3,7 +3,9 @@ TimecodeHash
 
 Author :  [Xavier "dascritch" Mouton-Dubosc](http://dascritch.com)
 
-Version : 0.2
+Version : 1
+
+Thank you [Thomas Parisot](https://oncletom.io/) for suggesitons
 
 Purpose
 -------
@@ -70,8 +72,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Versions
 --------
+* July 2014 : 1 , public release
+* June 2014 : 0.2 , proof of concept
 * October 2012 : first version, trashed
-* June 2014 : 0.2 , public release
 
 Repository : <https://github.com/dascritch/timecodehash>
 
