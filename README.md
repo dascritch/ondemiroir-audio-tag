@@ -17,6 +17,10 @@ Features
 
 Link to an hash with a timecode to point the media player to the desired time. The main difference with standard media fragment is to permit external link to your page at a precise moment of your media.
 
+Example page : <http://dascritch.github.io/timecodehash/index.html>
+
+Blog post to come after August.
+
 How to
 ------
 
@@ -37,8 +41,6 @@ For the timecode, you can use
 * human-readable units as in `page.html#player@2h4m2s` for the previous example. Sub-units availables : `s`econds, `m`inutes, `h`ours and `d`ays
 
 Note : if a timecode without named anchor is given, as in `href="#@13h37m"`, the very first `<audio>`/`<video>` element of the document will be started and placed at this time.
-
-Example page : http://dascritch.github.io/timecodehash/index.html
 
 Via the API and only for the API at this time, you can change the separator from `@` to any accepted unicode character, p.e. `;`, `‣` or `♪`.
 
