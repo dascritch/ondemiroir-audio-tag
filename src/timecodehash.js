@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 
 /*
 	TimecodeHash , an extension to the hash system to address timecode into audio/video elements
@@ -39,7 +39,9 @@ function TimecodeHash(hashcode) {
 		selector : 'audio,video',
 		menuId : 'timecodehash-menu',
 		locale : {
-			label : 'URL de cette position',
+			label : {
+					'fr' : 'URL de cette position'
+				},
 		},
 		_buildMenu : function() {
 			if ( (document.getElementById(this.menuId) !== null) || (document.body.insertAdjacentHTML === undefined) || (document.querySelectorAll === undefined) ) {
@@ -47,16 +49,16 @@ function TimecodeHash(hashcode) {
 			}
 			document.body.insertAdjacentHTML('beforeend',
 				'<menu type="context" id="'+this.menuId+'">'+
-					'<menuitem label="'+this.locale.label+'"></menuitem>'+
+					'<menuitem label="'+this.locale.label.fr+'"></menuitem>'+
 				'</menu>'
 				);
 			document.getElementById(this.menuId).querySelector('menuitem').addEventListener('click',this.onMenu);
-			var self=this;
+			var self = this;
 			[].forEach.call(	// explication de cette construction : https://coderwall.com/p/jcmzxw
 					document.querySelectorAll(self.selector),
 					function(el){
 				    	el.setAttribute('contextmenu',self.menuId);
-				    	el.addEventListener('contextmenu',this.onPreMenu);
+				    	el.addEventListener('contextmenu',self.onPreMenu);
 					}
 				);
 		},
@@ -68,7 +70,7 @@ function TimecodeHash(hashcode) {
 			var el = document.querySelector(self.selector);
 			var retour = document.location.href.split('#')[0];
 			retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
-			window.prompt(self.locale.label,retour);
+			window.prompt(self.locale.label.fr,retour);
 
 		},
 		convertTimeInSeconds : function(givenTime) {
@@ -130,12 +132,21 @@ function TimecodeHash(hashcode) {
 			}
 
 			var secs = this.convertTimeInSeconds(timecode);
+			// NOT GOOD, yes i know
 			try {
 				el.currentTime = secs;
 			} catch(e) {
 				el.src = el.src.split('#')[0] + '#t=' + secs;
 			}
-			el.play();
+
+			function made_element_play(e) {
+				var tag = e.target;
+				tag.play();
+				tag.removeEventListener('canplay', made_element_play, true);
+			}
+
+			el.addEventListener('canplay', made_element_play, true);
+
 		},
 		hashOrder : function(hashcode){
 			if (typeof hashcode !== 'string') {
