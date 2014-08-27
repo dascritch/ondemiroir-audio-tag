@@ -26,6 +26,13 @@
 
  */
 
+function TimecodeHash_onMenu() {
+	var self = new TimecodeHash();
+	var el = document.querySelector(self.selector);
+	var retour = document.location.href.split('#')[0];
+	retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
+	window.prompt(self.locale.label.fr,retour);
+}
 
 function TimecodeHash(hashcode) {
 	var funcs = {
@@ -52,7 +59,7 @@ function TimecodeHash(hashcode) {
 					'<menuitem label="'+this.locale.label.fr+'"></menuitem>'+
 				'</menu>'
 				);
-			document.getElementById(this.menuId).querySelector('menuitem').addEventListener('click',this.onMenu);
+			document.getElementById(this.menuId).querySelector('menuitem').addEventListener('click',TimecodeHash_onMenu);
 			var self = this;
 			[].forEach.call(	// explication de cette construction : https://coderwall.com/p/jcmzxw
 					document.querySelectorAll(self.selector),
@@ -60,14 +67,6 @@ function TimecodeHash(hashcode) {
 				    	el.setAttribute('contextmenu',self.menuId);
 					}
 				);
-		},
-		onMenu : function(ev,ctx) {
-			var self = TimecodeHash();
-			var el = document.querySelector(self.selector);
-			var retour = document.location.href.split('#')[0];
-			retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
-			window.prompt(self.locale.label.fr,retour);
-
 		},
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
@@ -92,7 +91,7 @@ function TimecodeHash(hashcode) {
 		convertColonTimeInSeconds : function(givenTime) {
 			var seconds = 0;
 			var atoms = givenTime.split(':');
-			var convert = [ 1 , 60 , 3600 , 86400 ]
+			var convert = [ 1 , 60 , 3600 , 86400 ];
 			for (var pos = 0 ; pos < atoms.length ; pos++ ) {
 				seconds += Number(atoms[pos]) * convert[((atoms.length-1) - pos)];
 			}
