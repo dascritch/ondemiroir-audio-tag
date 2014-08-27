@@ -1,5 +1,3 @@
-"use strict";
-
 /*
 	TimecodeHash , an extension to the hash system to address timecode into audio/video elements
     Copyright (C) 2014 Xavier "dascritch" Mouton-Dubosc
@@ -27,6 +25,8 @@
  */
 
 function TimecodeHash_onMenu() {
+	"use strict";
+
 	var self = new TimecodeHash();
 	var el = document.querySelector(self.selector);
 	var retour = document.location.href.split('#')[0];
@@ -35,6 +35,8 @@ function TimecodeHash_onMenu() {
 }
 
 function TimecodeHash(hashcode) {
+	"use strict";
+
 	var funcs = {
 		_units : {
 				'd' : 86400,
@@ -181,6 +183,8 @@ function TimecodeHash(hashcode) {
 }
 
 (function(window,TimecodeHash) {
+	"use strict";
+
 	if (window.addEventListener!== undefined) {
 		window.addEventListener( 'load', TimecodeHash ,false);
 		if ("onhashchange" in window) {
