@@ -8,6 +8,7 @@ Version : 1
 Thank you to my lovely friends
 * [Thomas Parisot](https://oncletom.io/) for suggestions
 * [Loïc Gerbaud](https://github.com/chibani) for corrections
+* [Guillaume Lemoine and Phonitive](http://www.phonitive.fr/) for helping
 * [Benoît Salles](https://twitter.com/infestedgrunt) for testing
 
 Purpose
