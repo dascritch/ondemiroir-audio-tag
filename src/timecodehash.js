@@ -25,7 +25,7 @@
  */
 
 function TimecodeHash_onMenu() {
-	"use strict";
+	'use strict';
 
 	var self = new TimecodeHash();
 	var el = document.querySelector(self.selector);
@@ -35,7 +35,7 @@ function TimecodeHash_onMenu() {
 }
 
 function TimecodeHash(hashcode) {
-	"use strict";
+	'use strict';
 
 	var funcs = {
 		_units : {
@@ -65,7 +65,7 @@ function TimecodeHash(hashcode) {
 			var self = this;
 			[].forEach.call(	// explication de cette construction : https://coderwall.com/p/jcmzxw
 					document.querySelectorAll(self.selector),
-					function(el){
+					function(el) {
 				    	el.setAttribute('contextmenu',self.menuId);
 					}
 				);
@@ -183,11 +183,11 @@ function TimecodeHash(hashcode) {
 }
 
 (function(document,window,TimecodeHash) {
-	"use strict";
+	'use strict';
 
-	if (document.addEventListener!== undefined) {
+	if (document.addEventListener !== undefined) {
 		document.addEventListener( 'DOMContentReady', TimecodeHash ,false);
-		if ("onhashchange" in window) {
+		if ('onhashchange' in window) {
 			window.addEventListener( 'hashchange', TimecodeHash , false);
 		}
 	}
