@@ -24,18 +24,16 @@
 
  */
 
-function TimecodeHash_onMenu() {
-	'use strict';
-
-	var self = new TimecodeHash();
-	var el = document.querySelector(self.selector);
-	var retour = document.location.href.split('#')[0];
-	retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
-	window.prompt(self.locale.label.fr,retour);
-}
-
 function TimecodeHash(hashcode) {
 	'use strict';
+
+	function TimecodeHash_onMenu() {
+		var self = new TimecodeHash();
+		var el = document.querySelector(self.selector);
+		var retour = document.location.href.split('#')[0];
+		retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
+		window.prompt(self.locale.label.fr,retour);
+	}
 
 	var funcs = {
 		_units : {
