@@ -117,6 +117,20 @@ function TimecodeHash(hashcode) {
 			return converted;
 		},
 		jumpElementAt : function(hash,timecode,callback_fx) {
+
+			function do_element_play(e) {
+				var tag = e.target;
+				tag.play();
+				if (e.notRealEvent === undefined) {
+					tag.removeEventListener('canplay', do_element_play, true);
+					tag.removeEventListener('canplaythrough', do_element_play, true);
+				}
+
+				if (typeof callback_fx === 'function') {
+					// this is needed for testing, as we now run in async tests
+					callback_fx();
+				}
+			}
 			var el;
 
 			if (hash !== '') {
@@ -136,23 +150,13 @@ function TimecodeHash(hashcode) {
 				el.src = el.src.split('#')[0] + '#t=' + secs;
 			}
 
-			function do_element_play(e) {
-				var tag = e.target;
-				tag.play();
-				if (e.notRealEvent === undefined) {
-					tag.removeEventListener('canplay', do_element_play, true);
-				}
 
-				if (typeof callback_fx === 'function') {
-					// this is needed for testing, as we now run in async tests
-					callback_fx();
-				}
-			}
-
+console.log(el.readyState ,el );
 			if (el.readyState >= 2)  {
 				do_element_play({ target : el , notRealEvent : true });
 			} else {
 				el.addEventListener('canplay', do_element_play, true);
+				el.addEventListener('canplaythrough', do_element_play, true);
 			}
 
 		},
