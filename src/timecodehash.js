@@ -116,6 +116,12 @@ function TimecodeHash(hashcode) {
 			}
 			return converted;
 		},
+		onDebug : function(callback_fx) {
+			if (typeof callback_fx === 'function') {
+				// this is needed for testing, as we now run in async tests
+				callback_fx();
+			}
+		},
 		jumpElementAt : function(hash,timecode,callback_fx) {
 
 			function do_element_play(e) {
@@ -125,11 +131,7 @@ function TimecodeHash(hashcode) {
 					tag.removeEventListener('canplay', do_element_play, true);
 					tag.removeEventListener('canplaythrough', do_element_play, true);
 				}
-
-				if (typeof callback_fx === 'function') {
-					// this is needed for testing, as we now run in async tests
-					callback_fx();
-				}
+				funcs.onDebug(callback_fx);
 			}
 			var el;
 
@@ -166,10 +168,7 @@ console.log(el.readyState ,el );
 			}
 
 			if (hashcode.indexOf(this.separator) === -1) {
-				if (typeof callback_fx === 'function') {
-					// this is needed for testing, as we now run in async tests
-					callback_fx();
-				}
+				this.onDebug(callback_fx);
 				return ;
 			}
 
