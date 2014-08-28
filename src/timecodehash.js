@@ -24,18 +24,18 @@
 
  */
 
-function TimecodeHash(hashcode) {
+window.TimecodeHash = function() {
 	'use strict';
 
 	function TimecodeHash_onMenu() {
-		var self = new TimecodeHash();
+		var self = window.TimecodeHash;
 		var el = document.querySelector(self.selector);
 		var retour = document.location.href.split('#')[0];
 		retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
 		window.prompt(self.locale.label.fr,retour);
 	}
 
-	var funcs = {
+	var self = {
 		_units : {
 				'd' : 86400,
 				'h' : 3600,
@@ -61,12 +61,13 @@ function TimecodeHash(hashcode) {
 				);
 			document.getElementById(this.menuId).querySelector('menuitem').addEventListener('click',TimecodeHash_onMenu);
 			var self = this;
-			[].forEach.call(	// explication de cette construction : https://coderwall.com/p/jcmzxw
-					document.querySelectorAll(self.selector),
-					function(el) {
-				    	el.setAttribute('contextmenu',self.menuId);
-					}
-				);
+			[].forEach.call(
+				// explication de cette construction : https://coderwall.com/p/jcmzxw
+				document.querySelectorAll(self.selector),
+				function(el) {
+					el.setAttribute('contextmenu',self.menuId);
+				}
+			);
 		},
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
@@ -115,8 +116,8 @@ function TimecodeHash(hashcode) {
 			return converted;
 		},
 		onDebug : function(callback_fx) {
+			// this is needed for testing, as we now run in async tests
 			if (typeof callback_fx === 'function') {
-				// this is needed for testing, as we now run in async tests
 				callback_fx();
 			}
 		},
@@ -129,7 +130,7 @@ function TimecodeHash(hashcode) {
 					tag.removeEventListener('canplay', do_element_play, true);
 					tag.removeEventListener('canplaythrough', do_element_play, true);
 				}
-				funcs.onDebug(callback_fx);
+				self.onDebug(callback_fx);
 			}
 			var el;
 
@@ -150,7 +151,6 @@ function TimecodeHash(hashcode) {
 				el.src = el.src.split('#')[0] + '#t=' + secs;
 			}
 
-
 console.log(el.readyState ,el );
 			if (el.readyState >= 2)  {
 				do_element_play({ target : el , notRealEvent : true });
@@ -166,7 +166,7 @@ console.log(el.readyState ,el );
 			}
 
 			if (hashcode.indexOf(this.separator) === -1) {
-				this.onDebug(callback_fx);
+				self.onDebug(callback_fx);
 				return ;
 			}
 
@@ -175,21 +175,15 @@ console.log(el.readyState ,el );
 		}
 	};
 
-	if (hashcode !== undefined) {
-		funcs.hashOrder(hashcode);
-	}
-	funcs._buildMenu();
+	self._buildMenu();
 
-	return funcs;
-}
-
-(function(document,window,TimecodeHash) {
-	'use strict';
 
 	if (document.addEventListener !== undefined) {
-		document.addEventListener( 'DOMContentReady', TimecodeHash ,false);
+		document.addEventListener( 'DOMContentReady', self.hashOrder ,false);
 		if ('onhashchange' in window) {
-			window.addEventListener( 'hashchange', TimecodeHash , false);
+			window.addEventListener( 'hashchange', self.hashOrder , false);
 		}
 	}
-})(document,window,TimecodeHash);
+
+	return self;
+}();

@@ -8,14 +8,14 @@ function stopPlayer() {
 QUnit.testDone(stopPlayer);
 
 test( "hello TimecodeHash", function() {
-	ok( typeof TimecodeHash === "function", "Passed!" );
+	ok( typeof window.TimecodeHash === "object", "Passed!" );
 
 	var $track = document.getElementById('track');
 	ok($track.paused, 'paused by defaults' );
 });
 
 test( "TimecodeHash.convertTimeInSeconds", function() {
-	var tch = new TimecodeHash();
+	var tch = window.TimecodeHash;
 	ok(tch.convertTimeInSeconds(0) === 0, 'got zero' );
 	ok(tch.convertTimeInSeconds('1') === 1, 'got one' );
 	ok(tch.convertTimeInSeconds('1s') === 1, 'got one second' );
@@ -26,7 +26,7 @@ test( "TimecodeHash.convertTimeInSeconds", function() {
 });
 
 test( "TimecodeHash.convertColonTimeInSeconds", function() {
-	var tch = new TimecodeHash();
+	var tch = window.TimecodeHash;
 	ok(tch.convertColonTimeInSeconds('0:01') === 1, 'got one second' );
 	ok(tch.convertColonTimeInSeconds('1:34') === 94, 'got one minute and 34 seconds' );
 	ok(tch.convertColonTimeInSeconds('2:01:34') === 7294, 'got two hours, one minute and 34 seconds' );
@@ -34,7 +34,7 @@ test( "TimecodeHash.convertColonTimeInSeconds", function() {
 });
 
 test( "TimecodeHash.convertSecondsInTime", function() {
-	var tch = new TimecodeHash();
+	var tch = window.TimecodeHash;
 	ok(tch.convertSecondsInTime(0) === '0s', 'got zero' );
 	ok(tch.convertSecondsInTime(1) === '1s', 'got one' );
 	ok(tch.convertSecondsInTime(20) === '20s', 'got twenty seconds' );
@@ -46,7 +46,7 @@ test( "TimecodeHash.convertSecondsInTime", function() {
 QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( assert ) {
 	expect( 2 );
 	var $track = document.getElementById('track');
-	var tch = new TimecodeHash();
+	var tch = window.TimecodeHash;
 	tch.jumpElementAt('track',0, function() {
 		assert.ok($track.currentTime === 0, 'is at start' );
 		assert.ok(!$track.paused, 'not paused afterwards' );
@@ -58,7 +58,7 @@ QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( asser
 QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at 600 secs", function( assert ) {
 	expect( 1 );
 	var $track = document.getElementById('track');
-	var tch = new TimecodeHash();
+	var tch = window.TimecodeHash;
 	tch.jumpElementAt('track',600, function() {
 		assert.ok($track.currentTime === 600, 'is at 10mn' );
 		QUnit.start();
@@ -70,7 +70,7 @@ function hashOrder_test(expected_string, hash , expected_time)
 {
 	QUnit.asyncTest( "TimecodeHash.hashOrder "+expected_string, function( assert ) {
 		expect( 1 );
-		var tch = new TimecodeHash();
+		var tch = window.TimecodeHash;
 		var $track = document.getElementById('track');
 		tch.hashOrder(hash, function() {
 			assert.ok($track.currentTime === expected_time, expected_string);
@@ -87,17 +87,21 @@ hashOrder_test('track is at 02:04:02', 'track@01:04:02', 3842);
 hashOrder_test('unnamed track is at 1:02', '@1:02', 62);
 
 
+var waiting = 0;
 function hashOrder_otherSeparator_test(expected_string, hash , expected_time)
 {
 	QUnit.asyncTest( "TimecodeHash.hashOrder with other separator "+expected_string, function( assert ) {
 		expect( 1 );
-		var tch = new TimecodeHash();
+		var tch = window.TimecodeHash;
 		tch.separator = '‣'
 		var $track = document.getElementById('track');
 		tch.hashOrder(hash, function() {
 			assert.ok($track.currentTime === expected_time, expected_string);
 			QUnit.start();
 			stopPlayer();
+			if (waiting++ === 6) {
+				test_finaux();
+			}
 		});
 	});
 }
@@ -117,16 +121,19 @@ function hashtest(hash,expects,describ) {
 		window.location = hash;
 		function event_callback() {
 			assert.ok($track.currentTime === expects);
-			window.removeEventListener( 'hashchange', event_callback,true);
+			window.removeEventListener( 'hashchange', event_callback,false);
 			stopPlayer();
 			QUnit.start();
 		}
-		window.addEventListener( 'hashchange', event_callback,true);
+		window.addEventListener( 'hashchange', event_callback,false);
 	});
 }
-hashtest('#track@30',		30,		'named is at 30 seconds' );
-hashtest('#track@25s',		25,		'named is at 25 seconds' );
-hashtest('#track@10m10s',	610,	'is at 10 minutes and 10 seconds');
-hashtest('#@10s',			10,		'unnamed is at 10 seconds');
-hashtest('#@01:01:01',		3661,	'unnamed is at 01:01:01');
-hashtest('#track@00:10:00',	600,	'named is at 00:10:00');
+function test_finaux() {
+	window.TimecodeHash.separator = '@';
+	hashtest('#track@30',		30,		'named is at 30 seconds' );
+	hashtest('#track@25s',		25,		'named is at 25 seconds' );
+	hashtest('#track@10m10s',	610,	'is at 10 minutes and 10 seconds');
+	hashtest('#@10s',			10,		'unnamed is at 10 seconds');
+	hashtest('#@01:01:01',		3661,	'unnamed is at 01:01:01');
+	hashtest('#track@00:10:00',	600,	'named is at 00:10:00');
+}
