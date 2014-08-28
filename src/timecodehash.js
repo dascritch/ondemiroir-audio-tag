@@ -182,13 +182,13 @@ function TimecodeHash(hashcode) {
 	return funcs;
 }
 
-(function(window,TimecodeHash) {
+(function(document,window,TimecodeHash) {
 	"use strict";
 
-	if (window.addEventListener!== undefined) {
-		window.addEventListener( 'load', TimecodeHash ,false);
+	if (document.addEventListener!== undefined) {
+		document.addEventListener( 'DOMContentReady', TimecodeHash ,false);
 		if ("onhashchange" in window) {
 			window.addEventListener( 'hashchange', TimecodeHash , false);
 		}
 	}
-})(window,TimecodeHash);
+})(document,window,TimecodeHash);

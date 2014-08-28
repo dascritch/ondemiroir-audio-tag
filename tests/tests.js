@@ -43,7 +43,6 @@ test( "TimecodeHash.convertSecondsInTime", function() {
 	ok(tch.convertSecondsInTime(7442) === '2h4m2s', 'got 2 hours, 4 minutes and 2 seconds' );
 });
 
-
 QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( assert ) {
 	expect( 2 );
 	var $track = document.getElementById('track');
