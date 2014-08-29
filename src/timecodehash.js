@@ -27,12 +27,9 @@
 window.TimecodeHash = function() {
 	'use strict';
 
-	function TimecodeHash_onMenu() {
-		var self = window.TimecodeHash;
-		var el = document.querySelector(self.selector);
-		var retour = document.location.href.split('#')[0];
-		retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
-		window.prompt(self.locale.label.fr,retour);
+	if ( (document.addEventListener === undefined) || (!('onhashchange' in window)) ) {
+		// not even think about it : probably MSIE < 8
+		return;
 	}
 
 	var self = {
@@ -47,27 +44,9 @@ window.TimecodeHash = function() {
 		menuId : 'timecodehash-menu',
 		locale : {
 			label : {
-					'fr' : 'URL de cette position'
+					'fr' : 'URL de cette position',
+					'en' : 'URL at this time'
 				},
-		},
-		_buildMenu : function() {
-			if ( (document.getElementById(this.menuId) !== null) || (document.body.insertAdjacentHTML === undefined) || (document.querySelectorAll === undefined) ) {
-				return;
-			}
-			document.body.insertAdjacentHTML('beforeend',
-				'<menu type="context" id="'+this.menuId+'">'+
-					'<menuitem label="'+this.locale.label.fr+'"></menuitem>'+
-				'</menu>'
-				);
-			document.getElementById(this.menuId).querySelector('menuitem').addEventListener('click',TimecodeHash_onMenu);
-			var self = this;
-			[].forEach.call(
-				// explication de cette construction : https://coderwall.com/p/jcmzxw
-				document.querySelectorAll(self.selector),
-				function(el) {
-					el.setAttribute('contextmenu',self.menuId);
-				}
-			);
 		},
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
@@ -151,7 +130,6 @@ window.TimecodeHash = function() {
 				el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 			}
 
-
 			if (el.readyState >= 2)  {
 				do_element_play({ target : el , notRealEvent : true });
 			} else {
@@ -175,15 +153,48 @@ window.TimecodeHash = function() {
 		}
 	};
 
-	self._buildMenu();
+	function _onMenu() {
+		var self = window.TimecodeHash;
+		var el = document.querySelector(self.selector);
+		var retour = document.location.href.split('#')[0];
+		retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
+		window.prompt(self.locale.label.fr,retour);
+	}
 
+	function _buildMenu() {
+		function _getPreferedLocale() {
+			// we really need here a smart way to catch the Accept-Locale
+			return 'fr';
+		}
 
-	if (document.addEventListener !== undefined) {
-		document.addEventListener( 'DOMContentReady', self.hashOrder ,false);
-		if ('onhashchange' in window) {
-			window.addEventListener( 'hashchange', self.hashOrder , false);
+		document.body.insertAdjacentHTML('beforeend',
+			'<menu type="context" id="'+self.menuId+'">'+
+				'<menuitem label="'+self.locale.label[_getPreferedLocale()]+'"></menuitem>'+
+			'</menu>'
+			);
+		document.getElementById(self.menuId).querySelector('menuitem').addEventListener('click',_onMenu);
+		[].forEach.call(
+			// explication de cette construction : https://coderwall.com/p/jcmzxw
+			document.querySelectorAll(self.selector),
+			function(el) {
+				el.setAttribute('contextmenu',self.menuId);
+			}
+		);
+	}
+
+	function _launch() {
+		if (document.getElementById(self.menuId) === null) {
+			_buildMenu();
+			self.hashOrder();
 		}
 	}
+
+	if ( (document.readyState === 'complete') || (document.readyState === 'loaded') || (document.readyState === 'interactive') ) {
+	     _launch();
+	} else {
+		document.addEventListener( 'readystatechange', _launch ,false);
+	}
+	window.addEventListener( 'hashchange', self.hashOrder , false);
 
 	return self;
 }();
