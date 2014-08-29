@@ -195,8 +195,9 @@ console.log(el.currentSrc);
 			self.hashOrder();
 		}
 	}
+console.log(document.body);
 
-	if ( (document.readyState === 'complete') || (document.readyState === 'loaded') || (document.readyState === 'interactive') ) {
+	if (document.body !== null) {
 	     _launch();
 	} else {
 		document.addEventListener( 'readystatechange', _launch ,false);
