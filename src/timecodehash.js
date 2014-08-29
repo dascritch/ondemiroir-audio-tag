@@ -144,14 +144,14 @@ window.TimecodeHash = function() {
 			}
 
 			var secs = this.convertTimeInSeconds(timecode);
-			// NOT GOOD, yes i know , but el.fastSeek(secs); is not available on chrome
+			// NOT GOOD, yes i know , but el.currentTime = secs; is not available on webkit
 			try {
 				el.currentTime = secs;
 			} catch(e) {
-				el.src = el.src.split('#')[0] + '#t=' + secs;
+				el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 			}
 
-console.log(el.readyState ,el );
+
 			if (el.readyState >= 2)  {
 				do_element_play({ target : el , notRealEvent : true });
 			} else {
