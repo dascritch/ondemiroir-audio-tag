@@ -128,6 +128,8 @@ window.TimecodeHash = function() {
 					el.load();
 				}
 console.log(el.currentSrc);
+
+
 				el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 			}
 
@@ -154,48 +156,47 @@ console.log(el.currentSrc);
 		}
 	};
 
-	function _buildMenu() {
-
-		var locale = {
-			'fr' : 'URL de cette position',
-			'en' : 'URL at this time'
-		};
-
-		function _getPreferedLocale() {
-			// we really need here a smart way to catch the Accept-Locale
-			return 'fr';
-		}
-
-		function _onMenu() {
-			var self = window.TimecodeHash;
-			var el = document.querySelector(self.selector);
-			var retour = document.location.href.split('#')[0];
-			retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
-			window.prompt(locale.fr,retour);
-		}
-
-		document.body.insertAdjacentHTML('beforeend',
-			'<menu type="context" id="'+self.menuId+'">'+
-				'<menuitem label="'+locale[_getPreferedLocale()]+'"></menuitem>'+
-			'</menu>'
-			);
-		document.getElementById(self.menuId).querySelector('menuitem').addEventListener('click',_onMenu);
-		[].forEach.call(
-			// explication de cette construction : https://coderwall.com/p/jcmzxw
-			document.querySelectorAll(self.selector),
-			function(el) {
-				el.setAttribute('contextmenu',self.menuId);
-			}
-		);
-	}
-
 	function _launch() {
+
+		function _buildMenu() {
+			var locale = {
+				'fr' : 'URL de cette position',
+				'en' : 'URL at this time'
+			};
+
+			function _getPreferedLocale() {
+				// we really need here a smart way to catch the Accept-Locale
+				return 'fr';
+			}
+
+			function _onMenu() {
+				var self = window.TimecodeHash;
+				var el = document.querySelector(self.selector);
+				var retour = document.location.href.split('#')[0];
+				retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
+				window.prompt(locale.fr,retour);
+			}
+
+			document.body.insertAdjacentHTML('beforeend',
+				'<menu type="context" id="'+self.menuId+'">'+
+					'<menuitem label="'+locale[_getPreferedLocale()]+'"></menuitem>'+
+				'</menu>'
+				);
+			document.getElementById(self.menuId).querySelector('menuitem').addEventListener('click',_onMenu);
+			[].forEach.call(
+				// explication de cette construction : https://coderwall.com/p/jcmzxw
+				document.querySelectorAll(self.selector),
+				function(el) {
+					el.setAttribute('contextmenu',self.menuId);
+				}
+			);
+		}
+
 		if (document.getElementById(self.menuId) === null) {
 			_buildMenu();
 			self.hashOrder();
 		}
 	}
-console.log(document.body);
 
 	if (document.body !== null) {
 	     _launch();
