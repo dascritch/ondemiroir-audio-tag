@@ -32,22 +32,17 @@ window.TimecodeHash = function() {
 		return;
 	}
 
+	var _units = {
+		'd' : 86400,
+		'h' : 3600,
+		'm' : 60,
+		's' : 1
+	};
+
 	var self = {
-		_units : {
-				'd' : 86400,
-				'h' : 3600,
-				'm' : 60,
-				's' : 1
-		},
 		separator : '@',
 		selector : 'audio,video',
 		menuId : 'timecodehash-menu',
-		locale : {
-			label : {
-					'fr' : 'URL de cette position',
-					'en' : 'URL at this time'
-				},
-		},
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
 			if (/^\d+$/.test(givenTime)) {
@@ -59,10 +54,10 @@ window.TimecodeHash = function() {
 		},
 		convertSubunitTimeInSeconds : function(givenTime) {
 			var seconds = 0;
-			for(var key in this._units) {
-				if ( (this._units.hasOwnProperty(key)) && (givenTime.indexOf(key) !== -1) ) {
+			for(var key in _units) {
+				if ( (_units.hasOwnProperty(key)) && (givenTime.indexOf(key) !== -1) ) {
 					var atoms = givenTime.split(key);
-					seconds += Number(atoms[0].replace(/\D*/g,'' )) * this._units[key];
+					seconds += Number(atoms[0].replace(/\D*/g,'' )) * _units[key];
 					givenTime = atoms[1];
 				}
 			}
@@ -79,9 +74,9 @@ window.TimecodeHash = function() {
 		},
 		convertSecondsInTime : function(givenSeconds) {
 			var converted = '';
-			for(var key in this._units) {
-				if (this._units.hasOwnProperty(key)) {
-					var multiply = this._units[key];
+			for(var key in _units) {
+				if (_units.hasOwnProperty(key)) {
+					var multiply = _units[key];
 					if (givenSeconds >= multiply) {
 						var digits = Math.floor(givenSeconds / multiply);
 						converted += digits + key;
@@ -123,10 +118,16 @@ window.TimecodeHash = function() {
 			}
 
 			var secs = this.convertTimeInSeconds(timecode);
-			// NOT GOOD, yes i know , but el.currentTime = secs; is not available on webkit
+			// NOT GOOD, yes i know , but  el.currentTime = secs and fastSeek(secs) are NOT available on webkit
 			try {
 				el.currentTime = secs;
 			} catch(e) {
+				if (el.currentSrc === '') {
+					/// TODO
+					/// se méfier si currentSrc est vide https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+					el.load();
+				}
+console.log(el.currentSrc);
 				el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 			}
 
@@ -153,23 +154,29 @@ window.TimecodeHash = function() {
 		}
 	};
 
-	function _onMenu() {
-		var self = window.TimecodeHash;
-		var el = document.querySelector(self.selector);
-		var retour = document.location.href.split('#')[0];
-		retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
-		window.prompt(self.locale.label.fr,retour);
-	}
-
 	function _buildMenu() {
+
+		var locale = {
+			'fr' : 'URL de cette position',
+			'en' : 'URL at this time'
+		};
+
 		function _getPreferedLocale() {
 			// we really need here a smart way to catch the Accept-Locale
 			return 'fr';
 		}
 
+		function _onMenu() {
+			var self = window.TimecodeHash;
+			var el = document.querySelector(self.selector);
+			var retour = document.location.href.split('#')[0];
+			retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
+			window.prompt(locale.fr,retour);
+		}
+
 		document.body.insertAdjacentHTML('beforeend',
 			'<menu type="context" id="'+self.menuId+'">'+
-				'<menuitem label="'+self.locale.label[_getPreferedLocale()]+'"></menuitem>'+
+				'<menuitem label="'+locale[_getPreferedLocale()]+'"></menuitem>'+
 			'</menu>'
 			);
 		document.getElementById(self.menuId).querySelector('menuitem').addEventListener('click',_onMenu);
