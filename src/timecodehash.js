@@ -120,7 +120,7 @@ window.TimecodeHash = function() {
 			var secs = this.convertTimeInSeconds(timecode);
 			// NOT GOOD, yes i know , but  el.currentTime = secs and fastSeek(secs) are NOT available on webkit
 			try {
-				el.currentTime = secs;
+				el.fastSeek(secs + 0.0);
 			} catch(e) {
 				if (el.currentSrc === '') {
 					/// TODO
@@ -128,7 +128,6 @@ window.TimecodeHash = function() {
 					el.load();
 				}
 console.log(el.currentSrc);
-
 
 				el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 			}
