@@ -97,6 +97,8 @@ window.TimecodeHash = function() {
 		},
 		jumpElementAt : function(hash,timecode,callback_fx) {
 
+			var el;
+
 			function do_element_play(e) {
 				var tag = e.target;
 				tag.play();
@@ -106,7 +108,35 @@ window.TimecodeHash = function() {
 				}
 				self.onDebug(callback_fx);
 			}
-			var el;
+
+			function do_needle_move(e) {
+
+				if (e.notRealEvent === undefined) {
+					el.removeEventListener('loadedmetadata', do_needle_move, true);
+				}
+
+				var secs = self.convertTimeInSeconds(timecode);
+				// NOT GOOD, yes i know , but  el.currentTime = secs and fastSeek(secs) are NOT available on webkit
+				try {
+					el.fastSeek(secs);
+				} catch(e) {
+					if (el.currentSrc === '') {
+						/// TODO
+						/// se méfier si currentSrc est vide https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+						el.load();
+					}
+console.log(el.currentSrc);
+
+					el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
+				}
+
+				if (el.readyState >= 2)  {
+					do_element_play({ target : el , notRealEvent : true });
+				} else {
+					el.addEventListener('canplay', do_element_play, true);
+					el.addEventListener('canplaythrough', do_element_play, true);
+				}
+			}
 
 			if (hash !== '') {
 				el = document.getElementById(hash);
@@ -117,26 +147,12 @@ window.TimecodeHash = function() {
 				return false;
 			}
 
-			var secs = this.convertTimeInSeconds(timecode);
-			// NOT GOOD, yes i know , but  el.currentTime = secs and fastSeek(secs) are NOT available on webkit
-			try {
-				el.fastSeek(secs);
-			} catch(e) {
-				if (el.currentSrc === '') {
-					/// TODO
-					/// se méfier si currentSrc est vide https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
-					el.load();
-				}
-console.log(el.currentSrc);
-
-				el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
-			}
-
-			if (el.readyState >= 2)  {
-				do_element_play({ target : el , notRealEvent : true });
+			if (el.readyState === 0 ) { // HAVE_NOTHING
+				el.addEventListener('loadedmetadata', do_needle_move , true);
+console.log('have nothing');
+				el.load();
 			} else {
-				el.addEventListener('canplay', do_element_play, true);
-				el.addEventListener('canplaythrough', do_element_play, true);
+				do_needle_move({notRealEvent : true });
 			}
 
 		},
