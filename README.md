@@ -3,7 +3,7 @@ TimecodeHash
 
 Author :  [Xavier "dascritch" Mouton-Dubosc](http://dascritch.com)
 
-Version : 1
+Version : 1pre
 
 Thank you to my lovely friends
 * [Thomas Parisot](https://oncletom.io/) for suggestions
