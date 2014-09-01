@@ -27,8 +27,8 @@
 window.TimecodeHash = function() {
 	'use strict';
 
-	if ( (document.addEventListener === undefined) || (!('onhashchange' in window)) ) {
-		// not even think about it : probably MSIE < 8
+	if ( (document.querySelector === undefined) || (!('oncanplay' in window)) ) {
+		// don't even think about it : probably MSIE < 8
 		return;
 	}
 
@@ -99,10 +99,14 @@ window.TimecodeHash = function() {
 
 			var el;
 
+			function _isEvent(e) {
+				return e.notRealEvent === undefined;
+			}
+
 			function do_element_play(e) {
 				var tag = e.target;
 				tag.play();
-				if (e.notRealEvent === undefined) {
+				if (!_isEvent(e)) {
 					tag.removeEventListener('canplay', do_element_play, true);
 					tag.removeEventListener('canplaythrough', do_element_play, true);
 				}
@@ -110,8 +114,7 @@ window.TimecodeHash = function() {
 			}
 
 			function do_needle_move(e) {
-
-				if (e.notRealEvent === undefined) {
+				if (!_isEvent(e)) {
 					el.removeEventListener('loadedmetadata', do_needle_move, true);
 				}
 
@@ -123,10 +126,7 @@ window.TimecodeHash = function() {
 					if (el.currentSrc === '') {
 						/// TODO
 						/// se méfier si currentSrc est vide https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
-						el.load();
 					}
-console.log(el.currentSrc);
-
 					el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 				}
 
@@ -138,21 +138,17 @@ console.log(el.currentSrc);
 				}
 			}
 
-			if (hash !== '') {
-				el = document.getElementById(hash);
-			} else {
-				el = (document.querySelector !== undefined) ? document.querySelector(this.selector) : undefined;
-			}
+			el = (hash !== '') ? document.getElementById(hash) : document.querySelector(this.selector);
+
 			if ((el === undefined) || (el.currentTime === undefined)) {
 				return false;
 			}
 
 			if (el.readyState === 0 ) { // HAVE_NOTHING
 				el.addEventListener('loadedmetadata', do_needle_move , true);
-console.log('have nothing');
 				el.load();
 			} else {
-				do_needle_move({notRealEvent : true });
+				do_needle_move({ notRealEvent : true });
 			}
 
 		},
