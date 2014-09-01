@@ -191,7 +191,7 @@ window.TimecodeHash = function() {
 					'<menuitem label="'+locale[_getPreferedLocale()]+'"></menuitem>'+
 				'</menu>'
 				);
-			document.getElementById(self.menuId).querySelector('menuitem').addEventListener('click',_onMenu);
+			document.querySelector('#'+self.menuId+' menuitem').addEventListener('click',_onMenu);
 			[].forEach.call(
 				// explication de cette construction : https://coderwall.com/p/jcmzxw
 				document.querySelectorAll(self.selector),
