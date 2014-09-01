@@ -39,6 +39,13 @@ window.TimecodeHash = function() {
 		's' : 1
 	};
 
+	function onDebug(callback_fx) {
+		// this is needed for testing, as we now run in async tests
+		if (typeof callback_fx === 'function') {
+			callback_fx();
+		}
+	}
+
 	var self = {
 		separator : '@',
 		selector : 'audio,video',
@@ -89,18 +96,11 @@ window.TimecodeHash = function() {
 			}
 			return converted;
 		},
-		onDebug : function(callback_fx) {
-			// this is needed for testing, as we now run in async tests
-			if (typeof callback_fx === 'function') {
-				callback_fx();
-			}
-		},
 		jumpElementAt : function(hash,timecode,callback_fx) {
-
 			var el;
 
 			function _isEvent(e) {
-				return e.notRealEvent !== undefined;
+				return e.preventDefault !== undefined;
 			}
 
 			function do_element_play(e) {
@@ -108,9 +108,8 @@ window.TimecodeHash = function() {
 				tag.play();
 				if (!_isEvent(e)) {
 					tag.removeEventListener('canplay', do_element_play, true);
-					tag.removeEventListener('canplaythrough', do_element_play, true);
 				}
-				self.onDebug(callback_fx);
+				onDebug(callback_fx);
 			}
 
 			function do_needle_move(e) {
@@ -125,16 +124,15 @@ window.TimecodeHash = function() {
 				} catch(e) {
 					if (el.currentSrc === '') {
 						/// TODO
-						/// se méfier si currentSrc est vide https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+						/// beware if currentSrc has nothing https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
 					}
 					el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 				}
 
-				if (el.readyState >= 2)  {
-					do_element_play({ target : el , notRealEvent : true });
+				if (el.readyState >= el.HAVE_FUTURE_DATA)  {
+					do_element_play({ target : el });
 				} else {
 					el.addEventListener('canplay', do_element_play, true);
-					el.addEventListener('canplaythrough', do_element_play, true);
 				}
 			}
 
@@ -144,11 +142,11 @@ window.TimecodeHash = function() {
 				return false;
 			}
 
-			if (el.readyState === 0 ) { // HAVE_NOTHING
+			if (el.readyState === el.HAVE_NOTHING ) {
 				el.addEventListener('loadedmetadata', do_needle_move , true);
 				el.load();
 			} else {
-				do_needle_move({ notRealEvent : true });
+				do_needle_move({});
 			}
 
 		},
@@ -157,13 +155,13 @@ window.TimecodeHash = function() {
 				hashcode = document.location.hash.substr(1);
 			}
 
-			if (hashcode.indexOf(this.separator) === -1) {
-				self.onDebug(callback_fx);
+			if (hashcode.indexOf(self.separator) === -1) {
+				onDebug(callback_fx);
 				return ;
 			}
 
-			var atoms = hashcode.split(this.separator);
-			this.jumpElementAt(atoms[0],atoms[1],callback_fx);
+			var atoms = hashcode.split(self.separator);
+			self.jumpElementAt(atoms[0],atoms[1],callback_fx);
 		}
 	};
 

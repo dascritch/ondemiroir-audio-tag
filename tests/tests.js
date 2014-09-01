@@ -1,8 +1,23 @@
 window.location = '#';
+var lock = false;
+var lockedAt = 0;
+
 
 function stopPlayer() {
 	window.location = '#';
 	document.getElementById('track').pause();
+	lock = false;
+}
+
+function nowLock() {
+	lock = true;
+	lockedAt = Date.now();
+}
+
+function waitNoLock() {
+console.log(lockedAt);
+	while (lock && (Date.now() < (lockedAt+10))) ;
+	lock = false;
 }
 
 QUnit.testDone(stopPlayer);
@@ -43,6 +58,8 @@ test( "TimecodeHash.convertSecondsInTime", function() {
 	ok(tch.convertSecondsInTime(7442) === '2h4m2s', 'got 2 hours, 4 minutes and 2 seconds' );
 });
 
+
+nowLock();
 QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( assert ) {
 	expect( 2 );
 	var $track = document.getElementById('track');
@@ -55,6 +72,8 @@ QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( asser
 	});
 });
 
+waitNoLock();
+nowLock();
 QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at 600 secs", function( assert ) {
 	expect( 1 );
 	var $track = document.getElementById('track');
@@ -68,7 +87,10 @@ QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at 600 secs", function( as
 
 function hashOrder_test(expected_string, hash , expected_time)
 {
+	waitNoLock();
+	nowLock();
 	QUnit.asyncTest( "TimecodeHash.hashOrder "+expected_string, function( assert ) {
+		nowLock();
 		expect( 1 );
 		var tch = window.TimecodeHash;
 		var $track = document.getElementById('track');
@@ -86,11 +108,12 @@ hashOrder_test('unnammed track is at 20 seconds', '@20s', 20);
 hashOrder_test('track is at 02:04:02', 'track@01:04:02', 3842);
 hashOrder_test('unnamed track is at 1:02', '@1:02', 62);
 
-
-var waiting = 0;
 function hashOrder_otherSeparator_test(expected_string, hash , expected_time)
 {
+	waitNoLock();
+	nowLock();
 	QUnit.asyncTest( "TimecodeHash.hashOrder with other separator "+expected_string, function( assert ) {
+		nowLock();
 		expect( 1 );
 		var tch = window.TimecodeHash;
 		tch.separator = '‣'
@@ -99,9 +122,6 @@ function hashOrder_otherSeparator_test(expected_string, hash , expected_time)
 			assert.ok($track.currentTime === expected_time, expected_string);
 			QUnit.start();
 			stopPlayer();
-			if (waiting++ === 6) {
-				test_finaux();
-			}
 		});
 	});
 }
@@ -115,8 +135,11 @@ hashOrder_otherSeparator_test('unnammed track is at 00:01:10', '‣00:01:10', 70
 
 
 function hashtest(hash,expects,describ) {
+	waitNoLock();
+	nowLock();
 	var $track = document.getElementById('track');
 	QUnit.asyncTest('on hash change : '+describ, function(assert) {
+		nowLock();
 		expect(1);
 		window.location = hash;
 		function event_callback() {
@@ -129,6 +152,8 @@ function hashtest(hash,expects,describ) {
 	});
 }
 function test_finaux() {
+	waitNoLock();
+	nowLock();
 	window.TimecodeHash.separator = '@';
 	hashtest('#track@30',		30,		'named is at 30 seconds' );
 	hashtest('#track@25s',		25,		'named is at 25 seconds' );
