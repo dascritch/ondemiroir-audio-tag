@@ -100,7 +100,7 @@ window.TimecodeHash = function() {
 			var el;
 
 			function _isEvent(e) {
-				return e.notRealEvent === undefined;
+				return e.notRealEvent !== undefined;
 			}
 
 			function do_element_play(e) {
