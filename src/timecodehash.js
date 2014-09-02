@@ -98,7 +98,6 @@ window.TimecodeHash = function() {
 		},
 		jumpElementAt : function(hash,timecode,callback_fx) {
 			var el;
-
 			function _isEvent(e) {
 				return e.preventDefault !== undefined;
 			}
@@ -106,14 +105,15 @@ window.TimecodeHash = function() {
 			function do_element_play(e) {
 				var tag = e.target;
 				tag.play();
-				if (!_isEvent(e)) {
+				if (_isEvent(e)) {
 					tag.removeEventListener('canplay', do_element_play, true);
 				}
 				onDebug(callback_fx);
 			}
 
 			function do_needle_move(e) {
-				if (!_isEvent(e)) {
+
+				if (_isEvent(e)) {
 					el.removeEventListener('loadedmetadata', do_needle_move, true);
 				}
 
