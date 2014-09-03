@@ -19,7 +19,7 @@
 
 	project repository : https://github.com/dascritch/timecodehash
 	professional : http://dascritch.com
-    blog : http://dascritch.net
+    blog post : http://dascritch.net/post/2014/09/03/Timecodehash-%3A-Lier-vers-un-moment-d-un-sonore
 
 
  */
@@ -118,14 +118,10 @@ window.TimecodeHash = function() {
 				}
 
 				var secs = self.convertTimeInSeconds(timecode);
-				// NOT GOOD, yes i know , but  el.currentTime = secs and fastSeek(secs) are NOT available on webkit
 				try {
+					// NOT GOOD, yes i know , but  el.currentTime = secs nor fastSeek(secs) are NOT available on firefox
 					el.fastSeek(secs);
 				} catch(e) {
-					if (el.currentSrc === '') {
-						/// TODO
-						/// beware if currentSrc has nothing https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
-					}
 					el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
 				}
 

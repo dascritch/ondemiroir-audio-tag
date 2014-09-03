@@ -11,6 +11,8 @@ Thank you to my lovely friends
 * [Guillaume Lemoine and Phonitive](http://www.phonitive.fr/) for helping
 * [Benoît Salles](https://twitter.com/infestedgrunt) for testing
 
+Informations in french : <http://dascritch.net/post/2014/09/03/Timecodehash-%3A-Lier-vers-un-moment-d-un-sonore>
+
 Purpose
 -------
 
