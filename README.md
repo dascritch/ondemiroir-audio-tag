@@ -3,7 +3,7 @@ TimecodeHash
 
 Author :  [Xavier "dascritch" Mouton-Dubosc](http://dascritch.com)
 
-Version : 1pre
+Version : 1
 
 Thank you to my lovely friends
 * [Thomas Parisot](https://oncletom.io/) for suggestions
@@ -28,13 +28,16 @@ Blog post to come after August.
 How to
 ------
 
-First, call the library as usual in your html where you want to address your players, preferably in the `<head>` section :
+First, call the library as usual in your html where you want to address your players :
 ```
 <script src="timecodehash.js"></script>
 ```
+I personaly prefer in the `<head>` section, but it can work at the end of `<body>` minimified and collated. It should also work in dynamic injection.
 
 Just link as you usually do to a named anchor, then add `@` and the timecode you want the player to jump to.
 By example, triggering `<a href="page.html#player@100">` will start any playable element of page.html named "player" at the 100th second. The referred page.html should have a call to the library, the referrent doesn't need it.
+
+If you want to change the separator character, you should change the `window.TimecodeHash.separator` property after calling the lib.
 
 Permitted notations
 -------------------
