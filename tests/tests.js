@@ -101,12 +101,12 @@ function hashOrder_test(expected_string, hash , expected_time)
 		});
 	});
 }
-hashOrder_test('is at 10 seconds', 'track@10', 10);
-hashOrder_test('is at one hour, 2 minutes and 4 seconds', 'track@1h2m4s', 3724);
-hashOrder_test('unnammed track is at 40 seconds', '@40', 40);
-hashOrder_test('unnammed track is at 20 seconds', '@20s', 20);
-hashOrder_test('track is at 02:04:02', 'track@01:04:02', 3842);
-hashOrder_test('unnamed track is at 1:02', '@1:02', 62);
+hashOrder_test('is at 10 seconds', 'track&t=10', 10);
+hashOrder_test('is at one hour, 2 minutes and 4 seconds', 'track&t=1h2m4s', 3724);
+hashOrder_test('unnammed track is at 40 seconds', '&t=40', 40);
+hashOrder_test('unnammed track is at 20 seconds', '&t=20s', 20);
+hashOrder_test('track is at 02:04:02', 'track&t=01:04:02', 3842);
+hashOrder_test('unnamed track is at 1:02', '&t=1:02', 62);
 
 function hashOrder_otherSeparator_test(expected_string, hash , expected_time)
 {
@@ -126,7 +126,7 @@ function hashOrder_otherSeparator_test(expected_string, hash , expected_time)
 	});
 }
 hashOrder_otherSeparator_test('is at 10 seconds', 'track‣10', 10);
-hashOrder_otherSeparator_test('original separator ignored', 'track@30', 10);
+hashOrder_otherSeparator_test('original separator ignored', 'track&t=30', 10);
 hashOrder_otherSeparator_test('is at one hour, 2 minutes and 4 seconds', 'track‣1h2m4s', 3724);
 hashOrder_otherSeparator_test('unnammed track is at 40 seconds', '‣40', 40);
 hashOrder_otherSeparator_test('unnammed track is at 20 seconds', '‣20', 20);
@@ -155,10 +155,10 @@ function test_finaux() {
 	waitNoLock();
 	nowLock();
 	window.TimecodeHash.separator = '@';
-	hashtest('#track@30',		30,		'named is at 30 seconds' );
-	hashtest('#track@25s',		25,		'named is at 25 seconds' );
-	hashtest('#track@10m10s',	610,	'is at 10 minutes and 10 seconds');
-	hashtest('#@10s',			10,		'unnamed is at 10 seconds');
-	hashtest('#@01:01:01',		3661,	'unnamed is at 01:01:01');
-	hashtest('#track@00:10:00',	600,	'named is at 00:10:00');
+	hashtest('#track&t=30',			30,		'named is at 30 seconds' );
+	hashtest('#track&t=25s',		25,		'named is at 25 seconds' );
+	hashtest('#track&t=10m10s',		610,	'is at 10 minutes and 10 seconds');
+	hashtest('#&t=10s',				10,		'unnamed is at 10 seconds');
+	hashtest('#&t=01:01:01',		3661,	'unnamed is at 01:01:01');
+	hashtest('#track&t=00:10:00',	600,	'named is at 00:10:00');
 }

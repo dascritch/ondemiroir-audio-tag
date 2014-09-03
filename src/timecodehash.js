@@ -47,7 +47,7 @@ window.TimecodeHash = function() {
 	}
 
 	var self = {
-		separator : '@',
+		separator : '&t=',
 		selector : 'audio,video',
 		menuId : 'timecodehash-menu',
 		convertTimeInSeconds : function(givenTime) {
@@ -112,7 +112,6 @@ window.TimecodeHash = function() {
 			}
 
 			function do_needle_move(e) {
-
 				if (_isEvent(e)) {
 					el.removeEventListener('loadedmetadata', do_needle_move, true);
 				}

@@ -3,7 +3,7 @@ TimecodeHash
 
 Author :  [Xavier "dascritch" Mouton-Dubosc](http://dascritch.com)
 
-Version : 1
+Version : 1.1.01
 
 Thank you to my lovely friends
 * [Thomas Parisot](https://oncletom.io/) for suggestions
@@ -36,7 +36,7 @@ First, call the library as usual in your html where you want to address your pla
 ```
 I personaly prefer in the `<head>` section, but it can work at the end of `<body>` minimified and collated. It should also work in dynamic injection.
 
-Just link as you usually do to a named anchor, then add `@` and the timecode you want the player to jump to.
+Just link as you usually do to a named anchor, then add `&t=` and the timecode you want the player to jump to.
 By example, triggering `<a href="page.html#player@100">` will start any playable element of page.html named "player" at the 100th second. The referred page.html should have a call to the library, the referrent doesn't need it.
 
 If you want to change the separator character, you should change the `window.TimecodeHash.separator` property after calling the lib.
@@ -45,13 +45,13 @@ Permitted notations
 -------------------
 
 For the timecode, you can use
-* seconds without unit : `page.html#player@7442`
-* professionnal timecodes as `02:04:02` (2 hours, 4 minutes and 2 seconds) : `page.html#player@02:04:02`
-* human-readable units as in `page.html#player@2h4m2s` for the previous example. Sub-units availables : `s`econds, `m`inutes, `h`ours and `d`ays
+* seconds without unit : `page.html#player&t=7442`
+* professionnal timecodes as `02:04:02` (2 hours, 4 minutes and 2 seconds) : `page.html#player&t=02:04:02`
+* human-readable units as in `page.html#player&t=2h4m2s` for the previous example. Sub-units availables : `s`econds, `m`inutes, `h`ours and `d`ays
 
 Note : if a timecode without named anchor is given, as in `href="#@13h37m"`, the very first `<audio>`/`<video>` element of the document will be started and placed at this time.
 
-Via the API and only for the API at this time, you can change the separator from `@` to any accepted unicode character, p.e. `;`, `‣` or `♪`.
+Via the API and only for the API at this time, you can change the separator from `&t=` to any accepted unicode character, p.e. `;`, `‣` or `♪`.
 
 Production notes
 ----------------
@@ -83,7 +83,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Versions
 --------
-* July 2014 : 1 , public release
+* September 2014 : 2 , correcting to standard separator
+* September 2014 : 1 , public announcing
+* July 2014 : 1.a , public release
 * June 2014 : 0.2 , proof of concept
 * October 2012 : first version, trashed
 
