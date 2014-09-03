@@ -21,7 +21,6 @@
 	professional : http://dascritch.com
 	blog post : http://dascritch.net/post/2014/09/03/Timecodehash-%3A-Lier-vers-un-moment-d-un-sonore
 
-
  */
 
 window.TimecodeHash = function() {
@@ -117,11 +116,17 @@ window.TimecodeHash = function() {
 				}
 
 				var secs = self.convertTimeInSeconds(timecode);
-				try {
-					// NOT GOOD, yes i know , but  el.currentTime = secs nor fastSeek(secs) are NOT available on firefox
+				if (el.fastSeek !== undefined) {
 					el.fastSeek(secs);
-				} catch(e) {
-					el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
+					// Firefox doesn't see fastSeek
+				} else {
+					try {
+						// but can set currentTime
+						el.currentTime = secs;
+					} catch(e) {
+						// exept sometimes, so you must use standard media fragment
+						el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
+					}
 				}
 
 				if (el.readyState >= el.HAVE_FUTURE_DATA)  {
