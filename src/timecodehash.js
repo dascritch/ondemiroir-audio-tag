@@ -56,7 +56,7 @@ window.OndeMiroirAudio = function() {
 		.OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { cursor : pointer } \
 		.OndeMiroirAudio-Player-titleline {display : flex} \
 		.OndeMiroirAudio-Player-about, .OndeMiroirAudio-Player-title {flex : 2 2 100%} \
-		.OndeMiroirAudio-Player-time {background : black; width : 95% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
+		.OndeMiroirAudio-Player-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
 		.OndeMiroirAudio-Player-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } ',
 		container :  {
 			tagname :'div',
@@ -242,7 +242,7 @@ window.OndeMiroirAudio = function() {
 		get_params_for_template : function(element) {
 			return {
 				// keys are stringed, as we need them not being modified
-				'title'     : element.title === '' ? self.__['(no title)'] : element.title,
+				'title'     : element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
 				'canonical' : element.dataset.canonical === undefined ? '' : element.dataset.canonical,
 				'poster' : self.element_attribute(element,'poster', self.poster_fallback),
 				'cover' : self.__['cover'],
