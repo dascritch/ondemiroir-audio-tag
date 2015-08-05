@@ -24,14 +24,8 @@ It will replace any <audio control> by an specialy crafted UI
 Todo
 ----
 
-- Building HTML element
 - Support for elapsed time / countdown time / total time
-- Support for time anchor derivated from Tiemcode Hash
-- Support for title via title=""
-- Support for cover via poster=""
-- Support for canonical url via canonical=""
 - Support for mute/ volume
-- Support for time line
 - Support for gear menu
 - Support for download / sharing twitter / facebook
 

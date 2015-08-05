@@ -120,6 +120,20 @@ window.OndeMiroirAudio = function() {
 			}
 			return converted;
 		},
+		seekElementAt : function(element, seconds) {
+			if (element.fastSeek !== undefined) {
+				element.fastSeek(seconds);
+				// Firefox doesn't see fastSeek
+			} else {
+				try {
+					// but can set currentTime
+					element.currentTime = seconds;
+				} catch(e) {
+					// exept sometimes, so you must use standard media fragment
+					element.src = element.currentSrc.split('#')[0] + '#t=' + seconds;
+				}
+			}
+		},
 		jumpElementAt : function(hash,timecode,callback_fx) {
 			var el;
 			function _isEvent(e) {
@@ -141,18 +155,7 @@ window.OndeMiroirAudio = function() {
 				}
 
 				var secs = self.convertTimeInSeconds(timecode);
-				if (el.fastSeek !== undefined) {
-					el.fastSeek(secs);
-					// Firefox doesn't see fastSeek
-				} else {
-					try {
-						// but can set currentTime
-						el.currentTime = secs;
-					} catch(e) {
-						// exept sometimes, so you must use standard media fragment
-						el.src = el.currentSrc.split('#')[0] + '#t=' + secs;
-					}
-				}
+				self.seekElementAt(el, secs);
 
 				if (el.readyState >= el.HAVE_FUTURE_DATA)  {
 					do_element_play({ target : el });
@@ -210,6 +213,16 @@ window.OndeMiroirAudio = function() {
 			}
 			return (child.className === self.container.classname) ? child : self.find_container(child.parentNode);
 		},
+		do_throbble : function(event) {
+			var container = self.find_container(event.target);
+			var audiotag = document.getElementById(container.dataset.rel);
+			console.log(event.clientX - event.target.offsetLeft, event);
+			var Xcoord = event.clientX - event.target.offsetLeft;
+			var ratio = Xcoord / event.target.clientWidth;
+			var gototime = ratio * audiotag.duration;
+			self.seekElementAt(audiotag, gototime)
+
+		},
 		do_pause : function(event) {
 			var container = self.find_container(event.target)
 			document.getElementById(container.dataset.rel).pause();
@@ -254,6 +267,7 @@ window.OndeMiroirAudio = function() {
 
 			container.querySelector('.'+self.container.classname+'-pause').addEventListener('click', self.do_pause);
 			container.querySelector('.'+self.container.classname+'-play').addEventListener('click', self.do_play);
+			container.querySelector('.'+self.container.classname+'-time').addEventListener('click', self.do_throbble);
 
 			var triggers = ['error', 'play', 'playing', 'pause', 'suspend', 'ended', 'durationchange',  'loadedmetadata', 'progress', 'timeupdate'];
 			for (var pos in triggers) {
