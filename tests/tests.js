@@ -60,11 +60,11 @@ test( "TimecodeHash.convertSecondsInTime", function() {
 
 
 nowLock();
-QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( assert ) {
+QUnit.asyncTest( "TimecodeHash.jumpIdAt existing at start", function( assert ) {
 	expect( 2 );
 	var $track = document.getElementById('track');
 	var tch = window.TimecodeHash;
-	tch.jumpElementAt('track',0, function() {
+	tch.jumpIdAt('track',0, function() {
 		assert.ok($track.currentTime === 0, 'is at start' );
 		assert.ok(!$track.paused, 'not paused afterwards' );
 		QUnit.start();
@@ -74,11 +74,11 @@ QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at start", function( asser
 
 waitNoLock();
 nowLock();
-QUnit.asyncTest( "TimecodeHash.jumpElementAt existing at 600 secs", function( assert ) {
+QUnit.asyncTest( "TimecodeHash.jumpIdAt existing at 600 secs", function( assert ) {
 	expect( 1 );
 	var $track = document.getElementById('track');
 	var tch = window.TimecodeHash;
-	tch.jumpElementAt('track',600, function() {
+	tch.jumpIdAt('track',600, function() {
 		assert.ok($track.currentTime === 600, 'is at 10mn' );
 		QUnit.start();
 		stopPlayer();

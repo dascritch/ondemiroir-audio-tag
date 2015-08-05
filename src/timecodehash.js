@@ -134,7 +134,7 @@ window.OndeMiroirAudio = function() {
 				}
 			}
 		},
-		jumpElementAt : function(hash,timecode,callback_fx) {
+		jumpIdAt : function(hash,timecode,callback_fx) {
 			var el;
 			function _isEvent(e) {
 				return e.preventDefault !== undefined;
@@ -189,7 +189,7 @@ window.OndeMiroirAudio = function() {
 			}
 
 			var atoms = hashcode.split(self.separator);
-			self.jumpElementAt(atoms[0],atoms[1],callback_fx);
+			self.jumpIdAt(atoms[0],atoms[1],callback_fx);
 		},
 		update_playbutton : function(event, element, container) {
 			container.querySelector('.'+self.container.classname+'-pause').style.display = element.paused ? 'none' : 'block';
@@ -216,12 +216,8 @@ window.OndeMiroirAudio = function() {
 		do_throbble : function(event) {
 			var container = self.find_container(event.target);
 			var audiotag = document.getElementById(container.dataset.rel);
-			console.log(event.clientX - event.target.offsetLeft, event);
-			var Xcoord = event.clientX - event.target.offsetLeft;
-			var ratio = Xcoord / event.target.clientWidth;
-			var gototime = ratio * audiotag.duration;
-			self.seekElementAt(audiotag, gototime)
-
+			var ratio = (event.clientX - event.target.offsetLeft) / event.target.clientWidth;
+			self.seekElementAt(audiotag, ratio * audiotag.duration)
 		},
 		do_pause : function(event) {
 			var container = self.find_container(event.target)
