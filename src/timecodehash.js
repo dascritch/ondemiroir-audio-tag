@@ -46,23 +46,24 @@ window.OndeMiroirAudio = function() {
 	}
 
 	var self = {
+		dontHideAudioTag : true,
 		separator : '&t=',
 		selector : 'audio[controls]',
 		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-tag-',
 		menuId : 'OndeMiroirAudio-menu',
 		styleId : 'OndeMiroirAudio-style',
-		style : ' .OndeMiroirAudio-Player { background : #ddd ; display : flex ; font-family: Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; border : none; padding : 0; margin : 0 } \
-		.OndeMiroirAudio-Player-cover , .OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .OndeMiroirAudio-Player-cover img { width : 100%  } \
-		.OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { cursor : pointer } \
-		.OndeMiroirAudio-Player-titleline {display : flex} \
-		.OndeMiroirAudio-Player-about, .OndeMiroirAudio-Player-title {flex : 2 2 100%} \
-		.OndeMiroirAudio-Player-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
-		.OndeMiroirAudio-Player-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } ',
 		container :  {
 			tagname :'div',
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player',
 		},
+		style : ' .{{classname}} { background : #ddd ; display : flex ; font-family: Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; border : none; padding : 0; margin : 0 } \
+		.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .{{classname}}-cover img { width : 100%  } \
+		.{{classname}}-play , .{{classname}}-pause { cursor : pointer } \
+		.{{classname}}-titleline {display : flex} \
+		.{{classname}}-about, .{{classname}}-title {flex : 2 2 100%} \
+		.{{classname}}-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
+		.{{classname}}-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } ',
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
 			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
 			<div class="{{classname}}-about"><div class="{{classname}}-titleline"><div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
@@ -227,8 +228,7 @@ window.OndeMiroirAudio = function() {
 			var container = self.find_container(event.target)
 			document.getElementById(container.dataset.rel).play();
 		},
-		populate_template : function(entry) {
-			var inner = self.template;
+		populate_template : function(inner, entry) {
 			for (var key in entry) {
 				if (entry.hasOwnProperty(key)) {
 					inner = inner.replace(RegExp('{{'+key+'}}','g'), entry[key]);
@@ -258,7 +258,7 @@ window.OndeMiroirAudio = function() {
 			element.dataset.ondemiroir = container.id;
 			container.dataset.rel = element.id;
 			container.className = self.container.classname;
-			container.innerHTML = self.populate_template(self.get_params_for_template(element));
+			container.innerHTML = self.populate_template(self.template, self.get_params_for_template(element));
 			element.parentNode.insertBefore(container, element);
 
 			container.querySelector('.'+self.container.classname+'-pause').addEventListener('click', self.do_pause);
@@ -272,6 +272,9 @@ window.OndeMiroirAudio = function() {
 				}
 			}
 			self.update({target : element})
+			if (self.dontHideAudioTag === false) {
+				element.style.display = 'none';
+			}
 
 			self.count_element++;
 		},
@@ -279,7 +282,7 @@ window.OndeMiroirAudio = function() {
 		insertStyle : function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
-			element.innerHTML = self.style;
+			element.innerHTML = self.populate_template(self.style, self.get_params_for_template(element));
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
 
