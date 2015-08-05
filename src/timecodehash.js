@@ -52,19 +52,15 @@ window.OndeMiroirAudio = function() {
 		menuId : 'OndeMiroirAudio-menu',
 		styleId : 'OndeMiroirAudio-style',
 		style : ' .OndeMiroirAudio-Player {  background : #ddd ; display : flex} \
-		.OndeMiroirAudio-Player-cover , .OndeMiroirAudio-Player-play { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .OndeMiroirAudio-Player-cover img { width : 100%  } \
-		.OndeMiroirAudio-Player-play { cursor : pointer }',
+		.OndeMiroirAudio-Player-cover , .OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .OndeMiroirAudio-Player-cover img { width : 100%  } \
+		.OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { cursor : pointer }',
 		container :  {
 			tagname :'div',
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player',
 		},
-		playbutton : {
-			play : '▮▮',
-			pause : '▶',
-		},
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
-			<div class="{{classname}}-play">play</div>\
+			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
 			<div><div><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
 			<div>timeline</div>\
 			<div class="{{classname}}-actions">and more</div>',
@@ -189,7 +185,8 @@ window.OndeMiroirAudio = function() {
 			self.jumpElementAt(atoms[0],atoms[1],callback_fx);
 		},
 		update_playbutton : function(event, element, container) {
-			container.querySelector('.'+self.container.classname+'-play').innerHTML = element.paused ? self.playbutton.pause : self.playbutton.play;
+			container.querySelector('.'+self.container.classname+'-pause').style.display = element.paused ? 'none' : 'block';
+			container.querySelector('.'+self.container.classname+'-play').style.display = element.paused ? 'block' : 'none' ;
 
 		},
 		update_time : function(event, element, container) {
@@ -202,6 +199,21 @@ window.OndeMiroirAudio = function() {
 			var container = document.getElementById(element.dataset.ondemiroir);
 			self.update_playbutton(event, element, container)
 			self.update_time(event, element, container)
+		},
+		find_container : function (child) {
+			if (child.closest) {
+				// DOMnode.closest is not yet available anywhere
+				return child.closest('.'+self.container.classname)
+			}
+			return (child.className === self.container.classname) ? child : self.find_container(child.parentNode);
+		},
+		do_pause : function(event) {
+			var container = self.find_container(event.target)
+			document.getElementById(container.dataset.rel).pause();
+		},
+		do_play : function(event) {
+			var container = self.find_container(event.target)
+			document.getElementById(container.dataset.rel).play();
 		},
 		populate_template : function(entry) {
 			var inner = self.template;
@@ -229,12 +241,16 @@ window.OndeMiroirAudio = function() {
 			if (element.id === '') {
 				element.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element);
 			}
-			var zone = document.createElement(self.container.tagname)
-			zone.id = self.container.idPrefix + String(self.count_element);
-			element.dataset.ondemiroir = zone.id;
-			zone.className = self.container.classname;
-			zone.innerHTML = self.populate_template(self.get_params_for_template(element));
-			element.parentNode.insertBefore(zone, element);
+			var container = document.createElement(self.container.tagname)
+			container.id = self.container.idPrefix + String(self.count_element);
+			element.dataset.ondemiroir = container.id;
+			container.dataset.rel = element.id;
+			container.className = self.container.classname;
+			container.innerHTML = self.populate_template(self.get_params_for_template(element));
+			element.parentNode.insertBefore(container, element);
+
+			container.querySelector('.'+self.container.classname+'-pause').addEventListener('click', self.do_pause);
+			container.querySelector('.'+self.container.classname+'-play').addEventListener('click', self.do_play);
 
 			var triggers = ['error', 'play', 'playing', 'pause', 'suspend', 'ended', 'durationchange',  'loadedmetadata', 'progress', 'timeupdate'];
 			for (var pos in triggers) {
