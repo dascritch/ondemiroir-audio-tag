@@ -51,14 +51,27 @@ window.OndeMiroirAudio = function() {
 		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-',
 		menuId : 'OndeMiroirAudio-menu',
 		styleId : 'OndeMiroirAudio-style',
-		style : '  .OndeMiroirAudio-Player {  border : 2px solid yellow }',
+		style : ' .OndeMiroirAudio-Player {  border : 2px solid yellow ; display : flex} \
+		.OndeMiroirAudio-Player-cover { flex: 0 0 64px; height : 64px } .OndeMiroirAudio-Player-cover img { width : 100%  } ',
 		container :  {
 			tagname :'div',
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player',
 		},
-		template : '',
+		playbutton : {
+			play : '▶',
+			pause : '▮▮',
+		},
+		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
+			<div class="{{classname}}-play">play</div>\
+			<div><div><a href="{{canonical}}#">{{title}}</a></div><div>elapsed</div></div>\
+			<div>timeline</div>\
+			<div class="{{classname}}-actions">and more</div>',
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
+		__ : {
+			'(no title)' : '(sans titre)',
+			'cover' : 'pochette'
+		},
 		count_element : 0,
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
@@ -174,6 +187,33 @@ window.OndeMiroirAudio = function() {
 			var atoms = hashcode.split(self.separator);
 			self.jumpElementAt(atoms[0],atoms[1],callback_fx);
 		},
+		update_playbutton : function(event) {
+			var element = event.target;
+			element.id
+
+		},
+		populate_template : function(entry) {
+			var inner = self.template;
+			for (var key in entry) {
+				if (entry.hasOwnProperty(key)) {
+					inner = inner.replace(RegExp('{{'+key+'}}','g'), entry[key]);
+				}
+			}
+			return inner;
+		},
+		element_attribute : function(element, key, missing) {
+			return (element.attributes[key] === undefined) ? missing : element.attributes[key].value;
+		},
+		get_params_for_template : function(element) {
+			return {
+				// keys are stringed, as we need them not being modified
+				'title'     : element.title === '' ? self.__['(no title)'] : element.title,
+				'canonical' : element.dataset.canonical === undefined ? '' : element.dataset.canonical,
+				'poster' : self.element_attribute(element,'poster', self.poster_fallback),
+				'cover' : self.__['cover'],
+				'classname' : self.container.classname
+			}
+		},
 		build : function(element) {
 			if (element.id === '') {
 				element.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element);
@@ -181,7 +221,16 @@ window.OndeMiroirAudio = function() {
 			var zone = document.createElement(self.container.tagname)
 			zone.id = self.container.idPrefix + String(self.count_element);
 			zone.className = self.container.classname;
-			element.parentNode.insertBefore(zone, element)
+			zone.innerHTML = self.populate_template(self.get_params_for_template(element));
+			element.parentNode.insertBefore(zone, element);
+
+			var triggers = ['error','play','pause','suspend'];
+			for (var pos in triggers) {
+				if (triggers.hasOwnProperty(pos)) {
+					element.addEventListener(triggers[pos],self.update_playbutton);
+				}
+			}
+
 			self.count_element++;
 		},
 

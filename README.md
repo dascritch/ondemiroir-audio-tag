@@ -25,7 +25,6 @@ Todo
 ----
 
 - Building HTML element
-- Support for lazy load CSS
 - Support for elapsed time / countdown time / total time
 - Support for time anchor derivated from Tiemcode Hash
 - Support for title via title=""
@@ -60,6 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Versions
 --------
+* August 2015 : 3 , forking to ondemiroir-audio-tag
 * September 2014 : 2 , correcting to standard separator
 * September 2014 : 1 , public announcing
 * July 2014 : 1.a , public release
