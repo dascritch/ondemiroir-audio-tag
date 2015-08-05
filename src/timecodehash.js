@@ -48,23 +48,24 @@ window.OndeMiroirAudio = function() {
 	var self = {
 		separator : '&t=',
 		selector : 'audio[controls]',
-		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-',
+		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-tag-',
 		menuId : 'OndeMiroirAudio-menu',
 		styleId : 'OndeMiroirAudio-style',
-		style : ' .OndeMiroirAudio-Player {  border : 2px solid yellow ; display : flex} \
-		.OndeMiroirAudio-Player-cover { flex: 0 0 64px; height : 64px } .OndeMiroirAudio-Player-cover img { width : 100%  } ',
+		style : ' .OndeMiroirAudio-Player {  background : #ddd ; display : flex} \
+		.OndeMiroirAudio-Player-cover , .OndeMiroirAudio-Player-play { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .OndeMiroirAudio-Player-cover img { width : 100%  } \
+		.OndeMiroirAudio-Player-play { cursor : pointer }',
 		container :  {
 			tagname :'div',
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player',
 		},
 		playbutton : {
-			play : '▶',
-			pause : '▮▮',
+			play : '▮▮',
+			pause : '▶',
 		},
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
 			<div class="{{classname}}-play">play</div>\
-			<div><div><a href="{{canonical}}#">{{title}}</a></div><div>elapsed</div></div>\
+			<div><div><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
 			<div>timeline</div>\
 			<div class="{{classname}}-actions">and more</div>',
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
@@ -187,10 +188,20 @@ window.OndeMiroirAudio = function() {
 			var atoms = hashcode.split(self.separator);
 			self.jumpElementAt(atoms[0],atoms[1],callback_fx);
 		},
-		update_playbutton : function(event) {
-			var element = event.target;
-			element.id
+		update_playbutton : function(event, element, container) {
+			container.querySelector('.'+self.container.classname+'-play').innerHTML = element.paused ? self.playbutton.pause : self.playbutton.play;
 
+		},
+		update_time : function(event, element, container) {
+
+
+			container.querySelector('.'+self.container.classname+'-elapse').innerHTML = self.convertSecondsInTime(element.currentTime) + ' / ' + self.convertSecondsInTime(element.duration);
+		},
+		update : function(event) {
+			var element = event.target;
+			var container = document.getElementById(element.dataset.ondemiroir);
+			self.update_playbutton(event, element, container)
+			self.update_time(event, element, container)
 		},
 		populate_template : function(entry) {
 			var inner = self.template;
@@ -220,16 +231,18 @@ window.OndeMiroirAudio = function() {
 			}
 			var zone = document.createElement(self.container.tagname)
 			zone.id = self.container.idPrefix + String(self.count_element);
+			element.dataset.ondemiroir = zone.id;
 			zone.className = self.container.classname;
 			zone.innerHTML = self.populate_template(self.get_params_for_template(element));
 			element.parentNode.insertBefore(zone, element);
 
-			var triggers = ['error','play','pause','suspend'];
+			var triggers = ['error', 'play', 'playing', 'pause', 'suspend', 'ended', 'durationchange',  'loadedmetadata', 'progress', 'timeupdate'];
 			for (var pos in triggers) {
 				if (triggers.hasOwnProperty(pos)) {
-					element.addEventListener(triggers[pos],self.update_playbutton);
+					element.addEventListener(triggers[pos],self.update);
 				}
 			}
+			self.update({target : element})
 
 			self.count_element++;
 		},
