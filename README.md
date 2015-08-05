@@ -1,9 +1,9 @@
-TimecodeHash
-============
+Onde Miroir <audio> tag
+=======================
 
 Author :  [Xavier "dascritch" Mouton-Dubosc](http://dascritch.com)
 
-Version : 1.1.01
+Version : 0
 
 Thank you to my lovely friends
 * [Thomas Parisot](https://oncletom.io/) for suggestions
@@ -16,49 +16,26 @@ Informations in french : <http://dascritch.net/post/2014/09/03/Timecodehash-%3A-
 Purpose
 -------
 
-This is an hashtag extention for `<audio></video>`, permits to do a hotlink or a deeplink.
+This is an hashtag extention for `<audio>`, derivated from timecodehash.js
+It could have been done via HTML templates, with a polyfill like the excellent Bosonic, but I wanted a plain vanilla, easy to install and configure.
 
-Features
---------
+It will replace any <audio control> by an specialy crafted UI
 
-Link to an hash with a timecode to point the media player to the desired time. The main difference with standard media fragment is to permit external link to your page at a precise moment of your media.
+Todo
+----
 
-Example page : <http://dascritch.github.io/timecodehash/index.html>
+- Building HTML element
+- Support for lazy load CSS
+- Support for elapsed time / countdown time / total time
+- Support for time anchor derivated from Tiemcode Hash
+- Support for title via title=""
+- Support for cover via poster=""
+- Support for canonical url via canonical=""
+- Support for mute/ volume
+- Support for time line
+- Support for gear menu
+- Support for download / sharing twitter / facebook
 
-Blog post to come after August.
-
-How to
-------
-
-First, call the library as usual in your html where you want to address your players :
-```
-<script src="timecodehash.js"></script>
-```
-I personaly prefer in the `<head>` section, but it can work at the end of `<body>` minimified and collated. It should also work in dynamic injection.
-
-Just link as you usually do to a named anchor, then add `&t=` and the timecode you want the player to jump to.
-By example, triggering `<a href="page.html#player@100">` will start any playable element of page.html named "player" at the 100th second. The referred page.html should have a call to the library, the referrent doesn't need it.
-
-If you want to change the separator character, you should change the `window.TimecodeHash.separator` property after calling the lib.
-
-Permitted notations
--------------------
-
-For the timecode, you can use
-* seconds without unit : `page.html#player&t=7442`
-* professionnal timecodes as `02:04:02` (2 hours, 4 minutes and 2 seconds) : `page.html#player&t=02:04:02`
-* human-readable units as in `page.html#player&t=2h4m2s` for the previous example. Sub-units availables : `s`econds, `m`inutes, `h`ours and `d`ays
-
-Note : if a timecode without named anchor is given, as in `href="#@13h37m"`, the very first `<audio>`/`<video>` element of the document will be started and placed at this time.
-
-Via the API and only for the API at this time, you can change the separator from `&t=` to any accepted unicode character, p.e. `;`, `‣` or `♪`.
-
-Production notes
-----------------
-
-Firefox do large media seeking without any problems. But Chrome is not handling very easily. So TDD tests where switched laterly in async mode and `.jumpElementAt` and `hashOrder` have a callback function to test it properly.
-
-A contrario, Firefox seems doing a refresh loading when I use media frangment.
 
 Licence
 -------

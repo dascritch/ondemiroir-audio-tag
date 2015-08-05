@@ -23,7 +23,7 @@
 
  */
 
-window.TimecodeHash = function() {
+window.OndeMiroirAudio = function() {
 	'use strict';
 
 	if ( (document.querySelector === undefined) || (!('oncanplay' in window)) ) {
@@ -47,8 +47,19 @@ window.TimecodeHash = function() {
 
 	var self = {
 		separator : '&t=',
-		selector : 'audio,video',
-		menuId : 'timecodehash-menu',
+		selector : 'audio[controls]',
+		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-',
+		menuId : 'OndeMiroirAudio-menu',
+		styleId : 'OndeMiroirAudio-style',
+		style : '  .OndeMiroirAudio-Player {  border : 2px solid yellow }',
+		container :  {
+			tagname :'div',
+			idPrefix : 'OndeMiroirAudio-Player-',
+			classname : 'OndeMiroirAudio-Player',
+		},
+		template : '',
+		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
+		count_element : 0,
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
 			if (/^\d+$/.test(givenTime)) {
@@ -72,7 +83,7 @@ window.TimecodeHash = function() {
 		convertColonTimeInSeconds : function(givenTime) {
 			var seconds = 0;
 			var atoms = givenTime.split(':');
-			var convert = [ 1 , 60 , 3600 , 86400 ];
+			var convert = [1, 60, 3600, 86400];
 			for (var pos = 0 ; pos < atoms.length ; pos++ ) {
 				seconds += Number(atoms[pos]) * convert[((atoms.length-1) - pos)];
 			}
@@ -162,57 +173,46 @@ window.TimecodeHash = function() {
 
 			var atoms = hashcode.split(self.separator);
 			self.jumpElementAt(atoms[0],atoms[1],callback_fx);
+		},
+		build : function(element) {
+			if (element.id === '') {
+				element.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element);
+			}
+			var zone = document.createElement(self.container.tagname)
+			zone.id = self.container.idPrefix + String(self.count_element);
+			zone.className = self.container.classname;
+			element.parentNode.insertBefore(zone, element)
+			self.count_element++;
+		},
+
+		insertStyle : function() {
+			var element = document.createElement('style');
+			element.id = self.styleId;
+			element.innerHTML = self.style;
+			var head = document.getElementsByTagName('head')[0];
+			head.appendChild(element);
+
+		},
+		launch : function() {
+			if (document.getElementById(self.styleId) !== null) {
+				// injected <style> is already there
+				return ;
+			}
+			[].forEach.call(
+				// explication de cette construction : https://coderwall.com/p/jcmzxw
+				document.querySelectorAll(self.selector), self.build
+			);
+			self.insertStyle();
 		}
 	};
 
-	function _launch() {
-
-		function _buildMenu() {
-			var locale = {
-				'fr' : 'URL de cette position',
-				'en' : 'URL at this time'
-			};
-
-			function _getPreferedLocale() {
-				// we really need here a smart way to catch the Accept-Locale
-				return 'fr';
-			}
-
-			function _onMenu() {
-				var self = window.TimecodeHash;
-				var el = document.querySelector(self.selector);
-				var retour = document.location.href.split('#')[0];
-				retour += '#' + el.id + self.separator + self.convertSecondsInTime(el.currentTime);
-				window.prompt(locale.fr,retour);
-			}
-
-			document.body.insertAdjacentHTML('beforeend',
-				'<menu type="context" id="'+self.menuId+'">'+
-					'<menuitem label="'+locale[_getPreferedLocale()]+'"></menuitem>'+
-				'</menu>'
-				);
-			document.querySelector('#'+self.menuId+' menuitem').addEventListener('click',_onMenu);
-			[].forEach.call(
-				// explication de cette construction : https://coderwall.com/p/jcmzxw
-				document.querySelectorAll(self.selector),
-				function(el) {
-					el.setAttribute('contextmenu',self.menuId);
-				}
-			);
-		}
-
-		if (document.getElementById(self.menuId) === null) {
-			_buildMenu();
-			self.hashOrder();
-		}
-	}
 
 	if (document.body !== null) {
-		 _launch();
+		self.launch();
 	} else {
-		document.addEventListener( 'readystatechange', _launch ,false);
+		document.addEventListener( 'readystatechange', self.launch, false);
 	}
-	window.addEventListener( 'hashchange', self.hashOrder , false);
+	window.addEventListener( 'hashchange', self.hashOrder, false);
 
 	return self;
 }();
