@@ -53,7 +53,9 @@ window.OndeMiroirAudio = function() {
 		styleId : 'OndeMiroirAudio-style',
 		style : ' .OndeMiroirAudio-Player {  background : #ddd ; display : flex} \
 		.OndeMiroirAudio-Player-cover , .OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .OndeMiroirAudio-Player-cover img { width : 100%  } \
-		.OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { cursor : pointer }',
+		.OndeMiroirAudio-Player-play , .OndeMiroirAudio-Player-pause { cursor : pointer } \
+		.OndeMiroirAudio-Player-about {flex : 2 2 100%} \
+		.OndeMiroirAudio-Player-titleline {display : flex} ',
 		container :  {
 			tagname :'div',
 			idPrefix : 'OndeMiroirAudio-Player-',
@@ -61,8 +63,8 @@ window.OndeMiroirAudio = function() {
 		},
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
 			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
-			<div><div><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
-			<div>timeline</div>\
+			<div  class="{{classname}}-about"><div class="{{classname}}-titleline"><div><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
+			<div>timeline</div></div>\
 			<div class="{{classname}}-actions">and more</div>',
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		__ : {
