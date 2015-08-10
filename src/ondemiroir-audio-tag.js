@@ -45,6 +45,80 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
+	var _style = `
+.{{classname}} {
+	background : #ddd;
+	display : flex;
+	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	border : none;
+	padding : 0;
+	margin : 0;
+}
+.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause {
+	flex : 0 0 64px;
+	height : 64px;
+	text-align : center;
+	vertical-align : middle;
+} 
+.{{classname}}-cover img {
+	width : 100%;
+}
+.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions {
+	cursor : pointer;
+}
+.{{classname}}-titleline {
+	display : flex;
+}
+.{{classname}}-about, .{{classname}}-title {
+	flex : 2 2 100%;
+}
+.{{classname}}-time {
+	background : black;
+	width : 100%;
+	height : 10px;
+	display : block;
+	border-radius : 4px;
+	position : relative;
+}
+.{{classname}}-elapsedline {
+	background : white;
+	height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; }
+.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}
+.{{classname}}-twitter {background : #4DB5F4} .{{classname}}-facebook {background : #5974CC} .{{classname}}-googleplus {background : #E15646}  .{{classname}}-email {background : #1DCE9A} .{{classname}}-link {background : #00E}
+	`;
+
+	var _template = `
+<div class="{{classname}}-cover">
+	<img src="{{poster}}" alt="{{cover}}" />
+</div>
+<div class="{{classname}}-pagemain">
+	<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>
+	<div class="{{classname}}-about">
+		<div class="{{classname}}-titleline">
+			<div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div>
+			<div class="{{classname}}-elapse">elapsed</div>
+		</div>
+		<div>
+			<div class="{{classname}}-time">
+				<div class="{{classname}}-elapsedline"></div>
+			</div>
+		</div>
+	</div>
+	<div class="{{classname}}-actions">{{more}}</div>
+</div>
+<div class="{{classname}}-pageshare">
+	<div class="{{classname}}-share">
+		<a href="#" target="social" class="{{classname}}-twitter">{{twitter}}</a>
+		<a href="#" target="social" class="{{classname}}-facebook">{{facebook}}</a>
+		<a href="#" target="social" class="{{classname}}-googleplus">{{googleplus}}</a>
+		<a href="#" target="social" class="{{classname}}-email">{{e-mail}}</a>
+		<a class="{{classname}}-playlist">{{playlist}}</a>
+		<a href="#" target="social" class="{{classname}}-link">{{direct-link}}</a>
+		<div class="{{classname}}-back">{{back}}</div>
+	</div>
+</div>
+	`;
+
 	var self = {
 		dontHideAudioTag : true,
 		separator : '&t=',
@@ -57,30 +131,7 @@ window.OndeMiroirAudio = function() {
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player',
 		},
-		style : ' .{{classname}} { background : #ddd ; display : flex ; font-family: Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; border : none; padding : 0; margin : 0 } \
-		.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .{{classname}}-cover img { width : 100%  } \
-		.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions { cursor : pointer } \
-		.{{classname}}-titleline {display : flex} \
-		.{{classname}}-about, .{{classname}}-title {flex : 2 2 100%} \
-		.{{classname}}-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
-		.{{classname}}-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } \
-		.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}\
-		.{{classname}}-twitter {background : #4DB5F4} .{{classname}}-facebook {background : #5974CC} .{{classname}}-googleplus {background : #E15646}  .{{classname}}-email {background : #1DCE9A} .{{classname}}-link {background : #00E}',
-		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
-			<div class="{{classname}}-pagemain">\
-			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
-			<div class="{{classname}}-about"><div class="{{classname}}-titleline"><div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
-			<div><div class="{{classname}}-time"><div class="{{classname}}-elapsedline"></div></div></div></div>\
-			<div class="{{classname}}-actions">{{more}}</div>\
-			</div><div class="{{classname}}-pageshare">\
-			<div class="{{classname}}-share">\
-			<a href="#" target="social" class="{{classname}}-twitter">{{twitter}}</a>\
-			<a href="#" target="social" class="{{classname}}-facebook">{{facebook}}</a>\
-			<a href="#" target="social" class="{{classname}}-googleplus">{{googleplus}}</a>\
-			<a href="#" target="social" class="{{classname}}-email">{{e-mail}}</a>\
-			<a class="{{classname}}-playlist">{{playlist}}</a>\
-			<a href="#" target="social" class="{{classname}}-link">{{direct-link}}</a>\
-			<div class="{{classname}}-back">{{back}}</div></div>',
+		
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		__ : {
 			'(no title)' : '(sans titre)',
@@ -307,7 +358,7 @@ window.OndeMiroirAudio = function() {
 			element.dataset.ondemiroir = container.id;
 			container.dataset.rel = element.id;
 			container.className = self.container.classname;
-			container.innerHTML = self.populate_template(self.template, self.get_params_for_template(element));
+			container.innerHTML = self.populate_template(_template, self.get_params_for_template(element));
 			element.parentNode.insertBefore(container, element);
 
 			var cliquables = {
@@ -340,7 +391,7 @@ window.OndeMiroirAudio = function() {
 		insertStyle : function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
-			element.innerHTML = self.populate_template(self.style, self.get_params_for_template(element));
+			element.innerHTML = self.populate_template(_style, self.get_params_for_template(element));
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
 
