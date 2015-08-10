@@ -63,16 +63,22 @@ window.OndeMiroirAudio = function() {
 		.{{classname}}-titleline {display : flex} \
 		.{{classname}}-about, .{{classname}}-title {flex : 2 2 100%} \
 		.{{classname}}-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
-		.{{classname}}-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } ',
+		.{{classname}}-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } \
+		.{{classname}}-share {display : none; flex : 2 2 100%}',
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
 			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
 			<div class="{{classname}}-about"><div class="{{classname}}-titleline"><div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
 			<div><div class="{{classname}}-time"><div class="{{classname}}-elapsedline"></div></div></div></div>\
-			<div class="{{classname}}-actions">and more</div>',
+			<div class="{{classname}}-actions">and more</div>\
+			<div class="{{classname}}-share"><ul><li>{{twitter}}</li><li>{{facebook}}</li><li>{{e-mail}}</li><li>{{direct-link}}</li></ul></div>',
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		__ : {
 			'(no title)' : '(sans titre)',
-			'cover' : 'pochette'
+			'cover' : 'pochette',
+			'twitter' : 'Partager sur Twitter',
+			'facebook' : 'Partager sur Facebook',
+			'e-mail' : 'Partager par e-mail',
+			'direct-link' : 'Lien direct',
 		},
 		count_element : 0,
 		convertTimeInSeconds : function(givenTime) {
@@ -221,12 +227,17 @@ window.OndeMiroirAudio = function() {
 			self.seekElementAt(audiotag, ratio * audiotag.duration)
 		},
 		do_pause : function(event) {
-			var container = self.find_container(event.target)
+			var container = self.find_container(event.target);
 			document.getElementById(container.dataset.rel).pause();
 		},
 		do_play : function(event) {
-			var container = self.find_container(event.target)
+			var container = self.find_container(event.target);
 			document.getElementById(container.dataset.rel).play();
+		},
+		show_actions : function(event) {
+			var container = self.find_container(event.target);
+			container.querySelector('.'+self.container.classname+'-about').style.display = 'none';
+			container.querySelector('.'+self.container.classname+'-share').style.display = 'block';
 		},
 		populate_template : function(inner, entry) {
 			for (var key in entry) {
@@ -240,14 +251,20 @@ window.OndeMiroirAudio = function() {
 			return (element.attributes[key] === undefined) ? missing : element.attributes[key].value;
 		},
 		get_params_for_template : function(element) {
-			return {
+			var out = {
 				// keys are stringed, as we need them not being modified
 				'title'     : element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
 				'canonical' : element.dataset.canonical === undefined ? '' : element.dataset.canonical,
 				'poster' : self.element_attribute(element,'poster', self.poster_fallback),
-				'cover' : self.__['cover'],
 				'classname' : self.container.classname
 			}
+			// we now add locales
+			for (var key in self.__) {
+				if (self.__.hasOwnProperty(key)) {
+					out[key] = self.__[key];
+				}
+			}
+			return out;
 		},
 		build : function(element) {
 			if (element.id === '') {
@@ -269,12 +286,11 @@ window.OndeMiroirAudio = function() {
 				'actions'	: self.show_actions,
 			};
 			for (var that in cliquables) {
-				console.log(that)
 				if (cliquables.hasOwnProperty(that)) {
-					container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);		
+					container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
 				}
 			}
-			
+
 			var triggers = ['error', 'play', 'playing', 'pause', 'suspend', 'ended', 'durationchange',  'loadedmetadata', 'progress', 'timeupdate'];
 			for (var pos in triggers) {
 				if (triggers.hasOwnProperty(pos)) {
