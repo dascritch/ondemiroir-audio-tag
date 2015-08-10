@@ -64,24 +64,27 @@ window.OndeMiroirAudio = function() {
 		.{{classname}}-about, .{{classname}}-title {flex : 2 2 100%} \
 		.{{classname}}-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
 		.{{classname}}-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } \
-		.{{classname}}-pagemain, .{{classname}}-pageshare {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}',
+		.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}',
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
 			<div class="{{classname}}-pagemain">\
 			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
 			<div class="{{classname}}-about"><div class="{{classname}}-titleline"><div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
 			<div><div class="{{classname}}-time"><div class="{{classname}}-elapsedline"></div></div></div></div>\
-			<div class="{{classname}}-actions">and more</div>\
+			<div class="{{classname}}-actions">{{more}}</div>\
 			</div><div class="{{classname}}-pageshare">\
-			<div class="{{classname}}-share"><ul><li>{{twitter}}</li><li>{{facebook}}</li><li>{{e-mail}}</li><li>{{direct-link}}</li></ul></div>\
-			</div>',
+			<div class="{{classname}}-share">\
+			<div>{{twitter}}</div><div>{{facebook}}</div><div>{{e-mail}}</div><div>{{direct-link}}</div>\
+			<div class="{{classname}}-back">{{back}}</div></div>',
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		__ : {
 			'(no title)' : '(sans titre)',
 			'cover' : 'pochette',
+			'more' : 'Partager',
 			'twitter' : 'Partager sur Twitter',
 			'facebook' : 'Partager sur Facebook',
 			'e-mail' : 'Partager par e-mail',
 			'direct-link' : 'Lien direct',
+			'back' : 'back'
 		},
 		count_element : 0,
 		convertTimeInSeconds : function(givenTime) {
@@ -240,7 +243,12 @@ window.OndeMiroirAudio = function() {
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'none';
-			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'block';
+			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'flex';
+		},
+		show_main : function(event) {
+			var container = self.find_container(event.target);
+			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'flex';
+			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'none';
 		},
 		populate_template : function(inner, entry) {
 			for (var key in entry) {
@@ -286,6 +294,7 @@ window.OndeMiroirAudio = function() {
 				'play'		: self.do_play,
 				'time'		: self.do_throbble,
 				'actions'	: self.show_actions,
+				'back' 		: self.show_main,
 			};
 			for (var that in cliquables) {
 				if (cliquables.hasOwnProperty(that)) {
