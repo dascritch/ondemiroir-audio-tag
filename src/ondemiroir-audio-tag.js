@@ -64,13 +64,16 @@ window.OndeMiroirAudio = function() {
 		.{{classname}}-about, .{{classname}}-title {flex : 2 2 100%} \
 		.{{classname}}-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
 		.{{classname}}-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } \
-		.{{classname}}-share {display : none; flex : 2 2 100%}',
+		.{{classname}}-pagemain, .{{classname}}-pageshare {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}',
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
+			<div class="{{classname}}-pagemain">\
 			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
 			<div class="{{classname}}-about"><div class="{{classname}}-titleline"><div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div><div class="{{classname}}-elapse">elapsed</div></div>\
 			<div><div class="{{classname}}-time"><div class="{{classname}}-elapsedline"></div></div></div></div>\
 			<div class="{{classname}}-actions">and more</div>\
-			<div class="{{classname}}-share"><ul><li>{{twitter}}</li><li>{{facebook}}</li><li>{{e-mail}}</li><li>{{direct-link}}</li></ul></div>',
+			</div><div class="{{classname}}-pageshare">\
+			<div class="{{classname}}-share"><ul><li>{{twitter}}</li><li>{{facebook}}</li><li>{{e-mail}}</li><li>{{direct-link}}</li></ul></div>\
+			</div>',
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		__ : {
 			'(no title)' : '(sans titre)',
@@ -236,8 +239,8 @@ window.OndeMiroirAudio = function() {
 		},
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
-			container.querySelector('.'+self.container.classname+'-about').style.display = 'none';
-			container.querySelector('.'+self.container.classname+'-share').style.display = 'block';
+			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'none';
+			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'block';
 		},
 		populate_template : function(inner, entry) {
 			for (var key in entry) {
@@ -277,7 +280,6 @@ window.OndeMiroirAudio = function() {
 			container.className = self.container.classname;
 			container.innerHTML = self.populate_template(self.template, self.get_params_for_template(element));
 			element.parentNode.insertBefore(container, element);
-
 
 			var cliquables = {
 				'pause'		: self.do_pause,
