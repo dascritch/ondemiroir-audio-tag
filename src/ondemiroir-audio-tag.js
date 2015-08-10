@@ -248,7 +248,6 @@ window.OndeMiroirAudio = function() {
 			} else {
 				do_needle_move({});
 			}
-
 		},
 		hashOrder : function(hashcode,callback_fx){
 			if (typeof hashcode !== 'string') {
@@ -303,7 +302,7 @@ window.OndeMiroirAudio = function() {
 			function ahref(category, href) {
 				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
 			}
-			var url = player.dataset.canonical+'#'+player.id+'&t='+self.convertSecondsInTime(player.currentTime);
+			var url = player.dataset.canonical+'#'+player.id+self.separator+self.convertSecondsInTime(player.currentTime);
 			ahref('twitter', 'https://twitter.com/share?text='+player.title+'&url='+url+'&via=dascritch');
 			ahref('facebook', 'https://www.facebook.com/sharer.php?t='+player.title+'&u='+url);
 			ahref('googleplus', 'https://plus.google.com/share?url='+url);
