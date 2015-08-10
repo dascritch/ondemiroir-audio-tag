@@ -64,7 +64,8 @@ window.OndeMiroirAudio = function() {
 		.{{classname}}-about, .{{classname}}-title {flex : 2 2 100%} \
 		.{{classname}}-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
 		.{{classname}}-elapsedline {background : white; height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; } \
-		.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}',
+		.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}\
+		.{{classname}}-twitter {background : #4DB5F4} .{{classname}}-facebook {background : #5974CC} .{{classname}}-googleplus {background : #E15646}  .{{classname}}-email {background : #1DCE9A} .{{classname}}-link {background : #00E}',
 		template : '<div class="{{classname}}-cover"><img src="{{poster}}" alt="{{cover}}" /></div>\
 			<div class="{{classname}}-pagemain">\
 			<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>\
@@ -73,7 +74,12 @@ window.OndeMiroirAudio = function() {
 			<div class="{{classname}}-actions">{{more}}</div>\
 			</div><div class="{{classname}}-pageshare">\
 			<div class="{{classname}}-share">\
-			<div>{{twitter}}</div><div>{{facebook}}</div><div>{{e-mail}}</div><div>{{direct-link}}</div>\
+			<a href="#" target="social" class="{{classname}}-twitter">{{twitter}}</a>\
+			<a href="#" target="social" class="{{classname}}-facebook">{{facebook}}</a>\
+			<a href="#" target="social" class="{{classname}}-googleplus">{{googleplus}}</a>\
+			<a href="#" target="social" class="{{classname}}-email">{{e-mail}}</a>\
+			<a class="{{classname}}-playlist">{{playlist}}</a>\
+			<a href="#" target="social" class="{{classname}}-link">{{direct-link}}</a>\
 			<div class="{{classname}}-back">{{back}}</div></div>',
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		__ : {
@@ -82,9 +88,11 @@ window.OndeMiroirAudio = function() {
 			'more' : 'Partager',
 			'twitter' : 'Partager sur Twitter',
 			'facebook' : 'Partager sur Facebook',
+			'googleplus' : 'Partager sur Google+',
 			'e-mail' : 'Partager par e-mail',
-			'direct-link' : 'Lien direct',
-			'back' : 'back'
+			'playlist' : 'Écouter plus tard',
+			'direct-link' : 'Lien permanent',
+			'back' : 'Annuler'
 		},
 		count_element : 0,
 		convertTimeInSeconds : function(givenTime) {
@@ -210,7 +218,7 @@ window.OndeMiroirAudio = function() {
 
 		},
 		update_time : function(event, element, container) {
-			container.querySelector('.'+self.container.classname+'-elapse').innerHTML = self.convertSecondsInTime(element.currentTime) + ' / ' + self.convertSecondsInTime(element.duration);
+			container.querySelector('.'+self.container.classname+'-elapse').innerHTML = self.convertSecondsInTime(element.currentTime) + ' / ' + self.convertSecondsInTime(Math.round(element.duration));
 			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%')
 		},
 		update : function(event) {
@@ -240,10 +248,22 @@ window.OndeMiroirAudio = function() {
 			var container = self.find_container(event.target);
 			document.getElementById(container.dataset.rel).play();
 		},
+		update_links : function(player, zone) {
+			function ahref(category, href) {
+				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
+			}
+			var url = player.dataset.canonical+'#'+player.id+'&t='+self.convertSecondsInTime(player.currentTime);
+			ahref('twitter', 'https://twitter.com/share?text='+player.title+'&url='+url+'&via=dascritch');
+			ahref('facebook', 'https://www.facebook.com/sharer.php?t='+player.title+'&u='+url);
+			ahref('googleplus', 'https://plus.google.com/share?url='+url);
+			ahref('email', 'mailto:?subject='+player.title+'&body='+url);
+			ahref('link', url);
+		},
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'none';
 			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'flex';
+			self.update_links(document.getElementById(container.dataset.rel), container.querySelector('.'+self.container.classname+'-share'))
 		},
 		show_main : function(event) {
 			var container = self.find_container(event.target);
@@ -262,11 +282,12 @@ window.OndeMiroirAudio = function() {
 			return (element.attributes[key] === undefined) ? missing : element.attributes[key].value;
 		},
 		get_params_for_template : function(element) {
+			element.dataset.canonical === undefined ? document.location.href : element.dataset.canonical;
 			var out = {
 				// keys are stringed, as we need them not being modified
 				'title'     : element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
-				'canonical' : element.dataset.canonical === undefined ? '' : element.dataset.canonical,
-				'poster' : self.element_attribute(element,'poster', self.poster_fallback),
+				'canonical' : element.dataset.canonical,
+				'poster' 	: self.element_attribute(element,'poster', self.poster_fallback),
 				'classname' : self.container.classname
 			}
 			// we now add locales
