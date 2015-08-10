@@ -59,7 +59,7 @@ window.OndeMiroirAudio = function() {
 		},
 		style : ' .{{classname}} { background : #ddd ; display : flex ; font-family: Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; border : none; padding : 0; margin : 0 } \
 		.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause { flex: 0 0 64px; height : 64px ; text-align : center ; vertical-align : middle } .{{classname}}-cover img { width : 100%  } \
-		.{{classname}}-play , .{{classname}}-pause { cursor : pointer } \
+		.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions { cursor : pointer } \
 		.{{classname}}-titleline {display : flex} \
 		.{{classname}}-about, .{{classname}}-title {flex : 2 2 100%} \
 		.{{classname}}-time {background : black; width : 100% ; height : 10px ; display : block ; border-radius : 4px; position:relative;} \
@@ -261,10 +261,20 @@ window.OndeMiroirAudio = function() {
 			container.innerHTML = self.populate_template(self.template, self.get_params_for_template(element));
 			element.parentNode.insertBefore(container, element);
 
-			container.querySelector('.'+self.container.classname+'-pause').addEventListener('click', self.do_pause);
-			container.querySelector('.'+self.container.classname+'-play').addEventListener('click', self.do_play);
-			container.querySelector('.'+self.container.classname+'-time').addEventListener('click', self.do_throbble);
 
+			var cliquables = {
+				'pause'		: self.do_pause,
+				'play'		: self.do_play,
+				'time'		: self.do_throbble,
+				'actions'	: self.show_actions,
+			};
+			for (var that in cliquables) {
+				console.log(that)
+				if (cliquables.hasOwnProperty(that)) {
+					container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);		
+				}
+			}
+			
 			var triggers = ['error', 'play', 'playing', 'pause', 'suspend', 'ended', 'durationchange',  'loadedmetadata', 'progress', 'timeupdate'];
 			for (var pos in triggers) {
 				if (triggers.hasOwnProperty(pos)) {
