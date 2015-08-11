@@ -82,9 +82,28 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-elapsedline {
 	background : white;
-	height : 10px ; display : block ; position:absolute; left:0; border-radius : 4px; pointer-events : none; }
-.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {flex : 2 2 100% ; display : flex} .{{classname}}-pageshare {display : none}
-.{{classname}}-twitter {background : #4DB5F4} .{{classname}}-facebook {background : #5974CC} .{{classname}}-googleplus {background : #E15646}  .{{classname}}-email {background : #1DCE9A} .{{classname}}-link {background : #00E}
+	height : 10px ;
+	display : block ;
+	position : absolute; 
+	left : 0;
+	border-radius : 4px;
+	pointer-events : none;
+}
+.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {
+	flex : 2 2 100%;
+	display : flex;
+}
+.{{classname}}-pageshare {
+	display : none;
+}
+.{{classname}}-share a {
+	flex : 2 0;
+}
+.{{classname}}-twitter {background : #4DB5F4}
+.{{classname}}-facebook {background : #5974CC}
+.{{classname}}-googleplus {background : #E15646}
+.{{classname}}-email {background : #1DCE9A}
+.{{classname}}-link {background : #77F}
 	`;
 
 	var _template = `
@@ -302,7 +321,7 @@ window.OndeMiroirAudio = function() {
 			function ahref(category, href) {
 				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
 			}
-			var url = player.dataset.canonical+'#'+player.id+self.separator+self.convertSecondsInTime(player.currentTime);
+			var url = player.dataset.canonical+'#'+player.id+(player.currentTime === 0 ? '' : self.separator+self.convertSecondsInTime(player.currentTime));
 			ahref('twitter', 'https://twitter.com/share?text='+player.title+'&url='+url+'&via=dascritch');
 			ahref('facebook', 'https://www.facebook.com/sharer.php?t='+player.title+'&u='+url);
 			ahref('googleplus', 'https://plus.google.com/share?url='+url);
