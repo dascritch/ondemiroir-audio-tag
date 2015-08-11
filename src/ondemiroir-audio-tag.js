@@ -322,10 +322,12 @@ window.OndeMiroirAudio = function() {
 				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
 			}
 			var url = player.dataset.canonical+'#'+player.id+(player.currentTime === 0 ? '' : self.separator+self.convertSecondsInTime(player.currentTime));
-			ahref('twitter', 'https://twitter.com/share?text='+player.title+'&url='+url+'&via=dascritch');
-			ahref('facebook', 'https://www.facebook.com/sharer.php?t='+player.title+'&u='+url);
-			ahref('googleplus', 'https://plus.google.com/share?url='+url);
-			ahref('email', 'mailto:?subject='+player.title+'&body='+url);
+			var _url = encodeURI(url);
+			var _title = encodeURI(player.title);
+			ahref('twitter', 'https://twitter.com/share?text='+_title+'&url='+_url+'&via=dascritch');
+			ahref('facebook', 'https://www.facebook.com/sharer.php?t='+_title+'&u='+_url);
+			ahref('googleplus', 'https://plus.google.com/share?url='+_url);
+			ahref('email', 'mailto:?subject='+_title+'&body='+_url);
 			ahref('link', url);
 		},
 		show_actions : function(event) {
