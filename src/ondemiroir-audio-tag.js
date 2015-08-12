@@ -26,9 +26,9 @@
 window.OndeMiroirAudio = function() {
 	'use strict';
 
-	if ( (document.querySelector === undefined) || (!('oncanplay' in window)) ) {
+	if ( (document.querySelector === undefined) || (!('oncanplay' in window)) || (![].forEach) ) {
 		// don't even think about it : probably MSIE < 8
-		return;
+		return undefined;
 	}
 
 	var _units = {
@@ -343,9 +343,7 @@ window.OndeMiroirAudio = function() {
 		},
 		populate_template : function(inner, entry) {
 			for (var key in entry) {
-				if (entry.hasOwnProperty(key)) {
-					inner = inner.replace(RegExp('{{'+key+'}}','g'), entry[key]);
-				}
+				inner = inner.replace(RegExp('{{'+key+'}}','g'), entry[key]);
 			}
 			return inner;
 		},
@@ -363,9 +361,7 @@ window.OndeMiroirAudio = function() {
 			}
 			// we now add locales
 			for (var key in self.__) {
-				if (self.__.hasOwnProperty(key)) {
-					out[key] = self.__[key];
-				}
+				out[key] = self.__[key];
 			}
 			return out;
 		},
@@ -389,17 +385,15 @@ window.OndeMiroirAudio = function() {
 				'back' 		: self.show_main,
 			};
 			for (var that in cliquables) {
-				if (cliquables.hasOwnProperty(that)) {
-					container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
-				}
+				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
 			}
 
-			var triggers = ['error', 'play', 'playing', 'pause', 'suspend', 'ended', 'durationchange',  'loadedmetadata', 'progress', 'timeupdate'];
-			for (var pos in triggers) {
-				if (triggers.hasOwnProperty(pos)) {
-					element.addEventListener(triggers[pos],self.update);
-				}
-			}
+			[
+				'ready', 'load',
+				'error',
+				'play', 'playing', 'pause', 'suspend', 'ended',
+				'durationchange',  'loadedmetadata', 'progress', 'timeupdate'
+			].forEach( function(on){ element.addEventListener(on, self.update); } );
 			self.update({target : element})
 			if (self.dontHideAudioTag === false) {
 				element.style.display = 'none';
