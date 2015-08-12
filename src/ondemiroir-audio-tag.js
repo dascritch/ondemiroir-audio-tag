@@ -98,6 +98,11 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-share a {
 	flex : 2 0;
+	color : white;
+	text-decoration : none;
+}
+.{{classname}}-share img {
+	vertical-align : middle;
 }
 .{{classname}}-twitter {background : #4DB5F4}
 .{{classname}}-facebook {background : #5974CC}
@@ -127,10 +132,10 @@ window.OndeMiroirAudio = function() {
 </div>
 <div class="{{classname}}-pageshare">
 	<div class="{{classname}}-share">
-		<a href="#" target="social" class="{{classname}}-twitter">{{twitter}}</a>
-		<a href="#" target="social" class="{{classname}}-facebook">{{facebook}}</a>
-		<a href="#" target="social" class="{{classname}}-googleplus">{{googleplus}}</a>
-		<a href="#" target="social" class="{{classname}}-email">{{e-mail}}</a>
+		<a href="#" target="social" class="{{classname}}-twitter"><img src="{{svg_pictos}}#twitter" alt="" />{{twitter}}</a>
+		<a href="#" target="social" class="{{classname}}-facebook"><img src="{{svg_pictos}}#facebook" alt="" />{{facebook}}</a>
+		<a href="#" target="social" class="{{classname}}-googleplus"><img src="{{svg_pictos}}#googleplus" alt="" />{{googleplus}}</a>
+		<a href="#" target="social" class="{{classname}}-email"><img src="{{svg_pictos}}#email" alt="" />{{e-mail}}</a>
 		<a class="{{classname}}-playlist">{{playlist}}</a>
 		<a href="#" target="social" class="{{classname}}-link">{{direct-link}}</a>
 		<div class="{{classname}}-back">{{back}}</div>
@@ -150,8 +155,8 @@ window.OndeMiroirAudio = function() {
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player',
 		},
-		
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
+		svg_pictos : './src/icones.svg',
 		__ : {
 			'(no title)' : '(sans titre)',
 			'cover' : 'pochette',
@@ -357,7 +362,8 @@ window.OndeMiroirAudio = function() {
 				'title'     : element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
 				'canonical' : element.dataset.canonical,
 				'poster' 	: self.element_attribute(element,'poster', self.poster_fallback),
-				'classname' : self.container.classname
+				'classname' : self.container.classname,
+				'svg_pictos': self.svg_pictos
 			}
 			// we now add locales
 			for (var key in self.__) {
