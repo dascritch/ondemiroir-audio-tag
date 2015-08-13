@@ -82,10 +82,8 @@ window.OndeMiroirAudio = function() {
 .{{classname}}-about, .{{classname}}-title {
 	flex : 2 2 100%;
 }
-.{{classname}}-line {
-	padding : 10px;
-	height : 30px;
-	bottom : 0;
+.{{classname}}-elapse {
+	flex : 2 0 120px;	
 }
 .{{classname}}-time {
 	background : black;
