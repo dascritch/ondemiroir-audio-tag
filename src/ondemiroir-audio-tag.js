@@ -132,7 +132,11 @@ window.OndeMiroirAudio = function() {
 		display : none;
 	}
 }
-
+@media screen and (max-width: 319px) {
+	.{{classname}}-elapse {
+		display : none;
+	}
+}
 	`;
 
 	var _template = `
