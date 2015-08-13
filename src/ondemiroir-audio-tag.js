@@ -124,6 +124,17 @@ window.OndeMiroirAudio = function() {
 .{{classname}}-googleplus {background : #E15646}
 .{{classname}}-email {background : #1DCE9A}
 .{{classname}}-link {background : #77F}
+
+@media screen and (max-width: 640px) {
+	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
+	flex : 0 0 32px;
+	height : 32px;
+	}
+	.{{classname}}-share span {
+		display : none;
+	}
+}
+
 	`;
 
 	var _template = `
@@ -147,12 +158,12 @@ window.OndeMiroirAudio = function() {
 </div>
 <div class="{{classname}}-pageshare">
 	<div class="{{classname}}-share">
-		<a href="#" target="social" class="{{classname}}-twitter"><img src="{{svg_pictos}}#twitter" alt="" />{{twitter}}</a>
-		<a href="#" target="social" class="{{classname}}-facebook"><img src="{{svg_pictos}}#facebook" alt="" />{{facebook}}</a>
-		<a href="#" target="social" class="{{classname}}-googleplus"><img src="{{svg_pictos}}#googleplus" alt="" />{{googleplus}}</a>
-		<a href="#" target="social" class="{{classname}}-email"><img src="{{svg_pictos}}#email" alt="" />{{e-mail}}</a>
-		<a class="{{classname}}-playlist"><img src="{{svg_pictos}}#play" alt="" />{{playlist}}</a>
-		<a href="#" target="social" class="{{classname}}-link"><img src="{{svg_pictos}}#share" alt="" />{{direct-link}}</a>
+		<a href="#" target="social" class="{{classname}}-twitter"><img src="{{svg_pictos}}#twitter" alt="" /><span>{{twitter}}</span></a>
+		<a href="#" target="social" class="{{classname}}-facebook"><img src="{{svg_pictos}}#facebook" alt="" /><span>{{facebook}}</span></a>
+		<a href="#" target="social" class="{{classname}}-googleplus"><img src="{{svg_pictos}}#googleplus" alt="" /><span>{{googleplus}}</span></a>
+		<a href="#" target="social" class="{{classname}}-email"><img src="{{svg_pictos}}#email" alt="" /><span>{{e-mail}}</span></a>
+		<a class="{{classname}}-playlist"><img src="{{svg_pictos}}#play" alt="" /><span>{{playlist}}</span></a>
+		<a href="#" target="social" class="{{classname}}-link"><img src="{{svg_pictos}}#share" alt="" /><span>{{direct-link}}</span></a>
 		<div class="{{classname}}-back">{{back}}</div>
 	</div>
 </div>
