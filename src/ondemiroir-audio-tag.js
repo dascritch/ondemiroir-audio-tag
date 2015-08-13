@@ -47,12 +47,16 @@ window.OndeMiroirAudio = function() {
 
 	var _style = `
 .{{classname}} {
-	background : #ddd;
+	background : #555;
+	color : #ccc;
 	display : flex;
 	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 	border : none;
 	padding : 0;
 	margin : 0;
+}
+.{{classname}} a {
+	color : #aaf;
 }
 .{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
 	flex : 0 0 64px;
