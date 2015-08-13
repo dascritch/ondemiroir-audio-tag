@@ -54,7 +54,7 @@ window.OndeMiroirAudio = function() {
 	padding : 0;
 	margin : 0;
 }
-.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause {
+.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
 	flex : 0 0 64px;
 	height : 64px;
 	text-align : center;
@@ -65,6 +65,11 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions {
 	cursor : pointer;
+}
+.{{classname}}-play img, .{{classname}}-pause img, .{{classname}}-actions img {
+	vertical-align : middle;
+	width : 100%;
+	max-height : 100%;
 }
 .{{classname}}-titleline {
 	display : flex;
@@ -116,7 +121,7 @@ window.OndeMiroirAudio = function() {
 	<img src="{{poster}}" alt="{{cover}}" />
 </div>
 <div class="{{classname}}-pagemain">
-	<div class="{{classname}}-play">▶</div><div class="{{classname}}-pause">▮▮</div>
+	<div class="{{classname}}-play"><img src="{{svg_pictos}}#play" alt="play" /></div><div class="{{classname}}-pause"><img src="{{svg_pictos}}#pause" alt="pause" /></div>
 	<div class="{{classname}}-about">
 		<div class="{{classname}}-titleline">
 			<div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div>
@@ -128,7 +133,7 @@ window.OndeMiroirAudio = function() {
 			</div>
 		</div>
 	</div>
-	<div class="{{classname}}-actions">{{more}}</div>
+	<div class="{{classname}}-actions"><img src="{{svg_pictos}}#share" alt="{{more}}" /></div>
 </div>
 <div class="{{classname}}-pageshare">
 	<div class="{{classname}}-share">
@@ -136,8 +141,8 @@ window.OndeMiroirAudio = function() {
 		<a href="#" target="social" class="{{classname}}-facebook"><img src="{{svg_pictos}}#facebook" alt="" />{{facebook}}</a>
 		<a href="#" target="social" class="{{classname}}-googleplus"><img src="{{svg_pictos}}#googleplus" alt="" />{{googleplus}}</a>
 		<a href="#" target="social" class="{{classname}}-email"><img src="{{svg_pictos}}#email" alt="" />{{e-mail}}</a>
-		<a class="{{classname}}-playlist">{{playlist}}</a>
-		<a href="#" target="social" class="{{classname}}-link">{{direct-link}}</a>
+		<a class="{{classname}}-playlist"><img src="{{svg_pictos}}#play" alt="" />{{playlist}}</a>
+		<a href="#" target="social" class="{{classname}}-link"><img src="{{svg_pictos}}#share" alt="" />{{direct-link}}</a>
 		<div class="{{classname}}-back">{{back}}</div>
 	</div>
 </div>
