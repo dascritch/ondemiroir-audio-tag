@@ -77,9 +77,15 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-titleline {
 	display : flex;
+	position : relative;
 }
 .{{classname}}-about, .{{classname}}-title {
 	flex : 2 2 100%;
+}
+.{{classname}}-line {
+	padding : 10px;
+	height : 30px;
+	bottom : 0;
 }
 .{{classname}}-time {
 	background : black;
@@ -131,7 +137,7 @@ window.OndeMiroirAudio = function() {
 			<div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div>
 			<div class="{{classname}}-elapse">elapsed</div>
 		</div>
-		<div>
+		<div class="{{classname}}-line">
 			<div class="{{classname}}-time">
 				<div class="{{classname}}-elapsedline"></div>
 			</div>
@@ -153,7 +159,7 @@ window.OndeMiroirAudio = function() {
 	`;
 
 	var self = {
-		dontHideAudioTag : true,
+		dontHideAudioTag : false,
 		separator : '&t=',
 		selector : 'audio[controls]',
 		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-tag-',
