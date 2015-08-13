@@ -63,11 +63,11 @@ window.OndeMiroirAudio = function() {
 	height : 64px;
 	text-align : center;
 	vertical-align : middle;
-} 
+}
 .{{classname}}-cover img {
 	width : 100%;
 }
-.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions {
+.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {
 	cursor : pointer;
 }
 .{{classname}}-play img, .{{classname}}-pause img, .{{classname}}-actions img {
@@ -83,7 +83,7 @@ window.OndeMiroirAudio = function() {
 	flex : 2 2 100%;
 }
 .{{classname}}-elapse {
-	flex : 2 0 120px;	
+	flex : 2 0 120px;
 }
 .{{classname}}-time {
 	background : black;
@@ -97,7 +97,7 @@ window.OndeMiroirAudio = function() {
 	background : white;
 	height : 10px ;
 	display : block ;
-	position : absolute; 
+	position : absolute;
 	left : 0;
 	border-radius : 4px;
 	pointer-events : none;
@@ -420,6 +420,7 @@ window.OndeMiroirAudio = function() {
 				'time'		: self.do_throbble,
 				'actions'	: self.show_actions,
 				'back' 		: self.show_main,
+				'cover'		: self.show_main,
 			};
 			for (var that in cliquables) {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
