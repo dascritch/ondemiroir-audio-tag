@@ -187,7 +187,7 @@ window.OndeMiroirAudio = function() {
 			classname : 'OndeMiroirAudio-Player',
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
-		svg_pictos : './src/icones.svg',
+		svg_pictos : null,
 		__ : {
 			'(no title)' : '(sans titre)',
 			'cover' : 'pochette',
@@ -449,6 +449,15 @@ window.OndeMiroirAudio = function() {
 
 		},
 		launch : function() {
+			if (!self.svg_pictos) {
+				[].forEach.call(
+					document.querySelectorAll('script[src]'), function(element){
+						var pos = element.src.indexOf('ondemiroir-audio-tag.js')
+						if (pos>-1) self.svg_pictos = element.src.substr(0, pos) + '/icones.svg';
+					}
+				);
+			}
+
 			if (document.getElementById(self.styleId) !== null) {
 				// injected <style> is already there
 				return ;
