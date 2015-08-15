@@ -188,6 +188,7 @@ window.OndeMiroirAudio = function() {
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		svg_pictos : null,
+		keymove : 5,
 		__ : {
 			'(no title)' : '(sans titre)',
 			'cover' : 'pochette',
@@ -353,6 +354,26 @@ window.OndeMiroirAudio = function() {
 			var container = self.find_container(event.target);
 			document.getElementById(container.dataset.rel).play();
 		},
+		do_onkey : function(event) {
+			var container = self.find_container(event.target);
+			var audiotag = document.getElementById(container.dataset.rel);
+			switch(event.keyCode) {
+				// can't use enter : standard usage
+				case 27 : // esc
+					self.seekElementAt(audiotag, 0);
+					audiotag.pause();
+					break;
+				case 32 : // space
+					audiotag.paused ? audiotag.play() : audiotag.pause();
+					break;
+				case 37 : // ←
+					self.seekElementAt(audiotag, audiotag.currentTime - self.keymove);
+					break;
+				case 39 : // →
+					self.seekElementAt(audiotag, audiotag.currentTime + self.keymove);
+					break;
+			}
+		},
 		update_links : function(player, zone) {
 			function ahref(category, href) {
 				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
@@ -437,6 +458,7 @@ window.OndeMiroirAudio = function() {
 				element.style.display = 'none';
 			}
 
+			container.addEventListener('keydown', self.do_onkey);
 			self.count_element++;
 		},
 
