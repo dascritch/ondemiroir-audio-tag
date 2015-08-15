@@ -366,6 +366,12 @@ window.OndeMiroirAudio = function() {
 				case 32 : // space
 					audiotag.paused ? audiotag.play() : audiotag.pause();
 					break;
+				case 35 : // end
+					self.seekElementAt(audiotag, audiotag.duration);
+					break;
+				case 36 : // home
+					self.seekElementAt(audiotag, 0);
+					break;
 				case 37 : // ←
 					self.seekElementAt(audiotag, audiotag.currentTime - self.keymove);
 					break;
@@ -433,7 +439,7 @@ window.OndeMiroirAudio = function() {
 			container.dataset.rel = element.id;
 			container.className = self.container.classname;
 			container.innerHTML = self.populate_template(_template, self.get_params_for_template(element));
-			container.tabIndex = 0 // see http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
+			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/ 
 			element.parentNode.insertBefore(container, element);
 
 			var cliquables = {
