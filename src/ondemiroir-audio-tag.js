@@ -433,6 +433,7 @@ window.OndeMiroirAudio = function() {
 			container.dataset.rel = element.id;
 			container.className = self.container.classname;
 			container.innerHTML = self.populate_template(_template, self.get_params_for_template(element));
+			container.tabIndex = 0 // see http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
 			element.parentNode.insertBefore(container, element);
 
 			var cliquables = {
