@@ -206,7 +206,7 @@ window.OndeMiroirAudio = function() {
 			if (/^\d+$/.test(givenTime)) {
 				seconds = Number(givenTime);
 			} else {
-				seconds = givenTime.indexOf(':') === -1 ? this.convertSubunitTimeInSeconds(givenTime) : this.convertColonTimeInSeconds(givenTime) ;
+				seconds = (givenTime.indexOf(':') === -1) ? this.convertSubunitTimeInSeconds(givenTime) : this.convertColonTimeInSeconds(givenTime) ;
 			}
 			return seconds;
 		},
@@ -459,7 +459,6 @@ window.OndeMiroirAudio = function() {
 			self.insertStyle();
 		}
 	};
-
 
 	if (document.body !== null) {
 		self.launch();
