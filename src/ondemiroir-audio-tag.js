@@ -45,134 +45,132 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
-	var _style = `
-.{{classname}} {
-	background : #555;
-	color : #ccc;
-	display : flex;
-	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-	border : none;
-	padding : 0;
-	margin : 0;
-}
-.{{classname}} a {
-	color : #aaf;
-}
-.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
-	flex : 0 0 64px;
-	height : 64px;
-	text-align : center;
-	vertical-align : middle;
-}
-.{{classname}}-cover img {
-	width : 100%;
-}
-.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {
-	cursor : pointer;
-}
-.{{classname}}-play img, .{{classname}}-pause img, .{{classname}}-actions img {
-	vertical-align : middle;
-	width : 100%;
-	max-height : 100%;
-}
-.{{classname}}-titleline {
-	display : flex;
-	position : relative;
-}
-.{{classname}}-about, .{{classname}}-title {
-	flex : 2 2 100%;
-}
-.{{classname}}-elapse {
-	flex : 2 0 120px;
-}
-.{{classname}}-time {
-	background : black;
-	width : 100%;
-	height : 10px;
-	display : block;
-	border-radius : 4px;
-	position : relative;
-}
-.{{classname}}-elapsedline {
-	background : white;
-	height : 10px ;
-	display : block ;
-	position : absolute;
-	left : 0;
-	border-radius : 4px;
-	pointer-events : none;
-}
-.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {
-	flex : 2 2 100%;
-	display : flex;
-}
-.{{classname}}-pageshare {
-	display : none;
-}
-.{{classname}}-share a {
-	flex : 2 0;
-	color : white;
-	text-decoration : none;
-}
-.{{classname}}-share img {
-	vertical-align : middle;
-}
-.{{classname}}-twitter {background : #4DB5F4}
-.{{classname}}-facebook {background : #5974CC}
-.{{classname}}-googleplus {background : #E15646}
-.{{classname}}-email {background : #1DCE9A}
-.{{classname}}-link {background : #77F}
+	var _style = 
+'.{{classname}} {'
++'	background : #555;'
++'	color : #ccc;'
++'	display : flex;'
++'	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;'
++'	border : none;'
++'	padding : 0;'
++'	margin : 0;'
++'}'
++'.{{classname}} a {'
++'	color : #aaf;'
++'}'
++'.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
++'	flex : 0 0 64px;'
++'	height : 64px;'
++'	text-align : center;'
++'	vertical-align : middle;'
++'}'
++'.{{classname}}-cover img {'
++'	width : 100%;'
++'}'
++'.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {'
++'	cursor : pointer;'
++'}'
++'.{{classname}}-play img, .{{classname}}-pause img, .{{classname}}-actions img {'
++'	vertical-align : middle;'
++'	width : 100%;'
++'	max-height : 100%;'
++'}'
++'.{{classname}}-titleline {'
++'	display : flex;'
++'	position : relative;'
++'}'
++'.{{classname}}-about, .{{classname}}-title {'
++'	flex : 2 2 100%;'
++'}'
++'.{{classname}}-elapse {'
++'	flex : 2 0 120px;'
++'}'
++'.{{classname}}-time {'
++'	background : black;'
++'	width : 100%;'
++'	height : 10px;'
++'	display : block;'
++'	border-radius : 4px;'
++'	position : relative;'
++'}'
++'.{{classname}}-elapsedline {'
++'	background : white;'
++'	height : 10px ;'
++'	display : block ;'
++'	position : absolute;'
++'	left : 0;'
++'	border-radius : 4px;'
++'	pointer-events : none;'
++'}'
++'.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {'
++'	flex : 2 2 100%;'
++'	display : flex;'
++'}'
++'.{{classname}}-pageshare {'
++'	display : none;'
++'}'
++'.{{classname}}-share a {'
++'	flex : 2 0;'
++'	color : white;'
++'	text-decoration : none;'
++'}'
++'.{{classname}}-share img {'
++'	vertical-align : middle;'
++'}'
++'.{{classname}}-twitter {background : #4DB5F4}'
++'.{{classname}}-facebook {background : #5974CC}'
++'.{{classname}}-googleplus {background : #E15646}'
++'.{{classname}}-email {background : #1DCE9A}'
++'.{{classname}}-link {background : #77F}'
++''
++'@media screen and (max-width: 640px) {'
++'	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
++'	flex : 0 0 32px;'
++'	height : 32px;'
++'	}'
++'	.{{classname}}-share {'
++'		text-align : center;'
++'	}'
++'	.{{classname}}-share span {'
++'		display : none;'
++'	}'
++'}'
++'@media screen and (max-width: 319px) {'
++'	.{{classname}}-elapse {'
++'		display : none;'
++'	}'
++'}';
 
-@media screen and (max-width: 640px) {
-	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
-	flex : 0 0 32px;
-	height : 32px;
-	}
-	.{{classname}}-share {
-		text-align : center;
-	}
-	.{{classname}}-share span {
-		display : none;
-	}
-}
-@media screen and (max-width: 319px) {
-	.{{classname}}-elapse {
-		display : none;
-	}
-}
-	`;
-
-	var _template = `
-<div class="{{classname}}-cover">
-	<img src="{{poster}}" alt="{{cover}}" />
-</div>
-<div class="{{classname}}-pagemain">
-	<div class="{{classname}}-play"><img src="{{svg_pictos}}#play" alt="play" /></div><div class="{{classname}}-pause"><img src="{{svg_pictos}}#pause" alt="pause" /></div>
-	<div class="{{classname}}-about">
-		<div class="{{classname}}-titleline">
-			<div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div>
-			<div class="{{classname}}-elapse">elapsed</div>
-		</div>
-		<div class="{{classname}}-line">
-			<div class="{{classname}}-time">
-				<div class="{{classname}}-elapsedline"></div>
-			</div>
-		</div>
-	</div>
-	<div class="{{classname}}-actions"><img src="{{svg_pictos}}#share" alt="{{more}}" /></div>
-</div>
-<div class="{{classname}}-pageshare">
-	<div class="{{classname}}-share">
-		<a href="#" target="social" class="{{classname}}-twitter"><img src="{{svg_pictos}}#twitter" alt="" /><span>{{twitter}}</span></a>
-		<a href="#" target="social" class="{{classname}}-facebook"><img src="{{svg_pictos}}#facebook" alt="" /><span>{{facebook}}</span></a>
-		<a href="#" target="social" class="{{classname}}-googleplus"><img src="{{svg_pictos}}#googleplus" alt="" /><span>{{googleplus}}</span></a>
-		<a href="#" target="social" class="{{classname}}-email"><img src="{{svg_pictos}}#email" alt="" /><span>{{e-mail}}</span></a>
-		<a class="{{classname}}-playlist"><img src="{{svg_pictos}}#play" alt="" /><span>{{playlist}}</span></a>
-		<a href="#" target="social" class="{{classname}}-link"><img src="{{svg_pictos}}#share" alt="" /><span>{{direct-link}}</span></a>
-		<div class="{{classname}}-back">{{back}}</div>
-	</div>
-</div>
-	`;
+	var _template = 
+ '<div class="{{classname}}-cover">'
++'	<img src="{{poster}}" alt="{{cover}}" />'
++'</div>'
++'<div class="{{classname}}-pagemain">'
++'	<div class="{{classname}}-play"><img src="{{svg_pictos}}#play" alt="play" /></div><div class="{{classname}}-pause"><img src="{{svg_pictos}}#pause" alt="pause" /></div>'
++'	<div class="{{classname}}-about">'
++'		<div class="{{classname}}-titleline">'
++'			<div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div>'
++'			<div class="{{classname}}-elapse">elapsed</div>'
++'		</div>'
++'		<div class="{{classname}}-line">'
++'			<div class="{{classname}}-time">'
++'				<div class="{{classname}}-elapsedline"></div>'
++'			</div>'
++'		</div>'
++'	</div>'
++'	<div class="{{classname}}-actions"><img src="{{svg_pictos}}#share" alt="{{more}}" /></div>'
++'</div>'
++'<div class="{{classname}}-pageshare">'
++'	<div class="{{classname}}-share">'
++'		<a href="#" target="social" class="{{classname}}-twitter"><img src="{{svg_pictos}}#twitter" alt="" /><span>{{twitter}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-facebook"><img src="{{svg_pictos}}#facebook" alt="" /><span>{{facebook}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-googleplus"><img src="{{svg_pictos}}#googleplus" alt="" /><span>{{googleplus}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-email"><img src="{{svg_pictos}}#email" alt="" /><span>{{e-mail}}</span></a>'
++'		<a class="{{classname}}-playlist"><img src="{{svg_pictos}}#play" alt="" /><span>{{playlist}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-link"><img src="{{svg_pictos}}#share" alt="" /><span>{{direct-link}}</span></a>'
++'		<div class="{{classname}}-back">{{back}}</div>'
++'	</div>'
++'</div>';
 
 	var self = {
 		dontHideAudioTag : false,
@@ -184,7 +182,7 @@ window.OndeMiroirAudio = function() {
 		container :  {
 			tagname :'div',
 			idPrefix : 'OndeMiroirAudio-Player-',
-			classname : 'OndeMiroirAudio-Player',
+			classname : 'OndeMiroirAudio-Player'
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		svg_pictos : null,
