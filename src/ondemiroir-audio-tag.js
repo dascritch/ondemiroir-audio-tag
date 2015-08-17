@@ -49,6 +49,7 @@ window.OndeMiroirAudio = function() {
 '.{{classname}} {'
 +'	background : #555;'
 +'	color : #ccc;'
++'	display : -webkit-flex;'
 +'	display : flex;'
 +'	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;'
 +'	border : none;'
@@ -66,6 +67,8 @@ window.OndeMiroirAudio = function() {
 +'}'
 +'.{{classname}}-cover img {'
 +'	width : 100%;'
++'	max-width : 64px;'
++'	max-height : 64px;'
 +'}'
 +'.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {'
 +'	cursor : pointer;'
@@ -76,6 +79,7 @@ window.OndeMiroirAudio = function() {
 +'	max-height : 100%;'
 +'}'
 +'.{{classname}}-titleline {'
++'	display : -webkit-flex;'
 +'	display : flex;'
 +'	position : relative;'
 +'}'
@@ -104,6 +108,7 @@ window.OndeMiroirAudio = function() {
 +'}'
 +'.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {'
 +'	flex : 2 2 100%;'
++'	display : -webkit-flex;'
 +'	display : flex;'
 +'}'
 +'.{{classname}}-pageshare {'
@@ -186,6 +191,7 @@ window.OndeMiroirAudio = function() {
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		svg_pictos : null,
+		flexIs : 'flex', // FUCK SAFARI
 		keymove : 5,
 		__ : {
 			'(no title)' : '(sans titre)',
@@ -394,12 +400,12 @@ window.OndeMiroirAudio = function() {
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'none';
-			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'flex';
+			container.querySelector('.'+self.container.classname+'-pageshare').style.display = self.flexIs;
 			self.update_links(document.getElementById(container.dataset.rel), container.querySelector('.'+self.container.classname+'-share'))
 		},
 		show_main : function(event) {
 			var container = self.find_container(event.target);
-			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'flex';
+			container.querySelector('.'+self.container.classname+'-pagemain').style.display = self.flexIs;
 			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'none';
 		},
 		populate_template : function(inner, entry) {
@@ -419,7 +425,7 @@ window.OndeMiroirAudio = function() {
 				'canonical' : element.dataset.canonical,
 				'poster' 	: self.element_attribute(element,'poster', self.poster_fallback),
 				'classname' : self.container.classname,
-				'svg_pictos': self.svg_pictos
+				'svg_pictos': self.svg_pictos,
 			}
 			// we now add locales
 			for (var key in self.__) {
@@ -494,6 +500,8 @@ window.OndeMiroirAudio = function() {
 				document.querySelectorAll(self.selector), self.build
 			);
 			self.insertStyle();
+			// Safari is a piece of SHIT
+			self.flexIs = document.querySelector('.'+self.container.classname+'-share').style.display;
 		}
 	};
 
