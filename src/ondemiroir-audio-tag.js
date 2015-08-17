@@ -45,11 +45,11 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
-	var _style =
+	var _style = 
 '.{{classname}} {'
 +'	background : #555;'
 +'	color : #ccc;'
-+'	display : {{flex}};'
++'	{{displayflex}};'
 +'	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;'
 +'	border : none;'
 +'	padding : 0;'
@@ -59,7 +59,7 @@ window.OndeMiroirAudio = function() {
 +'	color : #aaf;'
 +'}'
 +'.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	{{flex}} : 0 0 64px;'
++'	-webkit-flex : 0 0 64px; -ms-flex : 0 0 64px; flex : 0 0 64px;'
 +'	height : 64px;'
 +'	text-align : center;'
 +'	vertical-align : middle;'
@@ -78,14 +78,15 @@ window.OndeMiroirAudio = function() {
 +'	max-height : 100%;'
 +'}'
 +'.{{classname}}-titleline {'
-+'	display : {{flex}};'
++'	{{displayflex}};'
+//+'  -webkit-flex-direction: row; flex-direction: row;'
 +'	position : relative;'
 +'}'
 +'.{{classname}}-about, .{{classname}}-title {'
-+'	{{flex}} : 1 1 100%;'
++'	-webkit-flex : 1 1 100%; -ms-flex : 1 1 100%; flex : 1 1 100%;'
 +'}'
 +'.{{classname}}-elapse {'
-+'	{{flex}} : 1 0 120px;'
++'	-webkit-flex : 1 0 120px; -ms-flex : 1 0 120px; flex : 1 0 120px;'
 +'}'
 +'.{{classname}}-time {'
 +'	background : black;'
@@ -105,14 +106,15 @@ window.OndeMiroirAudio = function() {
 +'	pointer-events : none;'
 +'}'
 +'.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {'
-+'	{{flex}} : 1 1 100%;'
-+'	display : {{flex}};'
++'	-webkit-flex : 1 1 100%; -ms-flex : 1 1 100%; flex : 1 1 100%;'
++'	{{displayflex}};'
+//+'  -webkit-flex-direction: row; flex-direction: row;'
 +'}'
 +'.{{classname}}-pageshare {'
 +'	display : none;'
 +'}'
 +'.{{classname}}-share a {'
-+'	{{flex}} : 1 0;'
++'	-webkit-flex : 1 0; -ms-flex : 1 0; flex : 1 0;'
 +'	color : white;'
 +'	text-decoration : none;'
 +'}'
@@ -127,7 +129,7 @@ window.OndeMiroirAudio = function() {
 +''
 +'@media screen and (max-width: 640px) {'
 +'	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	{{flex}} : 0 0 32px;'
++'	 -webkit-flex : 0 0 32px; -ms-flex : 0 0 32px; flex : 0 0 32px;'
 +'	height : 32px;'
 +'	}'
 +'	.{{classname}}-share {'
@@ -422,7 +424,7 @@ window.OndeMiroirAudio = function() {
 				'canonical' : element.dataset.canonical,
 				'poster' 	: self.element_attribute(element,'poster', self.poster_fallback),
 				'classname' : self.container.classname,
-				'flex'		: self.flexIs,
+				'displayflex'	: '	display: -ms-flexbox; display: -webkit-flex; display: flex;',
 				'svg_pictos': self.svg_pictos,
 			}
 			// we now add locales
@@ -498,7 +500,8 @@ window.OndeMiroirAudio = function() {
 				document.querySelectorAll(self.selector), self.build
 			);
 			// Safari is a piece of SHIT
-			self.flexIs =  /chrome/.test(navigator.userAgent.toLowerCase()) ? '-webkit-flex' : 'flex';
+			self.flexIs =  /chrome|safari/.test(navigator.userAgent.toLowerCase()) ? '-webkit-flex' : 'flex';
+			self.flexIs =  /msie|microsoft/.test(navigator.userAgent.toLowerCase()) ? '-ms-flexbox' : self.flexIs;
 			self.insertStyle();
 		}
 	};
