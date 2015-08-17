@@ -501,7 +501,7 @@ window.OndeMiroirAudio = function() {
 			);
 			self.insertStyle();
 			// Safari is a piece of SHIT
-			self.flexIs = document.querySelector('.'+self.container.classname+'-share').style.display;
+			self.flexIs =  /chrome/.test(navigator.userAgent.toLowerCase()) ? '-webkit-flex' : 'flex'  ;
 		}
 	};
 
