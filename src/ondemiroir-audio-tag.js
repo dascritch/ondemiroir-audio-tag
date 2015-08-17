@@ -63,11 +63,11 @@ window.OndeMiroirAudio = function() {
 	height : 64px;
 	text-align : center;
 	vertical-align : middle;
-} 
+}
 .{{classname}}-cover img {
 	width : 100%;
 }
-.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions {
+.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {
 	cursor : pointer;
 }
 .{{classname}}-play img, .{{classname}}-pause img, .{{classname}}-actions img {
@@ -83,7 +83,7 @@ window.OndeMiroirAudio = function() {
 	flex : 2 2 100%;
 }
 .{{classname}}-elapse {
-	flex : 2 0 120px;	
+	flex : 2 0 120px;
 }
 .{{classname}}-time {
 	background : black;
@@ -97,7 +97,7 @@ window.OndeMiroirAudio = function() {
 	background : white;
 	height : 10px ;
 	display : block ;
-	position : absolute; 
+	position : absolute;
 	left : 0;
 	border-radius : 4px;
 	pointer-events : none;
@@ -187,7 +187,8 @@ window.OndeMiroirAudio = function() {
 			classname : 'OndeMiroirAudio-Player',
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
-		svg_pictos : './src/icones.svg',
+		svg_pictos : null,
+		keymove : 5,
 		__ : {
 			'(no title)' : '(sans titre)',
 			'cover' : 'pochette',
@@ -353,6 +354,32 @@ window.OndeMiroirAudio = function() {
 			var container = self.find_container(event.target);
 			document.getElementById(container.dataset.rel).play();
 		},
+		do_onkey : function(event) {
+			var container = self.find_container(event.target);
+			var audiotag = document.getElementById(container.dataset.rel);
+			switch(event.keyCode) {
+				// can't use enter : standard usage
+				case 27 : // esc
+					self.seekElementAt(audiotag, 0);
+					audiotag.pause();
+					break;
+				case 32 : // space
+					audiotag.paused ? audiotag.play() : audiotag.pause();
+					break;
+				case 35 : // end
+					self.seekElementAt(audiotag, audiotag.duration);
+					break;
+				case 36 : // home
+					self.seekElementAt(audiotag, 0);
+					break;
+				case 37 : // ←
+					self.seekElementAt(audiotag, audiotag.currentTime - self.keymove);
+					break;
+				case 39 : // →
+					self.seekElementAt(audiotag, audiotag.currentTime + self.keymove);
+					break;
+			}
+		},
 		update_links : function(player, zone) {
 			function ahref(category, href) {
 				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
@@ -412,6 +439,7 @@ window.OndeMiroirAudio = function() {
 			container.dataset.rel = element.id;
 			container.className = self.container.classname;
 			container.innerHTML = self.populate_template(_template, self.get_params_for_template(element));
+			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/ 
 			element.parentNode.insertBefore(container, element);
 
 			var cliquables = {
@@ -420,6 +448,7 @@ window.OndeMiroirAudio = function() {
 				'time'		: self.do_throbble,
 				'actions'	: self.show_actions,
 				'back' 		: self.show_main,
+				'cover'		: self.show_main,
 			};
 			for (var that in cliquables) {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
@@ -436,6 +465,7 @@ window.OndeMiroirAudio = function() {
 				element.style.display = 'none';
 			}
 
+			container.addEventListener('keydown', self.do_onkey);
 			self.count_element++;
 		},
 
@@ -448,6 +478,15 @@ window.OndeMiroirAudio = function() {
 
 		},
 		launch : function() {
+			if (!self.svg_pictos) {
+				[].forEach.call(
+					document.querySelectorAll('script[src]'), function(element){
+						var pos = element.src.indexOf('ondemiroir-audio-tag.js')
+						if (pos>-1) self.svg_pictos = element.src.substr(0, pos) + '/icones.svg';
+					}
+				);
+			}
+
 			if (document.getElementById(self.styleId) !== null) {
 				// injected <style> is already there
 				return ;
