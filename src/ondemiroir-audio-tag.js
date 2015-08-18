@@ -59,7 +59,7 @@ window.OndeMiroirAudio = function() {
 +'	color : #aaf;'
 +'}'
 +'.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	-webkit-flex : 0 0 64px; -ms-flex : 0 0 64px; flex : 0 0 64px;'
++'	-webkit-box-flex : 0 0 64px; -webkit-flex : 0 0 64px; -ms-flex : 0 0 64px; flex : 0 0 64px;'
 +'	height : 64px;'
 +'	text-align : center;'
 +'	vertical-align : middle;'
@@ -79,14 +79,13 @@ window.OndeMiroirAudio = function() {
 +'}'
 +'.{{classname}}-titleline {'
 +'	{{displayflex}};'
-//+'  -webkit-flex-direction: row; flex-direction: row;'
 +'	position : relative;'
 +'}'
 +'.{{classname}}-about, .{{classname}}-title {'
-+'	-webkit-flex : 1 1 100%; -ms-flex : 1 1 100%; flex : 1 1 100%;'
++'	-webkit-box-flex : 1 1 100%; -webkit-flex : 1 1 100%; -ms-flex : 1 1 100%; flex : 1 1 100%;'
 +'}'
 +'.{{classname}}-elapse {'
-+'	-webkit-flex : 1 0 120px; -ms-flex : 1 0 120px; flex : 1 0 120px;'
++'	-webkit-box-flex : 1 0 120px; -webkit-flex : 1 0 120px; -ms-flex : 1 0 120px; flex : 1 0 120px;'
 +'}'
 +'.{{classname}}-time {'
 +'	background : black;'
@@ -129,7 +128,7 @@ window.OndeMiroirAudio = function() {
 +''
 +'@media screen and (max-width: 640px) {'
 +'	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	 -webkit-flex : 0 0 32px; -ms-flex : 0 0 32px; flex : 0 0 32px;'
++'	 -webkit-box-flex : 0 0 32px; -webkit-flex : 0 0 32px; -ms-flex : 0 0 32px; flex : 0 0 32px;'
 +'	height : 32px;'
 +'	}'
 +'	.{{classname}}-share {'
@@ -424,7 +423,7 @@ window.OndeMiroirAudio = function() {
 				'canonical' : element.dataset.canonical,
 				'poster' 	: self.element_attribute(element,'poster', self.poster_fallback),
 				'classname' : self.container.classname,
-				'displayflex'	: '	display: -ms-flexbox; display: -webkit-flex; display: flex;',
+				'displayflex'	: '	display: -ms-flexbox; display: -webkit-box; display: -webkit-flex; display: flex;',
 				'svg_pictos': self.svg_pictos,
 			}
 			// we now add locales
