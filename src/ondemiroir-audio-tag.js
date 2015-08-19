@@ -45,6 +45,17 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
+	var _traces = {
+		'play' : '<path d="M 6,6 6,26 26,16 z" />',
+		'stop' : '<path d="M 6,6 6,26 26,26 26,6 z" />',
+		'pause' : '<path d="M 6,6 12.667,6 12.667,26 6,26 z" /><path d="M 19.333,6 26,6 26,26 19.333,26 z" />',
+		'share' : '<circle cx="12" cy="10" r="4" /><circle cx="12" cy="22" r="4" /><circle cx="23" cy="16" r="4" /><polygon points="12,8 24,14 24,18 12,12"/><polygon points="12,20 24,14 24,18 12,24"/>',
+		'facebook' : '<path d="m 21.117,16.002 -3.728,0 0,10.027 -4.297,0 0,-10.027 -2.070,0 0,-3.280 2.070,0 0,-2.130 c 0,-2.894 1.248,-4.616 4.652,-4.616 l 3.922,0 0,3.549 -3.203,0 c -0.950,-0.001 -1.068,0.495 -1.068,1.421 l -0.005,1.775 4.297,0 -0.568,3.280 0,2.34e-4 z" />',
+		'twitter' : '<path d="M 25.941,9.885 C 25.221,10.205 24.448,10.422 23.637,10.520 24.465,10.020 25.101,9.230 25.401,8.288 24.626,8.750 23.768,9.086 22.854,9.267 22.122,8.483 21.080,7.993 19.926,7.993 c -2.215,0 -4.011,1.806 -4.011,4.034 0,0.316 0.035,0.623 0.103,0.919 -3.333,-0.168 -6.288,-1.774 -8.267,-4.215 -0.345,0.596 -0.542,1.289 -0.542,2.028 0,1.399 0.708,2.634 1.784,3.358 -0.657,-0.020 -1.276,-0.202 -1.816,-0.504 -3.98e-4,0.016 -3.98e-4,0.033 -3.98e-4,0.050 0,1.954 1.382,3.585 3.217,3.955 -0.336,0.092 -0.690,0.141 -1.056,0.141 -0.258,0 -0.509,-0.025 -0.754,-0.072 0.510,1.602 1.991,2.769 3.746,2.801 -1.372,1.082 -3.102,1.726 -4.981,1.726 -0.323,0 -0.642,-0.019 -0.956,-0.056 1.775,1.144 3.883,1.812 6.148,1.812 7.377,0 11.411,-6.147 11.411,-11.478 0,-0.174 -0.004,-0.348 -0.011,-0.522 0.783,-0.569 1.463,-1.279 2.001,-2.088 z" />',
+		'googleplus' : '<path  d="M80.704,48.884,79.76,48.157c-0.28748-0.23641-0.68066-0.54849-0.68066-1.1198,0-0.57364,0.39318-0.93836,0.73446-1.276,1.0997-0.85822,2.1984-1.7717,2.1984-3.6966,0-1.9794-1.2561-3.0207-1.8581-3.5147h1.6232l1.705-1.06h-5.1616c-1.4163,0-3.4574,0.33229-4.9516,1.5555-1.1262,0.9635-1.6756,2.292-1.6756,3.4879,0,2.0302,1.572,4.0881,4.348,4.0881,0.26212,0,0.54889-0.02562,0.83756-0.05217-0.12964,0.31278-0.2607,0.57316-0.2607,1.0152,0,0.80628,0.41783,1.3007,0.78613,1.7691-1.1795,0.08037-3.3815,0.20986-5.0047,1.1992-1.546,0.91156-2.0164,2.2384-2.0164,3.1748,0,1.9275,1.8322,3.7229,5.6316,3.7229,4.5054,0,6.8905-2.472,6.8905-4.919,0-1.798-1.0473-2.683-2.2003-3.646zm-3.4315-2.9934c-2.2539,0-3.2749-2.8891-3.2749-4.6323,0-0.67868,0.12964-1.3794,0.57544-1.9268,0.4202-0.52123,1.1521-0.8594,1.8353-0.8594,2.1728,0,3.2998,2.9149,3.2998,4.7898,0,0.46906-0.05214,1.3003-0.65459,1.9012-0.42139,0.41689-1.1265,0.72756-1.7811,0.72756zm0.02583,10.468c-2.8028,0-4.6101-1.3294-4.6101-3.1779,0-1.848,1.6758-2.4731,2.2524-2.6802,1.0997-0.36684,2.5148-0.41806,2.7509-0.41806,0.26188,0,0.39295,0,0.60151,0.02608,1.9925,1.406,2.8573,2.1068,2.8573,3.4378,0,1.6119-1.3364,2.8122-3.852,2.8122z" /><polygon  points="86.04,49.78 87.33,49.78 87.33,47.03 89.94,47.03 89.94,45.86 87.33,45.86 87.33,43.23 86.04,43.23 86.04,45.86 83.40,45.86 83.40,47.03 86.04,47.03"/>',
+		'email' : '<path d="m 8.030,8.998 15.920,0 c 0.284,0 0.559,0.053 0.812,0.155 l -8.773,9.025 -8.773,-9.026 c 0.253,-0.101 0.528,-0.155 0.812,-0.155 z m -1.990,12.284 0,-10.529 c 0,-0.036 0.002,-0.073 0.004,-0.109 l 5.835,6.003 -5.771,5.089 c -0.045,-0.146 -0.068,-0.298 -0.069,-0.453 z m 17.910,1.754 -15.920,0 c -0.175,0 -0.348,-0.020 -0.514,-0.060 l 5.662,-4.993 2.811,2.892 2.811,-2.892 5.662,4.993 c -0.165,0.039 -0.338,0.060 -0.514,0.060 z m 1.990,-1.754 c 0,0.155 -0.023,0.307 -0.068,0.453 l -5.771,-5.089 5.835,-6.003 c 0.002,0.036 0.004,0.073 0.004,0.109 z" />',
+	}
+
 	var _style = 
 '.{{classname}} {'
 +'	background : #555;'
@@ -57,6 +68,9 @@ window.OndeMiroirAudio = function() {
 +'}'
 +'.{{classname}} a {'
 +'	color : #aaf;'
++'}'
++'.{{classname}} svg {'
++'  fill : #ffffff'
 +'}'
 +'.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
 +'	-webkit-box-flex : 0 0 64px; -webkit-flex : 0 0 64px; -ms-flex : 0 0 64px; flex : 0 0 64px;'
@@ -72,7 +86,7 @@ window.OndeMiroirAudio = function() {
 +'.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {'
 +'	cursor : pointer;'
 +'}'
-+'.{{classname}}-play img, .{{classname}}-pause img, .{{classname}}-actions img {'
++'.{{classname}}-play svg, .{{classname}}-pause svg, .{{classname}}-actions svg {'
 +'	vertical-align : middle;'
 +'	width : 100%;'
 +'	max-height : 100%;'
@@ -118,8 +132,9 @@ window.OndeMiroirAudio = function() {
 +'	color : white;'
 +'	text-decoration : none;'
 +'}'
-+'.{{classname}}-share img {'
++'.{{classname}}-share svg {'
 +'	vertical-align : middle;'
++'  width:32px; height : 32px;'
 +'}'
 +'.{{classname}}-twitter {background : #4DB5F4}'
 +'.{{classname}}-facebook {background : #5974CC}'
@@ -150,7 +165,7 @@ window.OndeMiroirAudio = function() {
 +'	<img src="{{poster}}" alt="{{cover}}" />'
 +'</div>'
 +'<div class="{{classname}}-pagemain">'
-+'	<div class="{{classname}}-play"><img src="{{svg_pictos}}#play" alt="play" /></div><div class="{{classname}}-pause"><img src="{{svg_pictos}}#pause" alt="pause" /></div>'
++'	<div class="{{classname}}-play">{{svg:play}}</div><div class="{{classname}}-pause">{{svg:pause}}</div>'
 +'	<div class="{{classname}}-about">'
 +'		<div class="{{classname}}-titleline">'
 +'			<div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div>'
@@ -162,16 +177,16 @@ window.OndeMiroirAudio = function() {
 +'			</div>'
 +'		</div>'
 +'	</div>'
-+'	<div class="{{classname}}-actions"><img src="{{svg_pictos}}#share" alt="{{more}}" /></div>'
++'	<div class="{{classname}}-actions">{{svg:share}}</div>'
 +'</div>'
 +'<div class="{{classname}}-pageshare">'
 +'	<div class="{{classname}}-share">'
-+'		<a href="#" target="social" class="{{classname}}-twitter"><img src="{{svg_pictos}}#twitter" alt="" /><span>{{twitter}}</span></a>'
-+'		<a href="#" target="social" class="{{classname}}-facebook"><img src="{{svg_pictos}}#facebook" alt="" /><span>{{facebook}}</span></a>'
-+'		<a href="#" target="social" class="{{classname}}-googleplus"><img src="{{svg_pictos}}#googleplus" alt="" /><span>{{googleplus}}</span></a>'
-+'		<a href="#" target="social" class="{{classname}}-email"><img src="{{svg_pictos}}#email" alt="" /><span>{{e-mail}}</span></a>'
-+'		<a class="{{classname}}-playlist"><img src="{{svg_pictos}}#play" alt="" /><span>{{playlist}}</span></a>'
-+'		<a href="#" target="social" class="{{classname}}-link"><img src="{{svg_pictos}}#share" alt="" /><span>{{direct-link}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-twitter">{{svg:twitter}}<span>{{twitter}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-facebook">{{svg:facebook}}<span>{{facebook}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-googleplus">{{svg:share}}<span>{{googleplus}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-email">{{svg:email}}<span>{{e-mail}}</span></a>'
++'		<a class="{{classname}}-playlist">{{svg:play}}<span>{{playlist}}</span></a>'
++'		<a href="#" target="social" class="{{classname}}-link">{{svg:share}}<span>{{direct-link}}</span></a>'
 +'		<div class="{{classname}}-back">{{back}}</div>'
 +'	</div>'
 +'</div>';
@@ -189,7 +204,6 @@ window.OndeMiroirAudio = function() {
 			classname : 'OndeMiroirAudio-Player'
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
-		svg_pictos : null,
 		flexIs : 'flex', // FUCK SAFARI
 		keymove : 5,
 		__ : {
@@ -425,11 +439,14 @@ window.OndeMiroirAudio = function() {
 				'poster' 	: self.element_attribute(element,'poster', self.poster_fallback),
 				'classname' : self.container.classname,
 				'displayflex'	: '	display: -ms-flexbox; display: -webkit-box; display: -webkit-flex; display: flex;',
-				'svg_pictos': self.svg_pictos,
 			}
 			// we now add locales
 			for (var key in self.__) {
 				out[key] = self.__[key];
+			}
+			// and svg traves
+			for (var key in _traces) {
+				out['svg:'+key] = '<svg viewBox="0 0 32 32">'+_traces[key]+'</svg>';	
 			}
 			return out;
 		},
@@ -482,15 +499,6 @@ window.OndeMiroirAudio = function() {
 
 		},
 		launch : function() {
-			if (!self.svg_pictos) {
-				[].forEach.call(
-					document.querySelectorAll('script[src]'), function(element){
-						var pos = element.src.indexOf('ondemiroir-audio-tag.js')
-						if (pos>-1) self.svg_pictos = element.src.substr(0, pos) + '/icones.svg';
-					}
-				);
-			}
-
 			if (document.getElementById(self.styleId) !== null) {
 				// injected <style> is already there
 				return ;
