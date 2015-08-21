@@ -204,7 +204,7 @@ window.OndeMiroirAudio = function() {
 			classname : 'OndeMiroirAudio-Player'
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
-		playlister : './playlist-player/index.html',
+		playlister : false,
 		flexIs : 'flex', // FUCK SAFARI
 		keymove : 5,
 		__ : {
@@ -505,6 +505,14 @@ window.OndeMiroirAudio = function() {
 			if (document.getElementById(self.styleId) !== null) {
 				// injected <style> is already there
 				return ;
+			}
+			if (!self.playlister) {
+				[].forEach.call(
+					document.querySelectorAll('script[src]'), function(element){
+						var pos = element.src.indexOf('ondemiroir-audio-tag.js')
+						if (pos>-1) self.playlister = element.src.substr(0, pos) + '../playlist-player/index.html';
+					}
+				);
 			}
 			[].forEach.call(
 				// explication de cette construction : https://coderwall.com/p/jcmzxw
