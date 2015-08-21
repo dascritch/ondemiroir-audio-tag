@@ -1,0 +1,67 @@
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(./RobotoCondensed-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(./RobotoCondensed-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;                                            
+  font-weight: 400;                                              
+  src: local('Roboto Condensed Italic'), local('RobotoCondensed-Italic'), url(./RobotoCondensed-Italic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold Italic'), local('RobotoCondensed-BoldItalic'), url(./RobotoCondensed-BoldItalic.ttf) format('truetype');
+}
+
+
+* {
+    font-family: 'Roboto Condensed', sans-serif;
+    padding : 0;
+    margin : 0;
+}
+audio {
+    width : 100%;
+}
+
+article {
+	cursor : move;
+	clear : both;
+}
+
+article:first-child {
+	cursor : auto;
+}
+
+article:first-child .move {
+	visibility : hidden;
+}
+
+article img, article a {
+	display : none;
+}
+
+article:first-child img , article:first-child a {
+	display : inline;
+}
+
+article:first-child img {
+	float : left;
+	max-width : 100px;
+	max-height : 100px;
+}
+
+aside {
+	clear : both;
+}
