@@ -510,7 +510,7 @@ window.OndeMiroirAudio = function() {
 				[].forEach.call(
 					document.querySelectorAll('script[src]'), function(element){
 						var pos = element.src.indexOf('ondemiroir-audio-tag.js')
-						if (pos>-1) self.playlister = element.src.substr(0, pos) + '../playlist-player/index.html';
+						if (pos>-1) self.playlister = element.src.substr(0, pos) + 'index.html';
 					}
 				);
 			}
