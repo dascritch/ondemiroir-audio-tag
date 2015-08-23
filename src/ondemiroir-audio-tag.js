@@ -206,6 +206,7 @@ window.OndeMiroirAudio = function() {
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		playlister : false,
 		playlist_window : false,
+		is_in_playlist : false,
 		rebuild_eventname : 'ondemiroir.rebuild',
 		flexIs : 'flex', // FUCK SAFARI
 		keymove : 5,
@@ -529,6 +530,10 @@ window.OndeMiroirAudio = function() {
 		insertStyle : function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
+			alert(self.is_in_playlist)
+			if (self.is_in_playlist) {
+				_style += ' .{{classname}}-playlist { display : none; }';
+			}
 			element.innerHTML = self.populate_template(_style, self.get_params_for_template(element));
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
@@ -542,7 +547,12 @@ window.OndeMiroirAudio = function() {
 				[].forEach.call(
 					document.querySelectorAll('script[src]'), function(element){
 						var pos = element.src.indexOf('ondemiroir-audio-tag.js')
-						if (pos>-1) self.playlister = element.src.substr(0, pos) + 'index.html';
+						if (pos>-1) {
+							self.playlister = element.src.substr(0, pos) + 'index.html';
+							if (self.playlister === document.location.href.replace(/#.*$/,'')) {
+								self.is_in_playlist = true;
+							}
+						}
 					}
 				);
 			}

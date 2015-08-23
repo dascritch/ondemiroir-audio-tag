@@ -61,7 +61,7 @@
 			player.playing = player.list.shift();
 			player.save_playlist();
 			console.info('next to play ',player.playing);
-			if (player.playing.src === undefined) {
+			if ((player.playing === undefined) || (player.playing.src === undefined)) {
 				return;
 			}
 
