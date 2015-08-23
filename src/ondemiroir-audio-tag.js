@@ -205,6 +205,7 @@ window.OndeMiroirAudio = function() {
 		},
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		playlister : false,
+		playlist_window : false,
 		flexIs : 'flex', // FUCK SAFARI
 		keymove : 5,
 		__ : {
@@ -423,6 +424,25 @@ window.OndeMiroirAudio = function() {
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display = self.flexIs;
 			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'none';
 		},
+		push_in_playlist : function(params) {
+			// loosy, but sunday morning, we'll clean it later
+			if (! self.playlist_window.push_in_playlist) {
+				window.setTimeout(self.push_in_playlist, 500, params);
+				return;
+			}
+			self.playlist_window.push_in_playlist(params);
+		},
+		add_playlist : function(event) {
+			self.playlist_window = window.open(self.playlister+'#', 'playlist');
+			// self.playlist_window = self.playlist_window ? self.playlist_window : window.open(self.playlister+'#', 'playlist');
+			self.push_in_playlist({
+				src : '',
+				title : '',
+				cover : '',
+				canonical : '',
+			})
+			event.preventDefault();
+		},
 		populate_template : function(inner, entry) {
 			for (var key in entry) {
 				inner = inner.replace(RegExp('{{'+key+'}}','g'), entry[key]);
@@ -473,6 +493,7 @@ window.OndeMiroirAudio = function() {
 				'actions'	: self.show_actions,
 				'back' 		: self.show_main,
 				'cover'		: self.show_main,
+				'playlist'	: self.add_playlist
 			};
 			for (var that in cliquables) {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);

@@ -134,10 +134,20 @@
 function push_in_playlist(data) {
 	// interface visible
 	'use strict';
-	alert('hi')
 	/** TODO
 	 * vérifier les clés entrantes
 	 * vérifier les NDD des images, liens et sources
 	 * éviter un double push si déjà présent dans la playlist
 	 * */
+    var playlist
+    try {
+		playlist = JSON.parse(localStorage.getItem('playlist') )
+		if (playlist === null) throw 0;
+	} catch(e) {
+		playlist = []
+	}
+    playlist.push(data)
+    localStorage.setItem('playlist', JSON.stringify(playlist))
+		// TODO si pas sur le NDD ondemiroir
+
 }
