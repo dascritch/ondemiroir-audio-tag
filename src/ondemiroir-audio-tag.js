@@ -433,13 +433,15 @@ window.OndeMiroirAudio = function() {
 			self.playlist_window.push_in_playlist(params);
 		},
 		add_playlist : function(event) {
-			self.playlist_window = window.open(self.playlister+'#', 'playlist');
-			// self.playlist_window = self.playlist_window ? self.playlist_window : window.open(self.playlister+'#', 'playlist');
+			self.playlist_window = window.open(self.playlister+'#', 'onde_miroir_player');
+			// self.playlist_window = self.playlist_window ? self.playlist_window : window.open(self.playlister+'#', 'onde_miroir_player');
+			var container = self.find_container(event.target);
+			var audiotag = document.getElementById(container.dataset.rel);
 			self.push_in_playlist({
-				src : '',
-				title : '',
-				cover : '',
-				canonical : '',
+				src 		: audiotag.currentSrc,
+				title 		: audiotag.title,
+				cover 		: audiotag.poster,
+				canonical	: audiotag.dataset.canonical,
 			})
 			event.preventDefault();
 		},
