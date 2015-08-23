@@ -206,6 +206,7 @@ window.OndeMiroirAudio = function() {
 		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
 		playlister : false,
 		playlist_window : false,
+		rebuild_eventname : 'ondemiroir.rebuild',
 		flexIs : 'flex', // FUCK SAFARI
 		keymove : 5,
 		__ : {
@@ -442,7 +443,9 @@ window.OndeMiroirAudio = function() {
 				title 		: audiotag.title,
 				cover 		: audiotag.poster,
 				canonical	: audiotag.dataset.canonical,
-			})
+			});
+			// make pause current, as launched in playlist
+			audiotag.pause();
 			event.preventDefault();
 		},
 		populate_template : function(inner, entry) {
@@ -475,18 +478,24 @@ window.OndeMiroirAudio = function() {
 			}
 			return out;
 		},
-		build : function(element) {
-			if (element.id === '') {
-				element.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element);
+		rebuild : function(event) {
+			var audiotag = event.target;
+			console.log('rebuild event on ', audiotag)
+			document.getElementById(audiotag.dataset.ondemiroir).remove();
+			self.build(audiotag);
+		},
+		build : function(audiotag) {
+			if (audiotag.id === '') {
+				audiotag.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element);
 			}
 			var container = document.createElement(self.container.tagname)
 			container.id = self.container.idPrefix + String(self.count_element);
-			element.dataset.ondemiroir = container.id;
-			container.dataset.rel = element.id;
+			audiotag.dataset.ondemiroir = container.id;
+			container.dataset.rel = audiotag.id;
 			container.className = self.container.classname;
-			container.innerHTML = self.populate_template(_template, self.get_params_for_template(element));
+			container.innerHTML = self.populate_template(_template, self.get_params_for_template(audiotag));
 			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
-			element.parentNode.insertBefore(container, element);
+			audiotag.parentNode.insertBefore(container, audiotag);
 
 			var cliquables = {
 				'pause'		: self.do_pause,
@@ -506,23 +515,23 @@ window.OndeMiroirAudio = function() {
 				'error',
 				'play', 'playing', 'pause', 'suspend', 'ended',
 				'durationchange',  'loadedmetadata', 'progress', 'timeupdate'
-			].forEach( function(on){ element.addEventListener(on, self.update); } );
-			self.update({target : element})
+			].forEach( function(on){ audiotag.addEventListener(on, self.update); } );
+			audiotag.addEventListener('ondemiroir.rebuild', self.rebuild);
+
+			self.update({target : audiotag})
 			if (self.dontHideAudioTag === false) {
-				element.style.display = 'none';
+				audiotag.style.display = 'none';
 			}
 
 			container.addEventListener('keydown', self.do_onkey);
 			self.count_element++;
 		},
-
 		insertStyle : function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
 			element.innerHTML = self.populate_template(_style, self.get_params_for_template(element));
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
-
 		},
 		launch : function() {
 			if (document.getElementById(self.styleId) !== null) {
@@ -537,6 +546,7 @@ window.OndeMiroirAudio = function() {
 					}
 				);
 			}
+			new CustomEvent(self.rebuild);
 			[].forEach.call(
 				// explication de cette construction : https://coderwall.com/p/jcmzxw
 				document.querySelectorAll(self.selector), self.build

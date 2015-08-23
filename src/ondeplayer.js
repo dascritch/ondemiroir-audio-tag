@@ -20,6 +20,7 @@
 
 	var player = {
 		storage_key : 'playlist',
+		rebuild_eventname : 'ondemiroir.rebuild',
 		listing : null,
 		audiotag : null,
 		window_title : document.title,
@@ -65,6 +66,7 @@
 			player.audiotag.title = player.playing.title;
 			player.audiotag.dataset.canonical = player.playing.canonical;
 			player.audiotag.cover = player.playing.cover;
+			player.dispatchEvent(player.rebuild_eventname);
 			player.audiotag.play();
 		},
 		reset_playlist : function() {
