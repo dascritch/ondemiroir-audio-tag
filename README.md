@@ -19,7 +19,12 @@ Purpose
 This is an hashtag extention for `<audio>`, derivated from timecodehash.js
 It could have been done via HTML templates, with a polyfill like the excellent Bosonic, but I wanted a plain vanilla, easy to install and configure.
 
-It will replace any <audio control> by an specialy crafted UI
+Simply put <script src="src/ondemiroir-audio-tag.js"></script> in the head of your html page.
+
+It will replace any <audio control> by an specialy crafted UI.
+title="<string>" : Name of the audio
+poster="<url>" : Cover image
+data-canonical="<url>" : link to the original page of the sound
 
 Todo
 ----
