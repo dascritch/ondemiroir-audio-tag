@@ -52,6 +52,9 @@
 			 * */
 			console.info('push in ',data);
 			player.list.push(data);
+			if (data.length === 1) {
+				player.get_next_to_play();
+			}
 			player.save_playlist();
 		},
 		get_next_to_play : function() {
@@ -66,7 +69,7 @@
 			player.audiotag.title = player.playing.title;
 			player.audiotag.dataset.canonical = player.playing.canonical;
 			player.audiotag.cover = player.playing.cover;
-			player.dispatchEvent(player.rebuild_eventname);
+			player.audiotag.dispatchEvent(new Event(player.rebuild_eventname));
 			player.audiotag.play();
 		},
 		reset_playlist : function() {
