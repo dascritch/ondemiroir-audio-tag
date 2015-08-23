@@ -33,7 +33,7 @@
 			}
 			if ((player.list === null) || (typeof player.list !== 'object') || (player.list.length === undefined)) {
 				player.list = [];
-				save_playlist();
+				player.save_playlist();
 			}
 			if (player.list.length == 0) {
 				// proposer 10 sonores au hasard ou écouter le flux
