@@ -56,7 +56,7 @@ window.OndeMiroirAudio = function() {
 		'email' : '<path d="m 8.030,8.998 15.920,0 c 0.284,0 0.559,0.053 0.812,0.155 l -8.773,9.025 -8.773,-9.026 c 0.253,-0.101 0.528,-0.155 0.812,-0.155 z m -1.990,12.284 0,-10.529 c 0,-0.036 0.002,-0.073 0.004,-0.109 l 5.835,6.003 -5.771,5.089 c -0.045,-0.146 -0.068,-0.298 -0.069,-0.453 z m 17.910,1.754 -15.920,0 c -0.175,0 -0.348,-0.020 -0.514,-0.060 l 5.662,-4.993 2.811,2.892 2.811,-2.892 5.662,4.993 c -0.165,0.039 -0.338,0.060 -0.514,0.060 z m 1.990,-1.754 c 0,0.155 -0.023,0.307 -0.068,0.453 l -5.771,-5.089 5.835,-6.003 c 0.002,0.036 0.004,0.073 0.004,0.109 z" />',
 	}
 
-	var _style = 
+	var _style =
 '.{{classname}} {'
 +'	background : #555;'
 +'	color : #ccc;'
@@ -410,7 +410,7 @@ window.OndeMiroirAudio = function() {
 			ahref('googleplus', 'https://plus.google.com/share?url='+_url);
 			ahref('email', 'mailto:?subject='+_title+'&body='+_url);
 			ahref('link', url);
-			ahref('playlist', self.playlister+'#&u='+_url);
+			ahref('playlist', self.playlister);
 		},
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
@@ -449,7 +449,7 @@ window.OndeMiroirAudio = function() {
 			}
 			// and svg traves
 			for (var key in _traces) {
-				out['svg:'+key] = '<svg viewBox="0 0 32 32">'+_traces[key]+'</svg>';	
+				out['svg:'+key] = '<svg viewBox="0 0 32 32">'+_traces[key]+'</svg>';
 			}
 			return out;
 		},
@@ -463,7 +463,7 @@ window.OndeMiroirAudio = function() {
 			container.dataset.rel = element.id;
 			container.className = self.container.classname;
 			container.innerHTML = self.populate_template(_template, self.get_params_for_template(element));
-			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/ 
+			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
 			element.parentNode.insertBefore(container, element);
 
 			var cliquables = {

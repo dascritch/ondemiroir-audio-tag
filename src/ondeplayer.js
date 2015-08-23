@@ -5,13 +5,13 @@
 (function(document, window){
 
 	window.name = 'onde_miroir_player';
-	
+
 	/**
 	 * TODO
 	 * if playing sound, indicate in window title
 	 *
 	 * **/
-	
+
     var player = {
 		template : '',
 		listing : null,
@@ -39,7 +39,10 @@
 			try {
 				player.list = JSON.parse(localStorage.getItem('playlist'));
 			} catch(e) {
-				player.list = []
+				player.list = [];
+			}
+			if ((player.list === null) || (typeof player.list !== 'object') || (player.list.length === undefined)) {
+				player.list = [];
 			}
 			if (player.list.length == 0) {
 				// proposer 10 sonores au hasard ou écouter le flux
@@ -120,7 +123,6 @@
 			document.getElementById('reset').addEventListener('click', player.reset_playlist)
 			player.listing.addEventListener('dragover',player.drag_over_playlist)
 			player.listing.addEventListener('dragleave',player.drag_out_playlist)
-			
 		},
     }
     window.addEventListener('DOMContentLoaded', player.install);
