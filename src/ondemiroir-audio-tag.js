@@ -530,7 +530,6 @@ window.OndeMiroirAudio = function() {
 		insertStyle : function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
-			alert(self.is_in_playlist)
 			if (self.is_in_playlist) {
 				_style += ' .{{classname}}-playlist { display : none; }';
 			}
