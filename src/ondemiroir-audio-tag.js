@@ -185,7 +185,7 @@ window.OndeMiroirAudio = function() {
 +'		<a href="#" target="social" class="{{classname}}-facebook">{{svg:facebook}}<span>{{facebook}}</span></a>'
 +'		<a href="#" target="social" class="{{classname}}-googleplus">{{svg:share}}<span>{{googleplus}}</span></a>'
 +'		<a href="#" target="social" class="{{classname}}-email">{{svg:email}}<span>{{e-mail}}</span></a>'
-+'		<a href="{{playlister}}" target="playlist" class="{{classname}}-playlist">{{svg:play}}<span>{{playlist}}</span></a>'
++'		<a href="{{playlister}}" target="onde_miroir_player" class="{{classname}}-playlist">{{svg:play}}<span>{{playlist}}</span></a>'
 +'		<a href="#" target="social" class="{{classname}}-link">{{svg:share}}<span>{{direct-link}}</span></a>'
 +'		<div class="{{classname}}-back">{{back}}</div>'
 +'	</div>'
@@ -442,7 +442,7 @@ window.OndeMiroirAudio = function() {
 			self.push_in_playlist({
 				src 		: audiotag.currentSrc,
 				title 		: audiotag.title,
-				cover 		: audiotag.poster,
+				cover 		: self.element_attribute(audiotag, 'poster', self.poster_fallback),
 				canonical	: audiotag.dataset.canonical,
 			});
 			// make pause current, as launched in playlist
