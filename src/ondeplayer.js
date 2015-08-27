@@ -14,8 +14,8 @@
 	 * **/
 
 	 var template =
-			'<h3><button type="button" class="remove">×</button> <button type="button" class="move">↕</button> {{title}}</h3>'
-			+'<img src="{{cover}}" alt="" />'
+			'<img src="{{cover}}" alt="" />'
+			+'<h3><button type="button" class="remove">×</button> <button type="button" class="move">↕</button> {{title}}</h3>'
 			+'<a href="{{canonical}}" target="verspage">page associée</a>';
 
 	var player = {

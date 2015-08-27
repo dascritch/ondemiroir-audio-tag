@@ -36,30 +36,22 @@ audio {
 }
 
 article {
-	cursor : move;
-	clear : both;
-}
-
-article:first-child {
 	cursor : auto;
+  clear : both;
 }
 
-article:first-child .move {
+article .move {
 	visibility : hidden;
 }
 
-article img, article a {
-	display : none;
-}
-
-article:first-child img , article:first-child a {
+article img , article:first-child a {
 	display : inline;
 }
 
-article:first-child img {
+article img {
 	float : left;
-	max-width : 100px;
-	max-height : 100px;
+	max-width : 64px;
+	max-height : 64px;
 }
 
 aside {
