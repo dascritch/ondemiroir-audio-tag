@@ -72,7 +72,7 @@
 			player.audiotag.src = player.playing.src;
 			player.audiotag.title = player.playing.title;
 			player.audiotag.dataset.canonical = player.playing.canonical;
-			player.audiotag.attributes['poster'] = player.playing.cover;
+			player.audiotag.setAttribute('poster', player.playing.cover);
 			player.audiotag.dispatchEvent(new Event(player.rebuild_eventname));
 			player.audiotag.play();
 		},
