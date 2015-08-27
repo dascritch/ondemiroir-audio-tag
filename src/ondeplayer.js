@@ -72,7 +72,7 @@
 			player.audiotag.src = player.playing.src;
 			player.audiotag.title = player.playing.title;
 			player.audiotag.dataset.canonical = player.playing.canonical;
-			player.audiotag.poster = player.playing.cover;
+			player.audiotag.attributes['poster'] = player.playing.cover;
 			player.audiotag.dispatchEvent(new Event(player.rebuild_eventname));
 			player.audiotag.play();
 		},
@@ -80,7 +80,9 @@
 			player.list = [];
 			player.save_playlist();
 		},
-
+		fast_foward_to_next : function() {
+			player.draw_playlist();
+		},
 		draw_item : function(entry) {
 			var inner = template;
 			for (var key in entry) {
@@ -150,7 +152,8 @@
 			player.audiotag = document.querySelector('audio');
 			player.draw_playlist();
 			player.get_next_to_play();
-			document.getElementById('reset').addEventListener('click', player.reset_playlist)
+			document.getElementById('reset').addEventListener('click', player.reset_playlist);
+			document.getElementById('ff').addEventListener('click', player.fast_foward_to_next);
 			player.listing.addEventListener('dragover',player.drag_over_playlist)
 			player.listing.addEventListener('dragleave',player.drag_out_playlist)
 		},
