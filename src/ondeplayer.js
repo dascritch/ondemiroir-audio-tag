@@ -16,7 +16,7 @@
 	 var template =
 			'<h3><button type="button" class="remove">×</button> <button type="button" class="move">↕</button> {{title}}</h3>'
 			+'<img src="{{cover}}" alt="" />'
-				+'<a href="{{canonical}}" target="verspage">page associée</a>';
+			+'<a href="{{canonical}}" target="verspage">page associée</a>';
 
 	var player = {
 		storage_key : 'playlist',
@@ -69,6 +69,7 @@
 				return;
 			}
 
+			// should be transformed in public method from ondemiroir-audio-tag
 			player.audiotag.src = player.playing.src;
 			player.audiotag.title = player.playing.title;
 			player.audiotag.dataset.canonical = player.playing.canonical;
@@ -81,7 +82,8 @@
 			player.save_playlist();
 		},
 		fast_foward_to_next : function() {
-			player.draw_playlist();
+			console.log('going next');
+			player.get_next_to_play();
 		},
 		draw_item : function(entry) {
 			var inner = template;
@@ -97,6 +99,7 @@
 			article.innerHTML = inner;
 			article.addEventListener('dragstart', player.dragging);
 			article.querySelector('.remove').addEventListener('click', player.remove_article);
+			article.dataset.entry = entry; // for re-ordering elements
 			return article;
 		},
 		draw_playlist : function() {
