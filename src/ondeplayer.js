@@ -52,7 +52,8 @@
 			 * */
 			console.info('push in ',data);
 			player.list.push(data);
-			if (data.length === 1) {
+			console.log('player.list ',player.list.length,player.list)
+			if ((player.list.length === 1) && (player.playing === undefined)) {
 				player.get_next_to_play();
 			}
 			player.save_playlist();
