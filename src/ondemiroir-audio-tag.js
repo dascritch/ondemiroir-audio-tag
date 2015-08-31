@@ -130,7 +130,7 @@ window.OndeMiroirAudio = function() {
 +'	.{{classname}}-share {'
 +'		text-align : center;'
 +'	}'
-+'.{{classname}}-share a {'
++'.{{classname}}-share a, .{{classname}}-share div {'
 +'	-webkit-flex : 1 0; -ms-flex : 1 0; flex : 1 0;'
 +'	color : white;'
 +'	text-decoration : none;'
