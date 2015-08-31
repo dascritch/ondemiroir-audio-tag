@@ -30,7 +30,7 @@ Todo
 ----
 
 - Support for elapsed time / countdown time / total time
-- Explanation about cross domain . cf https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS and http://enable-cors.org/server_apache.html . Or switch to event based
+- Explanation about cross domain . cf [CORS on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) and    [enable CORS](http://enable-cors.org/server_apache.html) . Or switch to [custom event based](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
 
 Licence
 -------
