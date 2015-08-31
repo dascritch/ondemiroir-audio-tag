@@ -50,9 +50,7 @@
 			 * vérifier les NDD des images, liens et sources
 			 * éviter un double push si déjà présent dans la playlist
 			 * */
-			console.info('push in ',data);
 			player.list.push(data);
-			console.log('player.list ',player.list.length,player.list)
 			if ((player.list.length === 1) && (player.playing === undefined)) {
 				player.get_next_to_play();
 			}
@@ -158,6 +156,7 @@
 			player.get_next_to_play();
 			document.getElementById('reset').addEventListener('click', player.reset_playlist);
 			document.getElementById('ff').addEventListener('click', player.fast_foward_to_next);
+			document.querySelector('audio').addEventListener('ended', player.fast_foward_to_next);
 			player.listing.addEventListener('dragover',player.drag_over_playlist)
 			player.listing.addEventListener('dragleave',player.drag_out_playlist)
 		},
