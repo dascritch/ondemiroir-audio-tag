@@ -30,10 +30,7 @@ Todo
 ----
 
 - Support for elapsed time / countdown time / total time
-- Support for mute/ volume
-- Support for gear menu
-- Support for download / sharing twitter / facebook
-
+- Explanation about cross domain . cf https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS and http://enable-cors.org/server_apache.html . Or switch to event based
 
 Licence
 -------
