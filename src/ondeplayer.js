@@ -26,6 +26,10 @@
 window.OndeMiroirAudio = function() {
 	'use strict';
 
+    // WATCH OUT ! You should NOT use this script in a unsecure domain name
+	document.domain = document.domain.replace(/^(.*\.)?(\w+\.\w+)$/,'$2');
+
+
 	if ( (document.querySelector === undefined) || (!('oncanplay' in window)) || (![].forEach) ) {
 		// don't even think about it : probably MSIE < 8
 		return undefined;
