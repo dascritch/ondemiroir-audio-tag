@@ -417,16 +417,16 @@ window.OndeMiroirAudio = function() {
 				return '#'
 			}
 			if (url[0] === '#') {
-				return location.protocol + location.pathname + url
+				return location.protocol + '//' + location.pathname + url
 			}
 			if (url.indexOf('://') > 0) {
 				return url
 			}
 			if (url.indexOf('://') === 0) {
-				return location.protocol + url
+				return location.protocol + '//' + url
 			}
 			if (url[0] === '/') {
-				return location.protocol + location.host + url
+				return location.protocol + '//' + location.host + url
 			}
 			return location.href + '/../' + url
 		},
@@ -472,10 +472,10 @@ window.OndeMiroirAudio = function() {
 			var container = self.find_container(event.target);
 			var audiotag = document.getElementById(container.dataset.rel);
 			self.push_in_playlist({
-				src 		: audiotag.currentSrc,
+				src 		: self.absolutize_url(audiotag.currentSrc),
 				title 		: audiotag.title,
-				cover 		: self.element_attribute(audiotag, 'poster', self.poster_fallback),
-				canonical	: audiotag.dataset.canonical,
+				cover 		: self.absolutize_url(self.element_attribute(audiotag, 'poster', self.poster_fallback)),
+				canonical	: self.absolutize_url(audiotag.dataset.canonical),
 			});
 			// make pause current, as launched in playlist
 			audiotag.pause();
