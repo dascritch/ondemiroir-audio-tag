@@ -14,9 +14,14 @@
 	 * **/
 
 	 var template =
-			'<img src="{{cover}}" alt="" />'
-			+'<h3><button type="button" class="remove">×</button> <button type="button" class="move">↕</button> {{title}}</h3>'
-			+'<a href="{{canonical}}" target="verspage">page associée</a>';
+			'<figure><img src="{{cover}}" alt="" /></figure>'
+			+'<div>'
+				+'<button type="button" class="remove">×</button> <button type="button" class="move">↕</button> <button type="button" class="move">»</button>'
+			+'</div>'
+			+'<div>'
+				+'<h3> {{title}}</h3>'
+				+'<a href="{{canonical}}" target="verspage">page associée</a>'
+			+'</div>';
 
 	var player = {
 		storage_key : 'playlist',

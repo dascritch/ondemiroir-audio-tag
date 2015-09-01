@@ -31,27 +31,43 @@
     padding : 0;
     margin : 0;
 }
+
+body {
+  padding : 10px;
+}
+
 audio {
     width : 100%;
+}
+
+button {
+  padding : 5px;
 }
 
 article {
 	cursor : auto;
   clear : both;
+  display : flex;
+  height : 64px;
 }
 
 article .move {
 	visibility : hidden;
 }
 
-article img , article:first-child a {
+article:first-child a {
 	display : inline;
 }
 
-article img {
-	float : left;
+article figure {
+  flex : 0 0 auto;
 	max-width : 64px;
 	max-height : 64px;
+}
+
+article img {
+  max-width : 64px;
+  max-height : 64px;
 }
 
 aside {
