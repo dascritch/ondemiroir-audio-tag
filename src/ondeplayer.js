@@ -27,7 +27,9 @@ window.OndeMiroirAudio = function() {
 	'use strict';
 
     // WATCH OUT ! You should NOT use this script in a unsecure domain name
-	document.domain = document.domain.replace(/^(.*\.)?(\w+\.\w+)$/,'$2');
+    if (document.domain !== '') {
+		document.domain = document.domain.replace(/^(.*\.)?(\w+\.\w+)$/,'$2');
+    }
 
 
 	if ( (document.querySelector === undefined) || (!('oncanplay' in window)) || (![].forEach) ) {
@@ -177,7 +179,7 @@ window.OndeMiroirAudio = function() {
 +'	<div class="{{classname}}-play">{{svg:play}}</div><div class="{{classname}}-pause">{{svg:pause}}</div>'
 +'	<div class="{{classname}}-about">'
 +'		<div class="{{classname}}-titleline">'
-+'			<div class="{{classname}}-title"><a href="{{canonical}}#">{{title}}</a></div>'
++'			<div class="{{classname}}-title"><a href="{{canonical}}">{{title}}</a></div>'
 +'			<div class="{{classname}}-elapse">elapsed</div>'
 +'		</div>'
 +'		<div class="{{classname}}-line">'
@@ -410,12 +412,33 @@ window.OndeMiroirAudio = function() {
 					break;
 			}
 		},
+		absolutize_url : function(url) {
+			if (url === undefined) {
+				return '#'
+			}
+			if (url[0] === '#') {
+				return location.protocol + location.pathname + url
+			}
+			if (url.indexOf('://') > 0) {
+				return url
+			}
+			if (url.indexOf('://') === 0) {
+				return location.protocol + url
+			}
+			if (url[0] === '/') {
+				return location.protocol + location.host + url
+			}
+			return location.href + '/../' + url
+		},
 		update_links : function(player, zone) {
 			function ahref(category, href) {
 				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
 			}
-			var url = player.dataset.canonical+'#'+player.id+(player.currentTime === 0 ? '' : self.separator+self.convertSecondsInTime(player.currentTime));
-			var _url = encodeURI(url);
+			var canonical = player.dataset.canonical
+			var url = (canonical === undefined ? '' : canonical )
+						+'#'+ player.id 
+						+ (player.currentTime === 0 ? '' : (self.separator+self.convertSecondsInTime(player.currentTime)));
+			var _url = encodeURI(self.absolutize_url(url));
 			var _title = encodeURI(player.title);
 			ahref('twitter', 'https://twitter.com/share?text='+_title+'&url='+_url+'&via=dascritch');
 			ahref('facebook', 'https://www.facebook.com/sharer.php?t='+_title+'&u='+_url);
@@ -469,14 +492,15 @@ window.OndeMiroirAudio = function() {
 		},
 		get_params_for_template : function(element) {
 			element.dataset.canonical === undefined ? document.location.href : element.dataset.canonical;
+			console.log('  canonical  ' , element.dataset.canonical, ' = ', self.absolutize_url(element.dataset.canonical ) )
 			var out = {
 				// keys are stringed, as we need them not being modified
-				'title'     : element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
-				'canonical' : element.dataset.canonical,
-				'poster' 	: self.element_attribute(element,'poster', self.poster_fallback),
-				'classname' : self.container.classname,
+				'title'     	: element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
+				'canonical' 	: self.absolutize_url(element.dataset.canonical),
+				'poster' 		: self.absolutize_url(self.element_attribute(element,'poster', self.poster_fallback)),
+				'classname' 	: self.container.classname,
 				'displayflex'	: '	display: -ms-flexbox; display: -webkit-box; display: -webkit-flex; display: flex;',
-				'playlister': self.playlister
+				'playlister'	: self.playlister
 			}
 			// we now add locales
 			for (var key in self.__) {
@@ -556,7 +580,7 @@ window.OndeMiroirAudio = function() {
 					document.querySelectorAll('script[src]'), function(element){
 						var pos = element.src.indexOf('ondeplayer.js')
 						if (pos>-1) {
-							self.playlister = element.src.substr(0, pos) + 'index.html';
+							self.playlister = self.absolutize_url(element.src.substr(0, pos) + 'index.html');
 							if (self.playlister === document.location.href.replace(/#.*$/,'')) {
 								self.is_in_playlist = true;
 							}
