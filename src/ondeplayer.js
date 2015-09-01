@@ -194,7 +194,7 @@ window.OndeMiroirAudio = function() {
 +'		<a href="#" target="social" class="{{classname}}-email">{{svg:email}}<span>{{e-mail}}</span></a>'
 +'		<a href="{{playlister}}" target="onde_miroir_player" class="{{classname}}-playlist">{{svg:play}}<span>{{playlist}}</span></a>'
 +'		<a href="#" target="social" class="{{classname}}-link">{{svg:share}}<span>{{direct-link}}</span></a>'
-+'		<div class="{{classname}}-back">{{back}}</div>'
++'		<a class="{{classname}}-back">{{back}}</a>'
 +'	</div>'
 +'</div>';
 
@@ -381,7 +381,8 @@ window.OndeMiroirAudio = function() {
 		do_throbble : function(event) {
 			var container = self.find_container(event.target);
 			var audiotag = document.getElementById(container.dataset.rel);
-			var ratio = (event.clientX - event.target.offsetLeft) / event.target.clientWidth;
+			var relLeft = event.target.getClientRects()[0].left;
+			var ratio = (event.clientX - relLeft) / event.target.clientWidth;
 			self.seekElementAt(audiotag, ratio * audiotag.duration)
 		},
 		do_pause : function(event) {
@@ -498,7 +499,6 @@ window.OndeMiroirAudio = function() {
 		},
 		get_params_for_template : function(element) {
 			element.dataset.canonical === undefined ? document.location.href : element.dataset.canonical;
-			console.log('  canonical  ' , element.dataset.canonical, ' = ', self.absolutize_url(element.dataset.canonical ) )
 			var out = {
 				// keys are stringed, as we need them not being modified
 				'title'     	: element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
