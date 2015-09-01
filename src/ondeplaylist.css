@@ -45,9 +45,9 @@ button {
 }
 
 article {
+  display: -ms-flexbox; display: -webkit-box; display: -webkit-flex; display: flex;
 	cursor : auto;
   clear : both;
-  display : flex;
   height : 64px;
 }
 
@@ -60,7 +60,7 @@ article:first-child a {
 }
 
 article figure {
-  flex : 0 0 auto;
+  -webkit-box-flex : 0 0 auto; -webkit-flex : 0 0 auto; -ms-flex : 0 0 auto; flex : 0 0 auto;
 	max-width : 64px;
 	max-height : 64px;
 }
