@@ -65,6 +65,7 @@ window.OndeMiroirAudio = function() {
 +'}'
 +'.{{classname}} a {'
 +'	color : #aaf;'
++'	border : none !important;'
 +'}'
 +'.{{classname}} svg {'
 +'  fill : #ffffff'
