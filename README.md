@@ -19,14 +19,15 @@ Purpose
 This is an hashtag extention for `<audio>`, derivated from timecodehash.js
 It could have been done via HTML templates, with a polyfill like the excellent Bosonic, but I wanted a plain vanilla, easy to install and configure.
 
-Simply put <script src="src/ondeplayer.js"></script> in the head of your html page.
+Simply put `<script src="src/ondeplayer.js"></script>` in the head of your html page.
 
-It will replace any <audio control> by an specialy crafted UI.
-title="<string>" : Name of the audio
-poster="<url>" : Cover image
-data-canonical="<url>" : link to the original page of the sound
+It will replace any `<audio control>` by an specialy crafted UI. Some attributes enhance the component :
 
-It will link automatically to the playlister in the same repertory.
+- `title="<string>"` : Name of the audio
+- `poster="<url>"` : Cover image
+- `data-canonical="<url>"` : link to the original page of the sound
+
+The script will link automatically to the playlister in the same repertory.
 
 Todo
 ----
