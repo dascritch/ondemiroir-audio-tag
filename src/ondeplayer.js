@@ -52,7 +52,7 @@ window.OndeMiroirAudio = function() {
 	}
 
 	var _style =
-'.{{classname}}, .{{classname}} * {'
+'.{{classname}}, .{{classname}} *, .{{classname}}-cover img {'
 +'	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;'
 +'	border : none;'
 +'	padding : 0;'
@@ -86,6 +86,7 @@ window.OndeMiroirAudio = function() {
 +'}'
 +'.{{classname}}-cover img {'
 +'	width : 64px;'
++'  max-width: 100%;'
 +'	height : 64px;'
 +'	object-fit: contain;'
 +'}'
