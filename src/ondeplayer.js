@@ -563,6 +563,8 @@ window.OndeMiroirAudio = function() {
 			self.update({target : audiotag})
 			if (self.dontHideAudioTag === false) {
 				audiotag.style.display = 'none';
+				// PHRACK SAFARI
+				audiotag.removeAttribute('controls');
 			}
 
 			container.addEventListener('keydown', self.do_onkey);
