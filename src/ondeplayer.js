@@ -305,44 +305,44 @@ window.OndeMiroirAudio = function() {
 			}
 		},
 		jumpIdAt : function(hash,timecode,callback_fx) {
-			var el;
-			function _isEvent(e) {
-				return e.preventDefault !== undefined;
+			var audiotag;
+			function _isEvent(event) {
+				return event.preventDefault !== undefined;
 			}
 
-			function do_element_play(e) {
-				var tag = e.target;
+			function do_element_play(event) {
+				var tag = event.target;
 				tag.play();
-				if (_isEvent(e)) {
+				if (_isEvent(event)) {
 					tag.removeEventListener('canplay', do_element_play, true);
 				}
 				onDebug(callback_fx);
 			}
 
-			function do_needle_move(e) {
-				if (_isEvent(e)) {
-					el.removeEventListener('loadedmetadata', do_needle_move, true);
+			function do_needle_move(event) {
+				if (_isEvent(event)) {
+					audiotag.removeEventListener('loadedmetadata', do_needle_move, true);
 				}
 
 				var secs = self.convertTimeInSeconds(timecode);
-				self.seekElementAt(el, secs);
+				self.seekElementAt(audiotag, secs);
 
-				if (el.readyState >= el.HAVE_FUTURE_DATA)  {
-					do_element_play({ target : el });
+				if (audiotag.readyState >= audiotag.HAVE_FUTURE_DATA)  {
+					do_element_play({ target : audiotag });
 				} else {
-					el.addEventListener('canplay', do_element_play, true);
+					audiotag.addEventListener('canplay', do_element_play, true);
 				}
 			}
 
-			el = (hash !== '') ? document.getElementById(hash) : document.querySelector(this.selector);
+			audiotag = (hash !== '') ? document.getElementById(hash) : document.querySelector(this.selector);
 
-			if ((el === undefined) || (el.currentTime === undefined)) {
+			if ((audiotag === undefined) || (audiotag === null) || (audiotag.currentTime === undefined)) {
 				return false;
 			}
 
-			if (el.readyState === el.HAVE_NOTHING ) {
-				el.addEventListener('loadedmetadata', do_needle_move , true);
-				el.load();
+			if (audiotag.readyState < audiotag.HAVE_CURRENT_DATA ) {
+				audiotag.addEventListener('loadedmetadata', do_needle_move , true);
+				audiotag.load();
 			} else {
 				do_needle_move({});
 			}
