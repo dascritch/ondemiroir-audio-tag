@@ -205,6 +205,7 @@ window.OndeMiroirAudio = function() {
 		dontHideAudioTag : false,
 		separator : '&t=',
 		selector : 'audio[controls]',
+		selector_fallback : 'audio[data-ondeplayer]',
 		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-tag-',
 		menuId : 'OndeMiroirAudio-menu',
 		styleId : 'OndeMiroirAudio-style',
@@ -334,7 +335,7 @@ window.OndeMiroirAudio = function() {
 				}
 			}
 
-			audiotag = (hash !== '') ? document.getElementById(hash) : document.querySelector(this.selector);
+			audiotag = (hash !== '') ? document.getElementById(hash) : document.querySelector(this.selector_fallback);
 
 			if ((audiotag === undefined) || (audiotag === null) || (audiotag.currentTime === undefined)) {
 				return false;
@@ -524,7 +525,6 @@ window.OndeMiroirAudio = function() {
 		},
 		rebuild : function(event) {
 			var audiotag = event.target;
-			console.log('rebuild event on ', audiotag)
 			document.getElementById(audiotag.dataset.ondemiroir).remove();
 			self.build(audiotag);
 		},
@@ -567,6 +567,7 @@ window.OndeMiroirAudio = function() {
 				audiotag.style.display = 'none';
 				// PHRACK SAFARI
 				audiotag.removeAttribute('controls');
+				audiotag.setAttribute('data-ondeplayer','');
 			}
 
 			container.addEventListener('keydown', self.do_onkey);
