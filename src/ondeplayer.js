@@ -276,10 +276,12 @@ window.OndeMiroirAudio = function() {
 		},
 		convertSecondsInTime : function(givenSeconds) {
 			var converted = '';
+			var inned = false;
 			for(var key in _units) {
 				if (_units.hasOwnProperty(key)) {
 					var multiply = _units[key];
-					if (givenSeconds >= multiply) {
+					if ((givenSeconds >= multiply) || (inned)) {
+						inned = true;
 						var digits = Math.floor(givenSeconds / multiply);
 						converted += digits + key;
 						givenSeconds -= digits * multiply;
