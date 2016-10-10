@@ -178,7 +178,7 @@ window.OndeMiroirAudio = function() {
 +'	<a class="{{classname}}-play">{{svg:play}}</a><a class="{{classname}}-pause">{{svg:pause}}</a>'
 +'	<div class="{{classname}}-about">'
 +'		<div class="{{classname}}-titleline">'
-+'			<div class="{{classname}}-title"><a href="{{canonical}}">{{title}}</a></div>'
++'			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical">{{title}}</a></div>'
 +'			<div class="{{classname}}-elapse">elapsed</div>'
 +'		</div>'
 +'		<div class="{{classname}}-line">'
@@ -427,22 +427,9 @@ window.OndeMiroirAudio = function() {
 			}
 		},
 		absolutize_url : function(url) {
-			if (url === undefined) {
-				return '#'
-			}
-			if (url[0] === '#') {
-				return location.protocol + '//' + location.pathname + url
-			}
-			if (url.indexOf('://') > 0) {
-				return url
-			}
-			if (url.indexOf('://') === 0) {
-				return location.protocol + '//' + url
-			}
-			if (url[0] === '/') {
-				return location.protocol + '//' + location.host + url
-			}
-			return location.href + '/../' + url
+			var test_element = document.createElement('a');
+			test_element.href = url;
+			return test_element.href;
 		},
 		update_links : function(player, zone) {
 			function ahref(category, href) {
@@ -575,6 +562,13 @@ window.OndeMiroirAudio = function() {
 			container.addEventListener('keydown', self.do_onkey);
 			self.count_element++;
 		},
+		prevent_link_on_same_page : function(event) {
+			if (self.absolutize_url( document.location.href ) !== self.absolutize_url(event.target.href)) {
+				return ;
+			}
+			event.preventDefault();
+
+		},
 		insertStyle : function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
@@ -612,6 +606,12 @@ window.OndeMiroirAudio = function() {
 			self.flexIs =  /chrome|safari/.test(navigator.userAgent.toLowerCase()) ? '-webkit-flex' : 'flex';
 			self.flexIs =  /msie|microsoft/.test(navigator.userAgent.toLowerCase()) ? '-ms-flexbox' : self.flexIs;
 			self.insertStyle();
+
+			[].forEach.call(
+				document.querySelectorAll('.'+self.container.classname+'-canonical'), function(element) {
+					element.addEventListener('click', self.prevent_link_on_same_page);
+				} 
+			);
 		}
 	};
 
