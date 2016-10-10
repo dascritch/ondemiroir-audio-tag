@@ -364,9 +364,8 @@ window.OndeMiroirAudio = function() {
 			self.jumpIdAt(atoms[0],atoms[1],callback_fx);
 		},
 		update_playbutton : function(event, element, container) {
-			container.querySelector('.'+self.container.classname+'-pause').style.display = element.paused ? 'none' : 'block';
-			container.querySelector('.'+self.container.classname+'-play').style.display = element.paused ? 'block' : 'none' ;
-
+			container.querySelector('.'+self.container.classname+'-pause').hidden = element.paused ;
+			container.querySelector('.'+self.container.classname+'-play').hidden = !element.paused ;
 		},
 		update_time : function(event, element, container) {
 			container.querySelector('.'+self.container.classname+'-elapse').innerHTML = self.convertSecondsInTime(element.currentTime) + ' / ' + self.convertSecondsInTime(Math.round(element.duration));
@@ -569,6 +568,9 @@ window.OndeMiroirAudio = function() {
 			event.preventDefault();
 
 		},
+		element_prevent_link_on_same_page : function(element) {
+			element.addEventListener('click', self.prevent_link_on_same_page);
+		},
 		insertStyle : function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
@@ -578,6 +580,12 @@ window.OndeMiroirAudio = function() {
 			element.innerHTML = self.populate_template(_style, self.get_params_for_template(element));
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
+		},
+		querySelector_apply : function(selector, callback) {
+			[].forEach.call(
+				// explication de cette construction : https://coderwall.com/p/jcmzxw
+				document.querySelectorAll(selector), callback
+			);
 		},
 		launch : function() {
 			if (document.getElementById(self.styleId) !== null) {
@@ -598,20 +606,12 @@ window.OndeMiroirAudio = function() {
 				);
 			}
 			new CustomEvent(self.rebuild);
-			[].forEach.call(
-				// explication de cette construction : https://coderwall.com/p/jcmzxw
-				document.querySelectorAll(self.selector), self.build
-			);
+			self.querySelector_apply(self.selector, self.build);
 			// Safari is a piece of SHIT
 			self.flexIs =  /chrome|safari/.test(navigator.userAgent.toLowerCase()) ? '-webkit-flex' : 'flex';
 			self.flexIs =  /msie|microsoft/.test(navigator.userAgent.toLowerCase()) ? '-ms-flexbox' : self.flexIs;
 			self.insertStyle();
-
-			[].forEach.call(
-				document.querySelectorAll('.'+self.container.classname+'-canonical'), function(element) {
-					element.addEventListener('click', self.prevent_link_on_same_page);
-				} 
-			);
+			self.querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
 		}
 	};
 
