@@ -362,13 +362,18 @@ window.OndeMiroirAudio = function() {
 		},
 		update_time : function(event, element, container) {
 			container.querySelector('.'+self.container.classname+'-elapse').innerHTML = self.convertSecondsInTime(element.currentTime) + ' / ' + self.convertSecondsInTime(Math.round(element.duration));
-			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%')
+			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%');
 		},
 		update : function(event) {
 			var element = event.target;
 			var container = document.getElementById(element.dataset.ondemiroir);
 			self.update_playbutton(event, element, container)
 			self.update_time(event, element, container)
+			if (element.paused) {
+				localStorage.removeItem(element.src);
+			} else {
+				localStorage.setItem(element.src, String(element.currentTime));
+			}
 		},
 		find_container : function (child) {
 			if (child.closest) {
@@ -536,6 +541,13 @@ window.OndeMiroirAudio = function() {
 			};
 			for (var that in cliquables) {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
+			}
+
+			var lasttimecode = Number(localStorage.getItem(audiotag.src));
+			// TODO and no hased time
+			if (lasttimecode > 0) {
+				self.seekElementAt(audiotag, lasttimecode);
+				audiotag.play();
 			}
 
 			[
