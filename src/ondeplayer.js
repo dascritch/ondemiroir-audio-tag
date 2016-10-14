@@ -543,10 +543,11 @@ window.OndeMiroirAudio = function() {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
 			}
 
-			var lasttimecode = Number(localStorage.getItem(audiotag.src));
+			var lasttimecode = localStorage.getItem(audiotag.src);
+			var typed_lasttimecode = Number(lasttimecode);
 			// TODO and no hased time
-			if (lasttimecode > 0) {
-				self.seekElementAt(audiotag, lasttimecode);
+			if ((lasttimecode !== null)  && (typed_lasttimecode > 0)) {
+				self.seekElementAt(audiotag, typed_lasttimecode);
 				audiotag.play();
 			}
 
