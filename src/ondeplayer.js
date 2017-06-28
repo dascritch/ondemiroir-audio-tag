@@ -362,7 +362,6 @@ window.OndeMiroirAudio = function() {
 					var atoms = parameter.split('=');
 					var p_key = atoms[0];
 					var p_value = atoms[1];
-					console.info(`  $(p_key) =  ${p_value} `)
 					switch (p_key) {
 						case 't':
 							// is a time index
