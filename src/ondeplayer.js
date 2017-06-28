@@ -197,7 +197,6 @@ window.OndeMiroirAudio = function() {
 
 	var self = {
 		dontHideAudioTag : false,
-		separator : '&t=',
 		selector : 'audio[controls]',
 		selector_fallback : 'audio[data-ondeplayer]',
 		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-tag-',
@@ -208,7 +207,7 @@ window.OndeMiroirAudio = function() {
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player'
 		},
-		poster_fallback : 'http://dascritch.net/themes/DSN13/img/entete1.svg',
+		poster_fallback : '//dascritch.net/themes/DSN13/img/entete1.svg',
 		playlister : false,
 		playlist_window : false,
 		is_in_playlist : false,
@@ -343,17 +342,52 @@ window.OndeMiroirAudio = function() {
 			}
 		},
 		hashOrder : function(hashcode,callback_fx){
+			var at_start = false;
 			if (typeof hashcode !== 'string') {
+				at_start = 'at_start' in hashcode;
 				hashcode = document.location.hash.substr(1);
 			}
+			var hash = '';
+			var timecode = '';
+			var segments = hashcode.split('&');
+			var autoplay = false;
 
-			if (hashcode.indexOf(self.separator) === -1) {
+			for (var _id in segments) {
+				var parameter = segments[_id];
+				if (parameter.indexOf('=') === -1) {
+					// should reference to the ID of the element
+					hash = parameter;
+				} else {
+					// should be a key=value parameter
+					var atoms = parameter.split('=');
+					var p_key = atoms[0];
+					var p_value = atoms[1];
+					console.info(`  $(p_key) =  ${p_value} `)
+					switch (p_key) {
+						case 't':
+							// is a time index
+							timecode = p_value;
+							break;
+						case 'autoplay':
+							if (p_value='1') {
+								autoplay = true;
+							}
+							break;
+						case 'auto_play':
+							if (p_value='true') {
+								autoplay = true;
+							}
+							break;
+					}
+
+				}
+			}
+
+			if ((timecode === '') || ((at_start) && (!autoplay))) {
 				onDebug(callback_fx);
 				return ;
 			}
-
-			var atoms = hashcode.split(self.separator);
-			self.jumpIdAt(atoms[0],atoms[1],callback_fx);
+			self.jumpIdAt(hash,timecode,callback_fx);
 		},
 		update_playbutton : function(event, element, container) {
 			container.querySelector('.'+self.container.classname+'-pause').hidden = element.paused ;
@@ -445,17 +479,13 @@ window.OndeMiroirAudio = function() {
 		},
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
-			//container.querySelector('.'+self.container.classname+'-pagemain').hidden = true;
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display  = 'none';
-			//container.querySelector('.'+self.container.classname+'-pageshare').hidden = false;
 			container.querySelector('.'+self.container.classname+'-pageshare').style.display  = self.flexIs;
 			self.update_links(document.getElementById(container.dataset.rel), container.querySelector('.'+self.container.classname+'-share'))
 		},
 		show_main : function(event) {
 			var container = self.find_container(event.target);
-			//container.querySelector('.'+self.container.classname+'-pagemain').hidden = false;
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display = self.flexIs;
-			//container.querySelector('.'+self.container.classname+'-pageshare').hidden = true;
 			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'none';
 		},
 		push_in_playlist : function(params) {
@@ -468,7 +498,6 @@ window.OndeMiroirAudio = function() {
 		},
 		add_playlist : function(event) {
 			self.playlist_window = window.open(self.playlister+'#', 'onde_miroir_player');
-			// self.playlist_window = self.playlist_window ? self.playlist_window : window.open(self.playlister+'#', 'onde_miroir_player');
 			var container = self.find_container(event.target);
 			var audiotag = document.getElementById(container.dataset.rel);
 			self.push_in_playlist({
@@ -601,23 +630,25 @@ window.OndeMiroirAudio = function() {
 				return ;
 			}
 			if (!self.playlister) {
-				[].forEach.call(
-					document.querySelectorAll('script[src]'), function(element){
-						var pos = element.src.indexOf('ondeplayer.js')
-						if (pos>-1) {
-							self.playlister = self.absolutize_url(element.src.substr(0, pos) + 'index.html');
-							if (self.playlister === document.location.href.replace(/#.*$/,'')) {
-								self.is_in_playlist = true;
-							}
+				function find_playlister_from_js_scr(element) {
+					var pos = element.src.indexOf('ondeplayer.js')
+					if (pos>-1) {
+						self.playlister = self.absolutize_url(element.src.substr(0, pos) + 'index.html');
+						if (self.playlister === document.location.href.replace(/#.*$/,'')) {
+							self.is_in_playlist = true;
 						}
 					}
-				);
+				}
+
+				self.querySelector_apply('script[src]', find_playlister_from_js_scr);
+
 			}
 			new CustomEvent(self.rebuild);
 			self.querySelector_apply(self.selector, self.build);
 			self.flexIs =  'flex';
 			self.insertStyle();
 			self.querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
+			self.hashOrder({ at_start : true });
 		}
 	};
 
