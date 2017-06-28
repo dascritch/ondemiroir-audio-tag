@@ -78,7 +78,7 @@ window.OndeMiroirAudio = function() {
 +'	fill : #555;'
 +'}'
 +'.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	-webkit-box-flex : 0 0 64px; -webkit-flex : 0 0 64px; -ms-flex : 0 0 64px; flex : 0 0 64px;'
++'	flex : 0 0 64px;'
 +'	width : 64px;'
 +'	height : 64px;'
 +'	text-align : center;'
@@ -103,13 +103,13 @@ window.OndeMiroirAudio = function() {
 +'	position : relative;'
 +'}'
 +'.{{classname}}-about, .{{classname}}-title {'
-+'	-webkit-box-flex : 1 1 100%; -webkit-flex : 1 1 100%; -ms-flex : 1 1 100%; flex : 1 1 100%;'
++'	flex : 1 1 100%;'
 +'}'
 +'.{{classname}}-title a {'
 +'  display : block;'
 +'}'
 +'.{{classname}}-elapse {'
-+'	-webkit-box-flex : 1 0 120px; -webkit-flex : 1 0 120px; -ms-flex : 1 0 120px; flex : 1 0 120px;'
++'	flex : 1 0 120px;'
 +'	text-align : right;'
 +'}'
 +'.{{classname}}-time {'
@@ -130,15 +130,14 @@ window.OndeMiroirAudio = function() {
 +'	pointer-events : none;'
 +'}'
 +'.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {'
-+'	-webkit-flex : 1 1 100%; -ms-flex : 1 1 100%; flex : 1 1 100%;'
++'	flex : 1 1 100%;'
 +'	{{displayflex}};'
-//+'  -webkit-flex-direction: row; flex-direction: row;'
 +'}'
 +'	.{{classname}}-share {'
 +'		text-align : center;'
 +'	}'
 +'.{{classname}}-share a, .{{classname}}-share div {'
-+'	-webkit-flex : 1 0; -ms-flex : 1 0; flex : 1 0;'
++'	flex : 1 0;'
 +'	color : white;'
 +'	text-decoration : none;'
 +'}'
@@ -153,7 +152,7 @@ window.OndeMiroirAudio = function() {
 +''
 +'@media screen and (max-width: 640px) {'
 +'	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	 -webkit-box-flex : 0 0 32px; -webkit-flex : 0 0 32px; -ms-flex : 0 0 32px; flex : 0 0 32px;'
++'	flex : 0 0 32px;'
 +'	height : 32px;'
 +'	}'
 +'  .{{classname}}-nosmall {'
@@ -499,7 +498,7 @@ window.OndeMiroirAudio = function() {
 				'canonical' 	: self.absolutize_url(element.dataset.canonical),
 				'poster' 		: self.absolutize_url(self.element_attribute(element,'poster', self.poster_fallback)),
 				'classname' 	: self.container.classname,
-				'displayflex'	: '	display: -ms-flexbox; display: -webkit-box; display: -webkit-flex; display: flex;',
+				'displayflex'	: 'display: flex;',
 				'playlister'	: self.playlister
 			}
 			// we now add locales
@@ -543,11 +542,10 @@ window.OndeMiroirAudio = function() {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
 			}
 
-			var lasttimecode = localStorage.getItem(audiotag.src);
-			var typed_lasttimecode = Number(lasttimecode);
+			var lasttimecode = Number(localStorage.getItem(audiotag.src));
 			// TODO and no hased time
-			if ((lasttimecode !== null)  && (typed_lasttimecode > 0)) {
-				self.seekElementAt(audiotag, typed_lasttimecode);
+			if (lasttimecode > 0) {
+				self.seekElementAt(audiotag, lasttimecode);
 				audiotag.play();
 			}
 
@@ -617,9 +615,7 @@ window.OndeMiroirAudio = function() {
 			}
 			new CustomEvent(self.rebuild);
 			self.querySelector_apply(self.selector, self.build);
-			// Safari is a piece of SHIT
-			self.flexIs =  /chrome|safari/.test(navigator.userAgent.toLowerCase()) ? '-webkit-flex' : 'flex';
-			self.flexIs =  /msie|microsoft/.test(navigator.userAgent.toLowerCase()) ? '-ms-flexbox' : self.flexIs;
+			self.flexIs =  'flex';
 			self.insertStyle();
 			self.querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
 		}
