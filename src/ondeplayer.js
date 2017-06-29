@@ -396,7 +396,7 @@ window.OndeMiroirAudio = function() {
 			var link_to = self.absolutize_url(element.dataset.canonical)+'#';
 			link_to += element.id ? (element.id+'&') : '';
 			var timecode = self.convertSecondsInTime(element.currentTime)
-			link_to += timecode;
+			link_to += 't='+timecode;
 
 			var elapse_element = container.querySelector('.'+self.container.classname+'-elapse');
 			elapse_element.href = link_to;
