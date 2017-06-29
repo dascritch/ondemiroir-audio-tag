@@ -174,7 +174,7 @@ window.OndeMiroirAudio = function() {
 +'	<div class="{{classname}}-about">'
 +'		<div class="{{classname}}-titleline">'
 +'			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical">{{title}}</a></div>'
-+'			<div class="{{classname}}-elapse">elapsed</div>'
++'			<a class="{{classname}}-elapse">elapsed</a>'
 +'		</div>'
 +'		<div class="{{classname}}-line">'
 +'			<div class="{{classname}}-time">'
@@ -393,7 +393,14 @@ window.OndeMiroirAudio = function() {
 			container.querySelector('.'+self.container.classname+'-play').hidden = !element.paused ;
 		},
 		update_time : function(event, element, container) {
-			container.querySelector('.'+self.container.classname+'-elapse').innerHTML = self.convertSecondsInTime(element.currentTime) + ' / ' + self.convertSecondsInTime(Math.round(element.duration));
+			var link_to = self.absolutize_url(element.dataset.canonical)+'#';
+			link_to += element.id ? (element.id+'&') : '';
+			var timecode = self.convertSecondsInTime(element.currentTime)
+			link_to += timecode;
+
+			var elapse_element = container.querySelector('.'+self.container.classname+'-elapse');
+			elapse_element.href = link_to;
+			elapse_element.innerHTML = timecode + ' / ' + self.convertSecondsInTime(Math.round(element.duration));
 			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%');
 		},
 		update : function(event) {
