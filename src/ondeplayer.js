@@ -555,6 +555,12 @@ window.OndeMiroirAudio = function() {
 			if (audiotag.id === '') {
 				audiotag.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element);
 			}
+
+			if (audiotag.preload === '') {
+				// ask ASAP metadata about media
+				audiotag.preload = 'metadata';
+			}
+
 			var container = document.createElement(self.container.tagname)
 			container.id = self.container.idPrefix + String(self.count_element);
 			audiotag.dataset.ondemiroir = container.id;
@@ -645,7 +651,6 @@ window.OndeMiroirAudio = function() {
 						}
 					}
 				}
-
 				self.querySelector_apply('script[src]', find_playlister_from_js_scr);
 
 			}
