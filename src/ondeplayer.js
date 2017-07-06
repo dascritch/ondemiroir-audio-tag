@@ -212,7 +212,6 @@ window.OndeMiroirAudio = function() {
 		playlist_window : false,
 		is_in_playlist : false,
 		rebuild_eventname : 'ondemiroir.rebuild',
-		flexIs : 'flex', // FUCK SAFARI
 		keymove : 5,
 		__ : {
 			'(no title)' : '(sans titre)',
@@ -486,12 +485,12 @@ window.OndeMiroirAudio = function() {
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display  = 'none';
-			container.querySelector('.'+self.container.classname+'-pageshare').style.display  = self.flexIs;
+			container.querySelector('.'+self.container.classname+'-pageshare').style.display  = 'flex';
 			self.update_links(document.getElementById(container.dataset.rel), container.querySelector('.'+self.container.classname+'-share'))
 		},
 		show_main : function(event) {
 			var container = self.find_container(event.target);
-			container.querySelector('.'+self.container.classname+'-pagemain').style.display = self.flexIs;
+			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'flex';
 			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'none';
 		},
 		push_in_playlist : function(params) {
@@ -560,6 +559,17 @@ window.OndeMiroirAudio = function() {
 				// ask ASAP metadata about media
 				audiotag.preload = 'metadata';
 			}
+
+			/** TODO bug duplicate controler 
+				* parameterize place to insert cointainer, perhaps audiotag.dataset.ondemiroir
+					* MUST have TAGNAME === self.container.tagname 
+					* may be called via self.build_clone() with dataset.player-clone === audiotag
+					* SHOULD have an ID, or be recalculated via self.build_clone()
+				* get its id value, to NOT precalculate container.id but reuse it
+				* use a dynamic dataset in audiotag to add players to impact
+				* on rebuild event, rebuild clones
+			**/
+
 
 			var container = document.createElement(self.container.tagname)
 			container.id = self.container.idPrefix + String(self.count_element);
@@ -656,7 +666,6 @@ window.OndeMiroirAudio = function() {
 			}
 			new CustomEvent(self.rebuild);
 			self.querySelector_apply(self.selector, self.build);
-			self.flexIs =  'flex';
 			self.insertStyle();
 			self.querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
 			self.hashOrder({ at_start : true });
