@@ -26,6 +26,7 @@
 window.OndeMiroirAudio = function() {
 	'use strict';
 
+
     // WATCH OUT ! You should NOT use this script in a unsecure domain name
     if (document.domain !== '') {
 		document.domain = document.domain.replace(/^(.*\.)?(\w+\.\w+)$/,'$2');
@@ -197,8 +198,9 @@ window.OndeMiroirAudio = function() {
 
 	var self = {
 		dontHideAudioTag : false,
-		selector : 'audio[controls]',
+		selector_media : 'audio[controls]',
 		selector_fallback : 'audio[data-ondeplayer]',
+		selector_container : 'div[data-ondeplayer]',
 		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-tag-',
 		menuId : 'OndeMiroirAudio-menu',
 		styleId : 'OndeMiroirAudio-style',
@@ -399,14 +401,24 @@ window.OndeMiroirAudio = function() {
 
 			var elapse_element = container.querySelector('.'+self.container.classname+'-elapse');
 			elapse_element.href = link_to;
-			elapse_element.innerHTML = timecode + ' / ' + self.convertSecondsInTime(Math.round(element.duration));
+
+			var total_duration = '…';
+			if (!isNaN(Math.round(element.duration))){
+				total_duration = self.convertSecondsInTime(Math.round(element.duration));
+			} 
+			 
+			elapse_element.innerHTML = timecode + ' / ' + total_duration;
 			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%');
 		},
+		
 		update : function(event) {
+			function update_id_container_infos(container_id) {
+				var container = document.getElementById(container_id);
+				self.update_playbutton(event, element, container);
+				self.update_time(event, element, container);
+			}
 			var element = event.target;
-			var container = document.getElementById(element.dataset.ondemiroir);
-			self.update_playbutton(event, element, container)
-			self.update_time(event, element, container)
+			element._ondemiroir.forEach(update_id_container_infos);
 			if (element.paused) {
 				localStorage.removeItem(element.src);
 			} else {
@@ -422,22 +434,22 @@ window.OndeMiroirAudio = function() {
 		},
 		do_throbble : function(event) {
 			var container = self.find_container(event.target);
-			var audiotag = document.getElementById(container.dataset.rel);
+			var audiotag = document.getElementById(container.dataset.ondeplayer);
 			var relLeft = event.target.getClientRects()[0].left;
 			var ratio = (event.clientX - relLeft) / event.target.clientWidth;
 			self.seekElementAt(audiotag, ratio * audiotag.duration)
 		},
 		do_pause : function(event) {
 			var container = self.find_container(event.target);
-			document.getElementById(container.dataset.rel).pause();
+			document.getElementById(container.dataset.ondeplayer).pause();
 		},
 		do_play : function(event) {
 			var container = self.find_container(event.target);
-			document.getElementById(container.dataset.rel).play();
+			document.getElementById(container.dataset.ondeplayer).play();
 		},
 		do_onkey : function(event) {
 			var container = self.find_container(event.target);
-			var audiotag = document.getElementById(container.dataset.rel);
+			var audiotag = document.getElementById(container.dataset.ondeplayer);
 			switch(event.keyCode) {
 				// can't use enter : standard usage
 				case 27 : // esc
@@ -486,7 +498,7 @@ window.OndeMiroirAudio = function() {
 			var container = self.find_container(event.target);
 			container.querySelector('.'+self.container.classname+'-pagemain').style.display  = 'none';
 			container.querySelector('.'+self.container.classname+'-pageshare').style.display  = 'flex';
-			self.update_links(document.getElementById(container.dataset.rel), container.querySelector('.'+self.container.classname+'-share'))
+			self.update_links(document.getElementById(container.dataset.ondeplayer), container.querySelector('.'+self.container.classname+'-share'))
 		},
 		show_main : function(event) {
 			var container = self.find_container(event.target);
@@ -504,7 +516,7 @@ window.OndeMiroirAudio = function() {
 		add_playlist : function(event) {
 			self.playlist_window = window.open(self.playlister+'#', 'onde_miroir_player');
 			var container = self.find_container(event.target);
-			var audiotag = document.getElementById(container.dataset.rel);
+			var audiotag = document.getElementById(container.dataset.ondeplayer);
 			self.push_in_playlist({
 				src 		: self.absolutize_url(audiotag.currentSrc),
 				title 		: audiotag.title,
@@ -547,39 +559,40 @@ window.OndeMiroirAudio = function() {
 		},
 		rebuild : function(event) {
 			var audiotag = event.target;
-			document.getElementById(audiotag.dataset.ondemiroir).remove();
-			self.build(audiotag);
+			audiotag._ondemiroir.forEach(
+				function(element_id) {
+					var container = document.getElementById(element_id);
+					if (container.dataset.ondeplayer === undefined) {
+						container.remove();
+						self.build_for_audiotag(audiotag);
+					} else {
+						container.innerHTML = '';
+						self.build_for_placeholder(container);
+					}
+				});
 		},
-		build : function(audiotag) {
+		add_id_to_container : function(container) {
+			container.id = container.id !== ''? container.id : (self.container.idPrefix + String(self.count_element++));
+		},
+		add_id_to_audiotag : function(audiotag) {
 			if (audiotag.id === '') {
-				audiotag.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element);
+				audiotag.id = self.dynamicallyAllocatedIdPrefix + String(self.count_element++);
 			}
-
-			if (audiotag.preload === '') {
-				// ask ASAP metadata about media
-				audiotag.preload = 'metadata';
+		},
+		add_related_controller : function(audiotag, container) {
+			self.add_id_to_container(container);
+			if (audiotag._ondemiroir.indexOf(container.id) > -1) {
+				return;
 			}
+			audiotag._ondemiroir.push(container.id);
+		},
 
-			/** TODO bug duplicate controler 
-				* parameterize place to insert cointainer, perhaps audiotag.dataset.ondemiroir
-					* MUST have TAGNAME === self.container.tagname 
-					* may be called via self.build_clone() with dataset.player-clone === audiotag
-					* SHOULD have an ID, or be recalculated via self.build_clone()
-				* get its id value, to NOT precalculate container.id but reuse it
-				* use a dynamic dataset in audiotag to add players to impact
-				* on rebuild event, rebuild clones
-			**/
-
-
-			var container = document.createElement(self.container.tagname)
-			container.id = self.container.idPrefix + String(self.count_element);
-			audiotag.dataset.ondemiroir = container.id;
-			container.dataset.rel = audiotag.id;
+		build_controller : function(container, audiotag) {
+			container.dataset.ondeplayer = audiotag.id;
 			container.className = self.container.classname;
 			container.innerHTML = self.populate_template(_template, self.get_params_for_template(audiotag));
 			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
-			audiotag.parentNode.insertBefore(container, audiotag);
-
+			self.add_related_controller(audiotag, container);
 			var cliquables = {
 				'pause'		: self.do_pause,
 				'play'		: self.do_play,
@@ -592,9 +605,36 @@ window.OndeMiroirAudio = function() {
 			for (var that in cliquables) {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
 			}
+			container.addEventListener('keydown', self.do_onkey);
+			self.show_main({target : container.querySelector('a')});
+			return container;
+		},
+		find_placeholders : function(container) {
+			// NOTE : to use placeholders, you need to build a <div id data-ondeplayer="el-audio" >
+			// AND you audio element SHOULD have an ID. Really
+			var audiotag = document.getElementById(container.dataset.ondeplayer);
+			if (audiotag === null) {
+				return;
+			}
+			self.add_related_controller(audiotag, container);
+			self.build_controller(container, audiotag);
+		},
+		build_for_audiotag : function(audiotag) {
+			if (audiotag._ondemiroir === undefined) {
+				audiotag._ondemiroir = []
+			}
+			if (audiotag.preload === '') {
+				// ask ASAP metadata about media
+				audiotag.preload = 'metadata';
+			}
+			self.add_id_to_audiotag(audiotag)
+
+			var container = document.createElement(self.container.tagname)
+			audiotag.parentNode.insertBefore(container, audiotag);
+			container = self.build_controller(container, audiotag);
 
 			var lasttimecode = Number(localStorage.getItem(audiotag.src));
-			// TODO and no hased time
+			// TODO and no hashed time
 			if (lasttimecode > 0) {
 				self.seekElementAt(audiotag, lasttimecode);
 				audiotag.play();
@@ -614,11 +654,10 @@ window.OndeMiroirAudio = function() {
 				// PHRACK SAFARI
 				audiotag.removeAttribute('controls');
 				audiotag.setAttribute('data-ondeplayer','');
-				self.show_main({target : container.querySelector('a')});
+				
 			}
 
-			container.addEventListener('keydown', self.do_onkey);
-			self.count_element++;
+			
 		},
 		prevent_link_on_same_page : function(event) {
 			if (self.absolutize_url( document.location.href ) !== self.absolutize_url(event.target.href)) {
@@ -641,10 +680,8 @@ window.OndeMiroirAudio = function() {
 			head.appendChild(element);
 		},
 		querySelector_apply : function(selector, callback) {
-			[].forEach.call(
-				// explication de cette construction : https://coderwall.com/p/jcmzxw
-				document.querySelectorAll(selector), callback
-			);
+			// explication de cette construction : https://coderwall.com/p/jcmzxw
+			[].forEach.call(document.querySelectorAll(selector), callback);
 		},
 		launch : function() {
 			if (document.getElementById(self.styleId) !== null) {
@@ -662,10 +699,10 @@ window.OndeMiroirAudio = function() {
 					}
 				}
 				self.querySelector_apply('script[src]', find_playlister_from_js_scr);
-
 			}
 			new CustomEvent(self.rebuild);
-			self.querySelector_apply(self.selector, self.build);
+			self.querySelector_apply(self.selector_media, self.build_for_audiotag);
+			self.querySelector_apply(self.selector_container, self.find_placeholders);
 			self.insertStyle();
 			self.querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
 			self.hashOrder({ at_start : true });
