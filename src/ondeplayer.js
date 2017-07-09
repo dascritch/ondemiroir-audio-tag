@@ -175,7 +175,7 @@ window.OndeMiroirAudio = function() {
 +'	<div class="{{classname}}-about">'
 +'		<div class="{{classname}}-titleline">'
 +'			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical">{{title}}</a></div>'
-+'			<a class="{{classname}}-elapse">elapsed</a>'
++'			<a class="{{classname}}-elapse">…</a>'
 +'		</div>'
 +'		<div class="{{classname}}-line">'
 +'			<div class="{{classname}}-time">'
