@@ -607,6 +607,7 @@ window.OndeMiroirAudio = function() {
 			}
 			container.addEventListener('keydown', self.do_onkey);
 			self.show_main({target : container.querySelector('a')});
+			self.update({target : audiotag});
 			return container;
 		},
 		find_placeholders : function(container) {
@@ -654,9 +655,7 @@ window.OndeMiroirAudio = function() {
 				// PHRACK SAFARI
 				audiotag.removeAttribute('controls');
 				audiotag.setAttribute('data-ondeplayer','');
-				
 			}
-
 			
 		},
 		prevent_link_on_same_page : function(event) {
