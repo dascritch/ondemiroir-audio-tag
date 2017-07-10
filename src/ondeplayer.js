@@ -1,6 +1,7 @@
 /*
-	TimecodeHash , an extension to the hash system to address timecode into audio/video elements
-	Copyright (C) 2014 Xavier "dascritch" Mouton-Dubosc
+	OndeMirroir Audio Tag , an extension to the hash system to address timecode into audio/video elements
+	Previously TimecodeHash
+	Copyright (C) 2014-2017 Xavier "dascritch" Mouton-Dubosc
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@
 
 	--
 
-	project repository : https://github.com/dascritch/timecodehash
+	project repository : https://github.com/dascritch/ondemiroir-audio-tag
 	professional : http://dascritch.com
 	blog post : http://dascritch.net/post/2014/09/03/Timecodehash-%3A-Lier-vers-un-moment-d-un-sonore
 
@@ -52,149 +53,159 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
-	var _style =
-'.{{classname}}, .{{classname}} *, .{{classname}}-cover img {'
-+'	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;'
-+'	border : none;'
-+'	padding : 0;'
-+'	margin : 0;'
-+'}'
-+'.{{classname}} {'
-+'	{{displayflex}};'
-+'	background : #555;'
-+'	color : #ccc;'
-+'}'
-+'.{{classname}} a {'
-+'	color : #aaf;'
-+'	border : none !important;'
-+'}'
-+'.{{classname}} svg {'
-+'  fill : #ffffff'
-+'}'
-+'.{{classname}} a:hover {'
-+'	color : #555;'
-+'	background : #aaf;'
-+'}'
-+'.{{classname}} a:hover svg {'
-+'	fill : #555;'
-+'}'
-+'.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	flex : 0 0 64px;'
-+'	width : 64px;'
-+'	height : 64px;'
-+'	text-align : center;'
-+'	vertical-align : middle;'
-+'}'
-+'.{{classname}}-cover img {'
-+'	width : 64px;'
-+'  max-width: 100%;'
-+'	height : 64px;'
-+'	object-fit: contain;'
-+'}'
-+'.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {'
-+'	cursor : pointer;'
-+'}'
-+'.{{classname}}-play svg, .{{classname}}-pause svg, .{{classname}}-actions svg {'
-+'	vertical-align : middle;'
-+'	width : 100%;'
-+'	max-height : 100%;'
-+'}'
-+'.{{classname}}-titleline {'
-+'	{{displayflex}};'
-+'	position : relative;'
-+'}'
-+'.{{classname}}-about, .{{classname}}-title {'
-+'	flex : 1 1 100%;'
-+'}'
-+'.{{classname}}-title a {'
-+'  display : block;'
-+'}'
-+'.{{classname}}-elapse {'
-+'	flex : 1 0 120px;'
-+'	text-align : right;'
-+'}'
-+'.{{classname}}-time {'
-+'	background : black;'
-+'	width : 100%;'
-+'	height : 10px;'
-+'	display : block;'
-+'	border-radius : 4px;'
-+'	position : relative;'
-+'}'
-+'.{{classname}}-elapsedline {'
-+'	background : white;'
-+'	height : 10px ;'
-+'	display : block ;'
-+'	position : absolute;'
-+'	left : 0;'
-+'	border-radius : 4px;'
-+'	pointer-events : none;'
-+'}'
-+'.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {'
-+'	flex : 1 1 100%;'
-+'	{{displayflex}};'
-+'}'
-+'	.{{classname}}-share {'
-+'		text-align : center;'
-+'	}'
-+'.{{classname}}-share a, .{{classname}}-share div {'
-+'	flex : 1 0;'
-+'	color : white;'
-+'	text-decoration : none;'
-+'}'
-+'.{{classname}}-share svg {'
-+'	vertical-align : middle;'
-+'  width:32px; height : 32px;'
-+'}'
-+'.{{classname}}-twitter {background : #4DB5F4}'
-+'.{{classname}}-facebook {background : #5974CC}'
-+'.{{classname}}-email {background : #CC0000}'
-+'.{{classname}}-link {background : #77F}'
-+''
-+'@media screen and (max-width: 640px) {'
-+'	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {'
-+'	flex : 0 0 32px;'
-+'	height : 32px;'
-+'	}'
-+'  .{{classname}}-nosmall {'
-+'	  display : none;'
-+'  }'
-+'}'
-+'@media screen and (max-width: 319px) {'
-+'	.{{classname}}-elapse {'
-+'		display : none;'
-+'	}'
-+'}';
+	var _style = `
+.{{classname}}, .{{classname}} *, .{{classname}}-cover img {
+	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	font-size : 15px;
+	border : none;
+	padding : 0;
+	margin : 0;
+}
+.{{classname}} {
+	{{displayflex}};
+	background : #555;
+	color : #ccc;
+}
+.{{classname}} a {
+	color : #aaf;
+	border : none !important;
+}
+.{{classname}} svg {
+  fill : #ffffff
+}
+.{{classname}} a:hover {
+	color : #555;
+	background : #aaf;
+}
+.{{classname}} a:hover svg {
+	fill : #555;
+}
+.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
+	flex : 0 0 64px;
+	width : 64px;
+	height : 64px;
+	text-align : center;
+	vertical-align : middle;
+}
+.{{classname}}-cover img {
+	width : 64px;
+  max-width: 100%;
+	height : 64px;
+	object-fit: contain;
+}
+.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {
+	cursor : pointer;
+	flex : 1 0 auto;
+}
+.{{classname}}-play svg, .{{classname}}-pause svg, .{{classname}}-actions svg {
+	vertical-align : middle;
+	width : 100%;
+	max-height : 100%;
+}
+.{{classname}}-titleline {
+	{{displayflex}};
+	position : relative;
+}
+.{{classname}}-about, .{{classname}}-title {
+	flex : 1 1 100%;
+}
+.{{classname}}-title a {
+  display : block;
+	text-overflow : ellipsis;
+	white-space: nowrap;
+}
+.{{classname}}-elapse {
+	flex : 1 0 120px;
+	text-align : right;
+}
+.{{classname}}-time {
+	background : black;
+	width : 100%;
+	height : 10px;
+	display : block;
+	border-radius : 4px;
+	position : relative;
+}
+.{{classname}}-elapsedline {
+	background : white;
+	height : 10px ;
+	display : block ;
+	position : absolute;
+	left : 0;
+	border-radius : 4px;
+	pointer-events : none;
+}
+.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {
+	flex : 1 1 100%;
+	{{displayflex}};
+	align-items: center;
+}
+	.{{classname}}-share {
+		text-align : center;
+	}
+.{{classname}}-share a, .{{classname}}-share div {
+	flex : 1 0;
+	color : white;
+	text-decoration : none;
+	overflow : hidden;
+	text-overflow : clip;
+}
+.{{classname}}-share svg {
+	vertical-align : middle;
+  width:32px; height : 32px;
+}
+.{{classname}}-twitter {background : #4DB5F4}
+.{{classname}}-facebook {background : #5974CC}
+.{{classname}}-email {background : #CC0000}
+.{{classname}}-link {background : #77F}
 
-	var _template =
- '<div class="{{classname}}-cover {{classname}}-nosmall">'
-+'	<img src="{{poster}}" alt="{{cover}}" />'
-+'</div>'
-+'<div class="{{classname}}-pagemain">'
-+'	<a class="{{classname}}-play">{{svg:play}}</a><a class="{{classname}}-pause">{{svg:pause}}</a>'
-+'	<div class="{{classname}}-about">'
-+'		<div class="{{classname}}-titleline">'
-+'			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical">{{title}}</a></div>'
-+'			<a class="{{classname}}-elapse">…</a>'
-+'		</div>'
-+'		<div class="{{classname}}-line">'
-+'			<div class="{{classname}}-time">'
-+'				<div class="{{classname}}-elapsedline"></div>'
-+'			</div>'
-+'		</div>'
-+'	</div>'
-+'	<a class="{{classname}}-actions">{{svg:share}}</a>'
-+'</div>'
-+'<div class="{{classname}}-pageshare">'
-+'	<div class="{{classname}}-share">'
-+'		<a href="#" target="social" class="{{classname}}-twitter {{classname}}-nosmall">{{svg:twitter}}<span>{{twitter}}</span></a>'
-+'		<a href="#" target="social" class="{{classname}}-facebook {{classname}}-nosmall">{{svg:facebook}}<span>{{facebook}}</span></a>'
-+'		<a href="#" target="social" class="{{classname}}-email">{{svg:email}}<span>{{e-mail}}</span></a>'
-+'		<a href="{{playlister}}" target="onde_miroir_player" class="{{classname}}-playlist">{{svg:play}}<span>{{playlist}}</span></a>'
-+'		<a href="#" target="social" class="{{classname}}-link">{{svg:download}}<span>{{download}}</span></a>'
-+'		<a class="{{classname}}-back">{{back}}</a>'
-+'	</div>'
-+'</div>';
+@media screen and (max-width: 640px) {
+	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
+	flex : 0 0 32px;
+	height : 32px;
+	}
+  .{{classname}}-nosmall {
+	  display : none;
+  }
+  .{{classname}}-elapse {
+  	flex : 1 0 80px;
++'  }';
+}
+@media screen and (max-width: 319px) {
+	.{{classname}}-elapse {
+		display : none;
+	}
++'}`;
+
+	var _template = `
+ <div class="{{classname}}-cover {{classname}}-nosmall">
+	<img src="{{poster}}" alt="{{cover}}" />
+</div>
+<div class="{{classname}}-pagemain">
+	<a class="{{classname}}-play">{{svg:play}}</a><a class="{{classname}}-pause">{{svg:pause}}</a>
+	<div class="{{classname}}-about">
+		<div class="{{classname}}-titleline">
+			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical">{{title}}</a></div>
+			<a class="{{classname}}-elapse">…</a>
+		</div>
+		<div class="{{classname}}-line">
+			<div class="{{classname}}-time">
+				<div class="{{classname}}-elapsedline"></div>
+			</div>
+		</div>
+	</div>
+	<a class="{{classname}}-actions">{{svg:share}}</a>
+</div>
+<div class="{{classname}}-pageshare">
+	<div class="{{classname}}-share">
+		<a href="#" target="social" class="{{classname}}-twitter {{classname}}-nosmall">{{svg:twitter}}<span>{{twitter}}</span></a>
+		<a href="#" target="social" class="{{classname}}-facebook {{classname}}-nosmall">{{svg:facebook}}<span>{{facebook}}</span></a>
+		<a href="#" target="social" class="{{classname}}-email">{{svg:email}}<span>{{e-mail}}</span></a>
+		<a href="{{playlister}}" target="onde_miroir_player" class="{{classname}}-playlist">{{svg:play}}<span>{{playlist}}</span></a>
+		<a href="#" target="social" class="{{classname}}-link">{{svg:download}}<span>{{download}}</span></a>
+		<a class="{{classname}}-back">{{back}}</a>
+	</div>
+</div>`;
 
 	var self = {
 		dontHideAudioTag : false,
@@ -407,7 +418,7 @@ window.OndeMiroirAudio = function() {
 				total_duration = self.convertSecondsInTime(Math.round(element.duration));
 			} 
 			 
-			elapse_element.innerHTML = timecode + ' / ' + total_duration;
+			elapse_element.innerHTML = timecode + '<span class="'+self.container.classname+'-nosmall"> / ' + total_duration+'</span>';
 			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%');
 		},
 		
