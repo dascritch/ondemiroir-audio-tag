@@ -1,5 +1,5 @@
 /*
-	OndeMirroir Audio Tag , an extension to the hash system to address timecode into audio/video elements
+	OndeMirroir Audio Tag, an extension to the hash system to address timecode into audio/video elements
 	Previously TimecodeHash
 	Copyright (C) 2014-2017 Xavier "dascritch" Mouton-Dubosc
 
@@ -66,12 +66,15 @@ window.OndeMiroirAudio = function() {
 	background : #555;
 	color : #ccc;
 }
+
 .{{classname}} a {
 	color : #aaf;
 	border : none !important;
 }
 .{{classname}} svg {
-  fill : #ffffff
+  	fill : #ffffff;
+  	width:64px;
+	height : 64px;
 }
 .{{classname}} a:hover {
 	color : #555;
@@ -145,6 +148,11 @@ window.OndeMiroirAudio = function() {
 .{{classname}}-share {
 	text-align : center;
 }
+
+.{{classname}}-share a {
+	height : 64px;
+}
+
 .{{classname}}-share a, .{{classname}}-share div {
 	flex : 1 0;
 	color : white;
@@ -154,7 +162,8 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-share svg {
 	vertical-align : middle;
-	width:32px; height : 32px;
+  		width:32px;
+		height : 32px;
 }
 .{{classname}}-twitter {background : #4DB5F4}
 .{{classname}}-facebook {background : #5974CC}
@@ -166,12 +175,20 @@ window.OndeMiroirAudio = function() {
 		flex : 0 0 32px;
 		height : 32px;
 	}
+	.{{classname}} svg {
+  		width:32px;
+		height : 32px;
+	}
   	.{{classname}}-nosmall {
 		display : none;
   	}
   	.{{classname}}-elapse {
   		flex : 1 0 80px;
   	}
+
+  	.{{classname}}-share a {
+		height : 32px;
+	}
 }
 @media screen and (max-width: 319px) {
 	.{{classname}}-elapse {
@@ -423,19 +440,18 @@ window.OndeMiroirAudio = function() {
 			elapse_element.innerHTML = timecode + '<span class="'+self.container.classname+'-nosmall"> / ' + total_duration+'</span>';
 			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%');
 		},
-		
-		update : function(event) {
-			function update_id_container_infos(container_id) {
+		update_id_container_infos: function (container_id) {
 				var container = document.getElementById(container_id);
+				var event = this;
+				var element = event.target;
 				self.update_playbutton(event, element, container);
 				self.update_time(event, element, container);
-			}
+		},
+		update : function(event) {
 			var element = event.target;
-			element._ondemiroir.forEach(update_id_container_infos);
-			if (element.paused) {
-				localStorage.removeItem(element.src);
-			} else {
-				localStorage.setItem(element.src, String(element.currentTime));
+			element._ondemiroir.forEach(self.update_id_container_infos, event);
+			if (!element.paused) {
+				localStorage.setItem(element.currentSrc, String(element.currentTime));
 			}
 		},
 		find_container : function (child) {
@@ -454,7 +470,9 @@ window.OndeMiroirAudio = function() {
 		},
 		do_pause : function(event) {
 			var container = self.find_container(event.target);
-			document.getElementById(container.dataset.ondeplayer).pause();
+			var audiotag = document.getElementById(container.dataset.ondeplayer);
+			audiotag.pause();
+			localStorage.removeItem(audiotag.currentSrc);
 		},
 		do_play : function(event) {
 			var container = self.find_container(event.target);
@@ -571,17 +589,17 @@ window.OndeMiroirAudio = function() {
 		},
 		rebuild : function(event) {
 			var audiotag = event.target;
-			audiotag._ondemiroir.forEach(
-				function(element_id) {
-					var container = document.getElementById(element_id);
-					if (container.dataset.ondeplayer === undefined) {
-						container.remove();
-						self.build_for_audiotag(audiotag);
-					} else {
-						container.innerHTML = '';
-						self.build_for_placeholder(container);
-					}
-				});
+			function rebuild_container_id(element_id) {
+				var container = document.getElementById(element_id);
+				if (container.dataset.ondeplayer === undefined) {
+					container.remove();
+					self.build_for_audiotag(audiotag);
+				} else {
+					container.innerHTML = '';
+					self.build_for_placeholder(container);
+				}
+			}
+			audiotag._ondemiroir.forEach(rebuild_container_id);
 		},
 		add_id_to_container : function(container) {
 			container.id = container.id !== ''? container.id : (self.container.idPrefix + String(self.count_element++));
@@ -646,7 +664,7 @@ window.OndeMiroirAudio = function() {
 			audiotag.parentNode.insertBefore(container, audiotag);
 			container = self.build_controller(container, audiotag);
 
-			var lasttimecode = Number(localStorage.getItem(audiotag.src));
+			var lasttimecode = Number(localStorage.getItem(audiotag.currentSrc));
 			// TODO and no hashed time
 			if (lasttimecode > 0) {
 				self.seekElementAt(audiotag, lasttimecode);
