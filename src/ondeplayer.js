@@ -89,7 +89,7 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-cover img {
 	width : 64px;
-  max-width: 100%;
+    max-width: 100%;
 	height : 64px;
 	object-fit: contain;
 }
@@ -110,9 +110,11 @@ window.OndeMiroirAudio = function() {
 	flex : 1 1 100%;
 }
 .{{classname}}-title a {
-  display : block;
+    display : block;
 	text-overflow : ellipsis;
-	white-space: nowrap;
+	max-height: 48px;
+	overflow: hidden;
+
 }
 .{{classname}}-elapse {
 	flex : 1 0 120px;
