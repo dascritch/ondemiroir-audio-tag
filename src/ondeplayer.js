@@ -62,7 +62,7 @@ window.OndeMiroirAudio = function() {
 	margin : 0;
 }
 .{{classname}} {
-	{{displayflex}};
+	display : flex;
 	background : #555;
 	color : #ccc;
 }
@@ -80,7 +80,7 @@ window.OndeMiroirAudio = function() {
 .{{classname}} a:hover svg {
 	fill : #555;
 }
-.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
+.{{classname}}-cover, .{{classname}}-play, .{{classname}}-pause, {{classname}}-actions  {
 	flex : 0 0 64px;
 	width : 64px;
 	height : 64px;
@@ -93,7 +93,7 @@ window.OndeMiroirAudio = function() {
 	height : 64px;
 	object-fit: contain;
 }
-.{{classname}}-play , .{{classname}}-pause , .{{classname}}-actions, .{{classname}}-back {
+.{{classname}}-play, .{{classname}}-pause, .{{classname}}-actions, .{{classname}}-back {
 	cursor : pointer;
 	flex : 1 0 auto;
 }
@@ -103,7 +103,7 @@ window.OndeMiroirAudio = function() {
 	max-height : 100%;
 }
 .{{classname}}-titleline {
-	{{displayflex}};
+	display : flex;
 	position : relative;
 }
 .{{classname}}-about, .{{classname}}-title {
@@ -139,12 +139,12 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {
 	flex : 1 1 100%;
-	{{displayflex}};
+	display : flex;
 	align-items: center;
 }
-	.{{classname}}-share {
-		text-align : center;
-	}
+.{{classname}}-share {
+	text-align : center;
+}
 .{{classname}}-share a, .{{classname}}-share div {
 	flex : 1 0;
 	color : white;
@@ -154,7 +154,7 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-share svg {
 	vertical-align : middle;
-  width:32px; height : 32px;
+	width:32px; height : 32px;
 }
 .{{classname}}-twitter {background : #4DB5F4}
 .{{classname}}-facebook {background : #5974CC}
@@ -163,21 +163,21 @@ window.OndeMiroirAudio = function() {
 
 @media screen and (max-width: 640px) {
 	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
-	flex : 0 0 32px;
-	height : 32px;
+		flex : 0 0 32px;
+		height : 32px;
 	}
-  .{{classname}}-nosmall {
-	  display : none;
-  }
-  .{{classname}}-elapse {
-  	flex : 1 0 80px;
-+'  }';
+  	.{{classname}}-nosmall {
+		display : none;
+  	}
+  	.{{classname}}-elapse {
+  		flex : 1 0 80px;
+  	}
 }
 @media screen and (max-width: 319px) {
 	.{{classname}}-elapse {
 		display : none;
 	}
-+'}`;
+}`;
 
 	var _template = `
  <div class="{{classname}}-cover {{classname}}-nosmall">
@@ -187,7 +187,7 @@ window.OndeMiroirAudio = function() {
 	<a class="{{classname}}-play">{{svg:play}}</a><a class="{{classname}}-pause">{{svg:pause}}</a>
 	<div class="{{classname}}-about">
 		<div class="{{classname}}-titleline">
-			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical">{{title}}</a></div>
+			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical" title="{{title}}">{{title}}</a></div>
 			<a class="{{classname}}-elapse">…</a>
 		</div>
 		<div class="{{classname}}-line">
@@ -200,12 +200,12 @@ window.OndeMiroirAudio = function() {
 </div>
 <div class="{{classname}}-pageshare">
 	<div class="{{classname}}-share">
-		<a href="#" target="social" class="{{classname}}-twitter {{classname}}-nosmall">{{svg:twitter}}<span>{{twitter}}</span></a>
-		<a href="#" target="social" class="{{classname}}-facebook {{classname}}-nosmall">{{svg:facebook}}<span>{{facebook}}</span></a>
-		<a href="#" target="social" class="{{classname}}-email">{{svg:email}}<span>{{e-mail}}</span></a>
-		<a href="{{playlister}}" target="onde_miroir_player" class="{{classname}}-playlist">{{svg:play}}<span>{{playlist}}</span></a>
-		<a href="#" target="social" class="{{classname}}-link">{{svg:download}}<span>{{download}}</span></a>
-		<a class="{{classname}}-back">{{back}}</a>
+		<a href="#" target="social" class="{{classname}}-twitter {{classname}}-nosmall" title="{{twitter}}">{{svg:twitter}}<span>{{twitter}}</span></a>
+		<a href="#" target="social" class="{{classname}}-facebook {{classname}}-nosmall" title="{{facebook}}">{{svg:facebook}}<span>{{facebook}}</span></a>
+		<a href="#" target="social" class="{{classname}}-email" title="{{email}}">{{svg:email}}<span>{{e-mail}}</span></a>
+		<a href="{{playlister}}" target="onde_miroir_player" class="{{classname}}-playlist" title="{{playlist}}">{{svg:play}}<span>{{playlist}}</span></a>
+		<a href="#" target="social" class="{{classname}}-link" title="{{download}}">{{svg:download}}<span>{{download}}</span></a>
+		<a class="{{classname}}-back" title="{{back}}">{{back}}</a>
 	</div>
 </div>`;
 
@@ -557,7 +557,6 @@ window.OndeMiroirAudio = function() {
 				'canonical' 	: self.absolutize_url(element.dataset.canonical),
 				'poster' 		: self.absolutize_url(self.element_attribute(element,'poster', self.poster_fallback)),
 				'classname' 	: self.container.classname,
-				'displayflex'	: 'display: flex;',
 				'playlister'	: self.playlister
 			}
 			// we now add locales
