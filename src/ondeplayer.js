@@ -102,7 +102,7 @@ window.OndeMiroirAudio = function() {
 }
 .{{classname}}-play svg, .{{classname}}-pause svg, .{{classname}}-actions svg {
 	vertical-align : middle;
-	width : 100%;
+	max-width : 100%;
 	max-height : 100%;
 }
 .{{classname}}-titleline {
@@ -735,15 +735,15 @@ window.OndeMiroirAudio = function() {
 			self.insertStyle();
 			self.querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
 			self.hashOrder({ at_start : true });
+			window.addEventListener( 'hashchange', self.hashOrder, false);
 		}
 	};
 
 	if (document.body !== null) {
 		self.launch();
 	} else {
-		document.addEventListener( 'readystatechange', self.launch, false);
+		document.addEventListener( 'DOMContentLoaded', self.launch, false);
 	}
-	window.addEventListener( 'hashchange', self.hashOrder, false);
 
 	return self;
 }();
