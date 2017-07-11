@@ -654,10 +654,11 @@ window.OndeMiroirAudio = function() {
 			if (audiotag._ondemiroir === undefined) {
 				audiotag._ondemiroir = []
 			}
-			if (audiotag.preload === '') {
-				// ask ASAP metadata about media
-				audiotag.preload = 'metadata';
-			}
+			// ask ASAP metadata about media
+			// we have to set in HTML code preload="none" due to a bug in Chrome very lagging in HTTP2
+			// https://stackoverflow.com/questions/14479413/chrome-ignoring-audio-preload-metadata
+			audiotag.preload = 'metadata';
+			audiotag.load();
 			self.add_id_to_audiotag(audiotag)
 
 			var container = document.createElement(self.container.tagname)
