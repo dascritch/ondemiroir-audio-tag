@@ -1,0 +1,75 @@
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(./RobotoCondensed-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(./RobotoCondensed-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;                                            
+  font-weight: 400;                                              
+  src: local('Roboto Condensed Italic'), local('RobotoCondensed-Italic'), url(./RobotoCondensed-Italic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold Italic'), local('RobotoCondensed-BoldItalic'), url(./RobotoCondensed-BoldItalic.ttf) format('truetype');
+}
+
+
+* {
+    font-family: 'Roboto Condensed', sans-serif;
+    padding : 0;
+    margin : 0;
+}
+
+body {
+  padding : 10px;
+}
+
+audio {
+    width : 100%;
+}
+
+button {
+  padding : 5px;
+}
+
+article {
+  display: -ms-flexbox; display: -webkit-box; display: -webkit-flex; display: flex;
+	cursor : auto;
+  clear : both;
+  height : 64px;
+}
+
+article .move {
+	visibility : hidden;
+}
+
+article:first-child a {
+	display : inline;
+}
+
+article figure {
+  -webkit-box-flex : 0 0 auto; -webkit-flex : 0 0 auto; -ms-flex : 0 0 auto; flex : 0 0 auto;
+	max-width : 64px;
+	max-height : 64px;
+}
+
+article img {
+  max-width : 64px;
+  max-height : 64px;
+}
+
+aside {
+	clear : both;
+}
