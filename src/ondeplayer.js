@@ -308,7 +308,7 @@ window.OndeMiroirAudio = function() {
 				var container = document.getElementById(container_id);
 				var event = this;
 				var audiotag = event.target;
-				console.log(event, audiotag.error, audiotag.readyState);
+				//console.log(event, audiotag.error, audiotag.readyState);
 				if (audiotag.error === 'error') {
 					self.update_act_container('error', container);
 
