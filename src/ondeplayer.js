@@ -308,6 +308,29 @@ window.OndeMiroirAudio = function() {
 				var container = document.getElementById(container_id);
 				var event = this;
 				var audiotag = event.target;
+				console.log(event, audiotag.error, audiotag.readyState);
+				if (audiotag.error === 'error') {
+					self.update_act_container('error', container);
+
+				   switch (audiotag.error.code) {
+						case audiotag.error.MEDIA_ERR_ABORTED:
+							alert('You aborted the video playback.');
+							break;
+						case audiotag.error.MEDIA_ERR_NETWORK:
+							alert('A network error caused the audio download to fail.');
+							break;
+						case audiotag.error.MEDIA_ERR_DECODE:
+							alert('The audio playback was aborted due to a corruption problem or because the video used features your browser did not support.');
+							break;
+						case audiotag.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+							alert('The video audio not be loaded, either because the server or network failed or because the format is not supported.');
+							break;
+						default:
+							alert('An unknown error occurred.');
+							break;
+				   	}
+					return;
+				}
 				self.update_playbutton(event, audiotag, container);
 				self.update_time(event, audiotag, container);
 		},
@@ -538,11 +561,12 @@ window.OndeMiroirAudio = function() {
 				audiotag.play();
 			}
 
+			// see https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events for list of events
 			[
-				'ready', 'load',
-				'error',
+				'ready', 'load', 'loadeddata', 'canplay', 'suspend', 'abort', 'emptied',
+				'error', 'stalled',
 				'play', 'playing', 'pause', 'suspend', 'ended',
-				'durationchange',  'loadedmetadata', 'progress', 'timeupdate'
+				'durationchange',  'loadedmetadata', 'progress', 'timeupdate', 'waiting'
 			].forEach( function(on){ audiotag.addEventListener(on, self.update); } );
 			audiotag.addEventListener('ondemiroir.rebuild', self.rebuild);
 

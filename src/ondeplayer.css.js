@@ -14,6 +14,10 @@ var cpu_style= `
 	color : #ccc;
 }
 
+.{{classname}}.{{classname}}-act-error {
+	color : #cc0;
+}
+
 .{{classname}} a {
 	color : #aaf;
 	border : none !important;
