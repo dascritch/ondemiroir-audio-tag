@@ -98,6 +98,8 @@ var cpu_style= `
 	border-radius : 4px;
 	pointer-events : none;
 }
+
+.{{classname}}-act-loading .{{classname}}-elapsedline,
 .{{classname}}-loadingline {
 	opacity : 0.3;
 }

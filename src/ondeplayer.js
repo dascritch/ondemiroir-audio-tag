@@ -24,6 +24,10 @@
 
  */
 
+import cpu_style from './ondeplayer.css.js';
+import cpu_template from './ondeplayer.html.js';
+
+
 window.OndeMiroirAudio = function() {
 	'use strict';
 
@@ -53,178 +57,9 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
-	var _style = `
-.{{classname}}, .{{classname}} *, .{{classname}}-cover img {
-	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-	font-size : 15px;
-	border : none;
-	padding : 0;
-	margin : 0;
-}
-.{{classname}} {
-	display : flex;
-	background : #555;
-	color : #ccc;
-}
-
-.{{classname}} a {
-	color : #aaf;
-	border : none !important;
-}
-.{{classname}} svg {
-  	fill : #ffffff;
-  	width:64px;
-	height : 64px;
-}
-.{{classname}} a:hover {
-	color : #555;
-	background : #aaf;
-}
-.{{classname}} a:hover svg {
-	fill : #555;
-}
-.{{classname}}-cover, .{{classname}}-play, .{{classname}}-pause, {{classname}}-actions  {
-	flex : 0 0 64px;
-	width : 64px;
-	height : 64px;
-	text-align : center;
-	vertical-align : middle;
-}
-.{{classname}}-cover img {
-	width : 64px;
-    max-width: 100%;
-	height : 64px;
-	object-fit: contain;
-}
-.{{classname}}-play, .{{classname}}-pause, .{{classname}}-actions, .{{classname}}-back {
-	cursor : pointer;
-	flex : 1 0 auto;
-}
-.{{classname}}-play svg, .{{classname}}-pause svg, .{{classname}}-actions svg {
-	vertical-align : middle;
-	max-width : 100%;
-	max-height : 100%;
-}
-.{{classname}}-titleline {
-	display : flex;
-	position : relative;
-}
-.{{classname}}-about, .{{classname}}-title {
-	flex : 1 1 100%;
-}
-.{{classname}}-title a {
-    display : block;
-	text-overflow : ellipsis;
-	max-height: 48px;
-	overflow: hidden;
-
-}
-.{{classname}}-elapse {
-	flex : 1 0 120px;
-	text-align : right;
-}
-.{{classname}}-time {
-	background : black;
-	width : 100%;
-	height : 10px;
-	display : block;
-	border-radius : 4px;
-	position : relative;
-}
-.{{classname}}-elapsedline {
-	background : white;
-	height : 10px ;
-	display : block ;
-	position : absolute;
-	left : 0;
-	border-radius : 4px;
-	pointer-events : none;
-}
-.{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {
-	flex : 1 1 100%;
-	display : flex;
-	align-items: center;
-}
-.{{classname}}-share {
-	text-align : center;
-}
-
-.{{classname}}-share a {
-	height : 64px;
-}
-
-.{{classname}}-share a, .{{classname}}-share div {
-	flex : 1 0;
-	color : white;
-	text-decoration : none;
-	overflow : hidden;
-	text-overflow : clip;
-}
-.{{classname}}-share svg {
-	vertical-align : middle;
-  		width:32px;
-		height : 32px;
-}
-.{{classname}}-twitter {background : #4DB5F4}
-.{{classname}}-facebook {background : #5974CC}
-.{{classname}}-email {background : #CC0000}
-.{{classname}}-link {background : #77F}
-
-@media screen and (max-width: 640px) {
-	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
-		flex : 0 0 32px;
-		height : 32px;
-	}
-	.{{classname}} svg {
-  		width:32px;
-		height : 32px;
-	}
-  	.{{classname}}-nosmall {
-		display : none;
-  	}
-  	.{{classname}}-elapse {
-  		flex : 1 0 80px;
-  	}
-
-  	.{{classname}}-share a {
-		height : 32px;
-	}
-}
-@media screen and (max-width: 319px) {
-	.{{classname}}-elapse {
-		display : none;
-	}
-}`;
 
 	var _template = `
- <div class="{{classname}}-cover {{classname}}-nosmall">
-	<img src="{{poster}}" alt="{{cover}}" />
-</div>
-<div class="{{classname}}-pagemain">
-	<a class="{{classname}}-play">{{svg:play}}</a><a class="{{classname}}-pause">{{svg:pause}}</a>
-	<div class="{{classname}}-about">
-		<div class="{{classname}}-titleline">
-			<div class="{{classname}}-title"><a href="{{canonical}}" class="{{classname}}-canonical" title="{{title}}">{{title}}</a></div>
-			<a class="{{classname}}-elapse">…</a>
-		</div>
-		<div class="{{classname}}-line">
-			<div class="{{classname}}-time">
-				<div class="{{classname}}-elapsedline"></div>
-			</div>
-		</div>
-	</div>
-	<a class="{{classname}}-actions">{{svg:share}}</a>
-</div>
-<div class="{{classname}}-pageshare">
-	<div class="{{classname}}-share">
-		<a href="#" target="social" class="{{classname}}-twitter {{classname}}-nosmall" title="{{twitter}}">{{svg:twitter}}<span>{{twitter}}</span></a>
-		<a href="#" target="social" class="{{classname}}-facebook {{classname}}-nosmall" title="{{facebook}}">{{svg:facebook}}<span>{{facebook}}</span></a>
-		<a href="#" target="social" class="{{classname}}-email" title="{{email}}">{{svg:email}}<span>{{e-mail}}</span></a>
-		<a href="{{playlister}}" target="onde_miroir_player" class="{{classname}}-playlist" title="{{playlist}}">{{svg:play}}<span>{{playlist}}</span></a>
-		<a href="#" target="social" class="{{classname}}-link" title="{{download}}">{{svg:download}}<span>{{download}}</span></a>
-		<a class="{{classname}}-back" title="{{back}}">{{back}}</a>
-	</div>
-</div>`;
+`;
 
 	var self = {
 		dontHideAudioTag : false,
@@ -260,6 +95,7 @@ window.OndeMiroirAudio = function() {
 			'play' : '<path d="M 6,6 6,26 26,16 z" />',
 			'stop' : '<path d="M 6,6 6,26 26,26 26,6 z" />',
 			'pause' : '<path d="M 6,6 12.667,6 12.667,26 6,26 z" /><path d="M 19.333,6 26,6 26,26 19.333,26 z" />',
+			'loading' : '<circle cx="6" cy="22" r="4" fill="#777777" /><circle cx="16" cy="22" r="4" fill="#777777" /><circle cx="26" cy="22" r="4" fill="#777777" />',
 			'share' : '<circle cx="12" cy="10" r="4" /><circle cx="12" cy="22" r="4" /><circle cx="23" cy="16" r="4" /><polygon points="12,8 24,14 24,18 12,12"/><polygon points="12,20 24,14 24,18 12,24"/>',
 			'facebook' : '<path d="m 21.117,16.002 -3.728,0 0,10.027 -4.297,0 0,-10.027 -2.070,0 0,-3.280 2.070,0 0,-2.130 c 0,-2.894 1.248,-4.616 4.652,-4.616 l 3.922,0 0,3.549 -3.203,0 c -0.950,-0.001 -1.068,0.495 -1.068,1.421 l -0.005,1.775 4.297,0 -0.568,3.280 0,2.34e-4 z" />',
 			'twitter' : '<path d="M 25.941,9.885 C 25.221,10.205 24.448,10.422 23.637,10.520 24.465,10.020 25.101,9.230 25.401,8.288 24.626,8.750 23.768,9.086 22.854,9.267 22.122,8.483 21.080,7.993 19.926,7.993 c -2.215,0 -4.011,1.806 -4.011,4.034 0,0.316 0.035,0.623 0.103,0.919 -3.333,-0.168 -6.288,-1.774 -8.267,-4.215 -0.345,0.596 -0.542,1.289 -0.542,2.028 0,1.399 0.708,2.634 1.784,3.358 -0.657,-0.020 -1.276,-0.202 -1.816,-0.504 -3.98e-4,0.016 -3.98e-4,0.033 -3.98e-4,0.050 0,1.954 1.382,3.585 3.217,3.955 -0.336,0.092 -0.690,0.141 -1.056,0.141 -0.258,0 -0.509,-0.025 -0.754,-0.072 0.510,1.602 1.991,2.769 3.746,2.801 -1.372,1.082 -3.102,1.726 -4.981,1.726 -0.323,0 -0.642,-0.019 -0.956,-0.056 1.775,1.144 3.883,1.812 6.148,1.812 7.377,0 11.411,-6.147 11.411,-11.478 0,-0.174 -0.004,-0.348 -0.011,-0.522 0.783,-0.569 1.463,-1.279 2.001,-2.088 z" />',
@@ -315,19 +151,25 @@ window.OndeMiroirAudio = function() {
 			}
 			return converted;
 		},
-		seekElementAt : function(element, seconds) {
-			if (element.fastSeek !== undefined) {
-				element.fastSeek(seconds);
+		seekElementAt : function(audiotag, seconds) {
+			if (audiotag.fastSeek !== undefined) {
+				audiotag.fastSeek(seconds);
 				// Firefox doesn't see fastSeek
 			} else {
 				try {
 					// but can set currentTime
-					element.currentTime = seconds;
+					audiotag.currentTime = seconds;
 				} catch(e) {
 					// exept sometimes, so you must use standard media fragment
-					element.src = element.currentSrc.split('#')[0] + '#t=' + seconds;
+					audiotag.src = audiotag.currentSrc.split('#')[0] + '#t=' + seconds;
 				}
 			}
+			function update_id_container_loading(container_id) {
+				var container = document.getElementById(container_id);
+				self.update_line(audiotag, container, 'loading', seconds);
+				self.update_act_container('loading', container);
+			}
+			audiotag._ondemiroir.forEach(update_id_container_loading);
 		},
 		jumpIdAt : function(hash,timecode,callback_fx) {
 			var audiotag;
@@ -345,6 +187,7 @@ window.OndeMiroirAudio = function() {
 			}
 
 			function do_needle_move(event) {
+
 				if (_isEvent(event)) {
 					audiotag.removeEventListener('loadedmetadata', do_needle_move, true);
 				}
@@ -357,6 +200,7 @@ window.OndeMiroirAudio = function() {
 				} else {
 					audiotag.addEventListener('canplay', do_element_play, true);
 				}
+				self.update({target : audiotag});
 			}
 
 			audiotag = (hash !== '') ? document.getElementById(hash) : document.querySelector(this.selector_fallback);
@@ -371,6 +215,7 @@ window.OndeMiroirAudio = function() {
 			} else {
 				do_needle_move({});
 			}
+			self.update({target : audiotag});
 		},
 		hashOrder : function(hashcode,callback_fx){
 			var at_start = false;
@@ -419,39 +264,58 @@ window.OndeMiroirAudio = function() {
 			}
 			self.jumpIdAt(hash,timecode,callback_fx);
 		},
-		update_playbutton : function(event, element, container) {
-			container.querySelector('.'+self.container.classname+'-pause').hidden = element.paused ;
-			container.querySelector('.'+self.container.classname+'-play').hidden = !element.paused ;
+		update_act_container : function (act, container) {
+			container.classList.remove(
+				self.container.classname+'-act-loading',
+				self.container.classname+'-act-pause',
+				self.container.classname+'-act-play');
+			container.classList.add(self.container.classname+'-act-'+act);
 		},
-		update_time : function(event, element, container) {
-			var link_to = self.absolutize_url(element.dataset.canonical)+'#';
-			link_to += element.id ? (element.id+'&') : '';
-			var timecode = self.convertSecondsInTime(element.currentTime)
+		update_playbutton : function(event, audiotag, container) {
+
+			if (audiotag.readyState < audiotag.HAVE_CURRENT_DATA ) {
+				self.update_act_container('loading', container);
+				return;
+			}
+			if (!audiotag.paused) {
+				self.update_act_container('play', container);
+			} else {
+				self.update_act_container('pause', container);
+			}
+		},
+		update_line : function(audiotag, container, type, seconds) {
+			// type = 'elapsed', 'loading'
+			container.querySelector('.'+self.container.classname+'-'+type+'line').style.width = audiotag.duration === 0 ? 0 : (String(100 *seconds / audiotag.duration)+'%');
+		},
+		update_time : function(event, audiotag, container) {
+			var link_to = self.absolutize_url(audiotag.dataset.canonical)+'#';
+			link_to += audiotag.id ? (audiotag.id+'&') : '';
+			var timecode = self.convertSecondsInTime(audiotag.currentTime)
 			link_to += 't='+timecode;
 
 			var elapse_element = container.querySelector('.'+self.container.classname+'-elapse');
 			elapse_element.href = link_to;
 
 			var total_duration = '…';
-			if (!isNaN(Math.round(element.duration))){
-				total_duration = self.convertSecondsInTime(Math.round(element.duration));
+			if (!isNaN(Math.round(audiotag.duration))){
+				total_duration = self.convertSecondsInTime(Math.round(audiotag.duration));
 			} 
 			 
 			elapse_element.innerHTML = timecode + '<span class="'+self.container.classname+'-nosmall"> / ' + total_duration+'</span>';
-			container.querySelector('.'+self.container.classname+'-elapsedline').style.width = element.duration === 0 ? 0 : (String(100 *element.currentTime / element.duration)+'%');
+			self.update_line(audiotag, container, 'elapsed', audiotag.currentTime);
 		},
 		update_id_container_infos: function (container_id) {
 				var container = document.getElementById(container_id);
 				var event = this;
-				var element = event.target;
-				self.update_playbutton(event, element, container);
-				self.update_time(event, element, container);
+				var audiotag = event.target;
+				self.update_playbutton(event, audiotag, container);
+				self.update_time(event, audiotag, container);
 		},
 		update : function(event) {
-			var element = event.target;
-			element._ondemiroir.forEach(self.update_id_container_infos, event);
-			if (!element.paused) {
-				localStorage.setItem(element.currentSrc, String(element.currentTime));
+			var audiotag = event.target;
+			audiotag._ondemiroir.forEach(self.update_id_container_infos, event);
+			if (!audiotag.paused) {
+				localStorage.setItem(audiotag.currentSrc, String(audiotag.currentTime));
 			}
 		},
 		find_container : function (child) {
@@ -568,7 +432,9 @@ window.OndeMiroirAudio = function() {
 			return (element.attributes[key] === undefined) ? missing : element.attributes[key].value;
 		},
 		get_params_for_template : function(element) {
-			element.dataset.canonical === undefined ? document.location.href : element.dataset.canonical;
+			if (element.dataset.canonical === undefined) {
+				element.dataset.canonical = document.location.href;
+			}
 			var out = {
 				// keys are stringed, as we need them not being modified
 				'title'     	: element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
@@ -620,12 +486,12 @@ window.OndeMiroirAudio = function() {
 		build_controller : function(container, audiotag) {
 			container.dataset.ondeplayer = audiotag.id;
 			container.className = self.container.classname;
-			container.innerHTML = self.populate_template(_template, self.get_params_for_template(audiotag));
+			container.innerHTML = self.populate_template(cpu_template, self.get_params_for_template(audiotag));
 			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
 			self.add_related_controller(audiotag, container);
 			var cliquables = {
-				'pause'		: self.do_pause,
-				'play'		: self.do_play,
+				'pause'		: self.do_play,
+				'play'		: self.do_pause,
 				'time'		: self.do_throbble,
 				'actions'	: self.show_actions,
 				'back' 		: self.show_main,
@@ -657,8 +523,8 @@ window.OndeMiroirAudio = function() {
 			// ask ASAP metadata about media
 			// we have to set in HTML code preload="none" due to a bug in Chrome very lagging in HTTP2
 			// https://stackoverflow.com/questions/14479413/chrome-ignoring-audio-preload-metadata
-			audiotag.preload = 'metadata';
-			audiotag.load();
+			// audiotag.preload = 'metadata';
+			// audiotag.load();
 			self.add_id_to_audiotag(audiotag)
 
 			var container = document.createElement(self.container.tagname)
@@ -703,9 +569,9 @@ window.OndeMiroirAudio = function() {
 			var element = document.createElement('style');
 			element.id = self.styleId;
 			if (self.is_in_playlist) {
-				_style += ' .{{classname}}-playlist { display : none; }';
+				cpu_style += ' .{{classname}}-playlist { display : none; }';
 			}
-			element.innerHTML = self.populate_template(_style, self.get_params_for_template(element));
+			element.innerHTML = self.populate_template(cpu_style, self.get_params_for_template(element));
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
 		},
