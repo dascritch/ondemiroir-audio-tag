@@ -7,6 +7,7 @@ var cpu_style= `
 	border : none;
 	padding : 0;
 	margin : 0;
+	transition : none;
 }
 .{{classname}} {
 	display : flex;
@@ -21,6 +22,7 @@ var cpu_style= `
 .{{classname}} a {
 	color : #aaf;
 	border : none !important;
+	text-decoration : none;
 }
 .{{classname}} svg {
   	fill : #ffffff;
