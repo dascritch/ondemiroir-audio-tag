@@ -13,6 +13,7 @@ var cpu_style= `
 	display : flex;
 	background : #555;
 	color : #ccc;
+	height : 64px;
 }
 
 .{{classname}}.{{classname}}-act-error {
@@ -140,6 +141,9 @@ var cpu_style= `
 .{{classname}}-link {background : #77F}
 
 @media screen and (max-width: 640px) {
+	.{{classname}} {
+		height : 32px;
+	}
 	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
 		flex : 0 0 32px;
 		height : 32px;
