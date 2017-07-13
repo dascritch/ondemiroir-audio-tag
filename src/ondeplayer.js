@@ -1,7 +1,7 @@
-/*
+/** @license
 	OndeMirroir Audio Tag, an extension to the hash system to address timecode into audio/video elements
-	Previously TimecodeHash
 	Copyright (C) 2014-2017 Xavier "dascritch" Mouton-Dubosc
+	Previously TimecodeHash
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,9 +17,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	--
-
 	project repository : https://github.com/dascritch/ondemiroir-audio-tag
-	professional : http://dascritch.com
 	blog post : http://dascritch.net/post/2014/09/03/Timecodehash-%3A-Lier-vers-un-moment-d-un-sonore
 
  */
@@ -30,7 +28,6 @@ import cpu_template from './ondeplayer.html.js';
 
 window.OndeMiroirAudio = function() {
 	'use strict';
-
 
     // WATCH OUT ! You should NOT use this script in a unsecure domain name
     if (document.domain !== '') {
@@ -56,10 +53,6 @@ window.OndeMiroirAudio = function() {
 			callback_fx();
 		}
 	}
-
-
-	var _template = `
-`;
 
 	var self = {
 		dontHideAudioTag : false,
