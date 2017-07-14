@@ -256,6 +256,7 @@ window.OndeMiroirAudio = function() {
 				return ;
 			}
 			self.jumpIdAt(hash,timecode,callback_fx);
+			document.location.hash = '#'+hash;
 		},
 		update_act_container : function (act, container) {
 			container.classList.remove(
@@ -329,6 +330,7 @@ window.OndeMiroirAudio = function() {
 		},
 		update : function(event) {
 			var audiotag = event.target;
+			//console.log(event.type, event);
 			audiotag._ondemiroir.forEach(self.update_id_container_infos, event);
 			if (!audiotag.paused) {
 				localStorage.setItem(audiotag.currentSrc, String(audiotag.currentTime));
