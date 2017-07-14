@@ -57,6 +57,75 @@ var cpu_style= `
 	cursor : pointer;
 }
 
+.{{classname}}-act-loading .{{classname}}-loading circle:nth-child(1) {
+	  animation: {{classname}}-pulse0 2s infinite;
+}
+
+.{{classname}}-act-loading .{{classname}}-loading circle:nth-child(2) {
+	  animation: {{classname}}-pulse1 2s infinite;
+}
+
+.{{classname}}-act-loading .{{classname}}-loading circle:nth-child(3) {
+	  animation: {{classname}}-pulse2 2s infinite;
+}
+
+@keyframes {{classname}}-pulse0 {
+    0% {
+        opacity : 1;
+    }
+    50% {
+        opacity : 0;
+    }
+    100% {
+        opacity : 1;
+    }
+}
+
+@keyframes {{classname}}-pulse1 {
+    0% {
+        opacity : 0.75;
+    }
+    12% {
+        opacity : 1;
+    }
+    62% {
+        opacity : 0;
+    }
+    100% {
+        opacity : 0.75;
+    }
+}
+
+@keyframes {{classname}}-pulse2 {
+    0% {
+        opacity : 0.5;
+    }
+    25% {
+        opacity : 1;
+    }
+    75% {
+        opacity : 0;
+    }
+    100% {
+        opacity : 0.5;
+    }
+}
+
+@keyframes {{classname}}-pulse4 {
+    0% {
+        opacity : 0.25;
+    }
+    37% {
+        opacity : 1;
+    }
+    87% {
+        opacity : 0;
+    }
+    100% {
+        opacity : 0.5;
+    }
+}
+
 .{{classname}}-cover img {
 	width : 64px;
     max-width: 100%;
@@ -106,9 +175,8 @@ var cpu_style= `
 	pointer-events : none;
 }
 
-.{{classname}}-act-loading .{{classname}}-elapsedline,
-.{{classname}}-loadingline {
-	opacity : 0.3;
+.{{classname}}-act-loading .{{classname}}-loadingline {
+	animation: {{classname}}-pulse3 2s infinite;
 }
 .{{classname}}-pagemain, .{{classname}}-pageshare, .{{classname}}-share {
 	flex : 1 1 100%;
