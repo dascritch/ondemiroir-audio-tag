@@ -48,7 +48,8 @@ var cpu_style= `
 .{{classname}}-back {
 	flex : 0 0 64px;
 	width : 64px;
-	height : 64px;
+	max-height : 64px;
+	height : 100%;
 	text-align : center;
 	vertical-align : middle;
 }
@@ -212,7 +213,11 @@ var cpu_style= `
 	.{{classname}} {
 		height : 32px;
 	}
-	.{{classname}}-cover , .{{classname}}-play , .{{classname}}-pause, .{{classname}}-actions  {
+	.{{classname}}-cover ,
+	.{{classname}}-act-loading .{{classname}}-loading,
+	.{{classname}}-act-play .{{classname}}-play,
+	.{{classname}}-act-pause .{{classname}}-pause,
+	{{classname}}-actions  {
 		flex : 0 0 32px;
 		height : 32px;
 	}
