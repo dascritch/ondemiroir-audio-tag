@@ -4,6 +4,7 @@ var cpu_style= `
 .{{classname}}, .{{classname}} *, .{{classname}}-cover img {
 	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 	font-size : 15px;
+	line-height : 1.2;
 	border : none;
 	padding : 0;
 	margin : 0;
@@ -216,13 +217,13 @@ var cpu_style= `
   	.{{classname}}-nosmall {
 		display : none;
   	}
-	.{{classname}}-cover ,
 	.{{classname}}-act-loading .{{classname}}-loading,
 	.{{classname}}-act-play .{{classname}}-play,
 	.{{classname}}-act-pause .{{classname}}-pause,
-	{{classname}}-actions  {
+	.{{classname}}-actions {
 		flex : 0 0 32px;
 		height : 32px;
+		width : 32px;
 	}
 	.{{classname}} svg {
   		width:32px;
@@ -234,6 +235,7 @@ var cpu_style= `
 
   	.{{classname}}-elapse {
   		flex : 1 0 80px;
+		max-height : 16px;
   	}
 
   	.{{classname}}-share a {
