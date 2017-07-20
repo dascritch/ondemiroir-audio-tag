@@ -213,6 +213,9 @@ var cpu_style= `
 	.{{classname}} {
 		height : 32px;
 	}
+  	.{{classname}}-nosmall {
+		display : none;
+  	}
 	.{{classname}}-cover ,
 	.{{classname}}-act-loading .{{classname}}-loading,
 	.{{classname}}-act-play .{{classname}}-play,
@@ -225,9 +228,10 @@ var cpu_style= `
   		width:32px;
 		height : 32px;
 	}
-  	.{{classname}}-nosmall {
-		display : none;
-  	}
+	.{{classname}}-title a {
+		max-height : 16px;
+	}
+
   	.{{classname}}-elapse {
   		flex : 1 0 80px;
   	}
