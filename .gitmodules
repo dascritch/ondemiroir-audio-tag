@@ -1,0 +1,3 @@
+[submodule "src/__"]
+	path = src/__
+	url = git@github.com:dascritch/__.git

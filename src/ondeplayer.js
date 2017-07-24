@@ -24,7 +24,7 @@
 
 import cpu_style from './ondeplayer.css.js';
 import cpu_template from './ondeplayer.html.js';
-
+import __ from './__/__.js';
 
 window.OndeMiroirAudio = function() {
 	'use strict';
@@ -54,6 +54,52 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
+	var traces = {
+		'play' : '<path d="M 6,6 6,26 26,16 z" />',
+		'stop' : '<path d="M 6,6 6,26 26,26 26,6 z" />',
+		'pause' : '<path d="M 6,6 12.667,6 12.667,26 6,26 z" /><path d="M 19.333,6 26,6 26,26 19.333,26 z" />',
+		'loading' : '<circle cx="6" cy="22" r="4" fill="#777777" /><circle cx="16" cy="22" r="4" fill="#777777" /><circle cx="26" cy="22" r="4" fill="#777777" />',
+		'share' : '<circle cx="12" cy="10" r="4" /><circle cx="12" cy="22" r="4" /><circle cx="23" cy="16" r="4" /><polygon points="12,8 24,14 24,18 12,12"/><polygon points="12,20 24,14 24,18 12,24"/>',
+		'facebook' : '<path d="m 21.117,16.002 -3.728,0 0,10.027 -4.297,0 0,-10.027 -2.070,0 0,-3.280 2.070,0 0,-2.130 c 0,-2.894 1.248,-4.616 4.652,-4.616 l 3.922,0 0,3.549 -3.203,0 c -0.950,-0.001 -1.068,0.495 -1.068,1.421 l -0.005,1.775 4.297,0 -0.568,3.280 0,2.34e-4 z" />',
+		'twitter' : '<path d="M 25.941,9.885 C 25.221,10.205 24.448,10.422 23.637,10.520 24.465,10.020 25.101,9.230 25.401,8.288 24.626,8.750 23.768,9.086 22.854,9.267 22.122,8.483 21.080,7.993 19.926,7.993 c -2.215,0 -4.011,1.806 -4.011,4.034 0,0.316 0.035,0.623 0.103,0.919 -3.333,-0.168 -6.288,-1.774 -8.267,-4.215 -0.345,0.596 -0.542,1.289 -0.542,2.028 0,1.399 0.708,2.634 1.784,3.358 -0.657,-0.020 -1.276,-0.202 -1.816,-0.504 -3.98e-4,0.016 -3.98e-4,0.033 -3.98e-4,0.050 0,1.954 1.382,3.585 3.217,3.955 -0.336,0.092 -0.690,0.141 -1.056,0.141 -0.258,0 -0.509,-0.025 -0.754,-0.072 0.510,1.602 1.991,2.769 3.746,2.801 -1.372,1.082 -3.102,1.726 -4.981,1.726 -0.323,0 -0.642,-0.019 -0.956,-0.056 1.775,1.144 3.883,1.812 6.148,1.812 7.377,0 11.411,-6.147 11.411,-11.478 0,-0.174 -0.004,-0.348 -0.011,-0.522 0.783,-0.569 1.463,-1.279 2.001,-2.088 z" />',
+		'email' : '<path d="m 8.030,8.998 15.920,0 c 0.284,0 0.559,0.053 0.812,0.155 l -8.773,9.025 -8.773,-9.026 c 0.253,-0.101 0.528,-0.155 0.812,-0.155 z m -1.990,12.284 0,-10.529 c 0,-0.036 0.002,-0.073 0.004,-0.109 l 5.835,6.003 -5.771,5.089 c -0.045,-0.146 -0.068,-0.298 -0.069,-0.453 z m 17.910,1.754 -15.920,0 c -0.175,0 -0.348,-0.020 -0.514,-0.060 l 5.662,-4.993 2.811,2.892 2.811,-2.892 5.662,4.993 c -0.165,0.039 -0.338,0.060 -0.514,0.060 z m 1.990,-1.754 c 0,0.155 -0.023,0.307 -0.068,0.453 l -5.771,-5.089 5.835,-6.003 c 0.002,0.036 0.004,0.073 0.004,0.109 z" />',
+		'download' : '<path d="M 6,6 26,6 16,26 z" /><rect x="6" y="22" width="20" height="4" />'
+	}
+
+	var i18n_default = {
+		'-' : {},
+		'fr' : {
+			'untitled' : '(sans titre)',
+			'cover' : 'pochette',
+			'more' : 'Partager',
+			'twitter' : 'Partager sur Twitter',
+			'facebook' : 'Partager sur Facebook',
+			'e-mail' : 'Partager par e-mail',
+			'playlist' : 'Écouter plus tard',
+			'download' : 'Télécharger',
+			'back' : 'Annuler'
+		},
+		'en' : {
+			'untitled' : '(untitled)',
+			'cover' : 'cover',
+			'more' : 'Share',
+			'twitter' : 'Share on Twitter',
+			'facebook' : 'Share on Facebook',
+			'e-mail' : 'Share by e-mail',
+			'playlist' : 'Listen later',
+			'download' : 'Download',
+			'back' : 'Back'
+		},
+	}
+
+	for (var key in traces) {
+			i18n_default['-']['svg:'+key] = '<svg viewBox="0 0 32 32">'+traces[key]+'</svg>';
+		}
+
+	if (!__.merge_source(i18n_default)) {
+	    __._add_locale('en', i18n_default);
+	}
+
 	var self = {
 		dontHideAudioTag : false,
 		selector_media : 'audio[controls]',
@@ -73,28 +119,6 @@ window.OndeMiroirAudio = function() {
 		is_in_playlist : false,
 		rebuild_eventname : 'ondemiroir.rebuild',
 		keymove : 5,
-		__ : {
-			'(no title)' : '(sans titre)',
-			'cover' : 'pochette',
-			'more' : 'Partager',
-			'twitter' : 'Partager sur Twitter',
-			'facebook' : 'Partager sur Facebook',
-			'e-mail' : 'Partager par e-mail',
-			'playlist' : 'Écouter plus tard',
-			'download' : 'Télécharger',
-			'back' : 'Annuler'
-		},
-		_traces : {
-			'play' : '<path d="M 6,6 6,26 26,16 z" />',
-			'stop' : '<path d="M 6,6 6,26 26,26 26,6 z" />',
-			'pause' : '<path d="M 6,6 12.667,6 12.667,26 6,26 z" /><path d="M 19.333,6 26,6 26,26 19.333,26 z" />',
-			'loading' : '<circle cx="6" cy="22" r="4" fill="#777777" /><circle cx="16" cy="22" r="4" fill="#777777" /><circle cx="26" cy="22" r="4" fill="#777777" />',
-			'share' : '<circle cx="12" cy="10" r="4" /><circle cx="12" cy="22" r="4" /><circle cx="23" cy="16" r="4" /><polygon points="12,8 24,14 24,18 12,12"/><polygon points="12,20 24,14 24,18 12,24"/>',
-			'facebook' : '<path d="m 21.117,16.002 -3.728,0 0,10.027 -4.297,0 0,-10.027 -2.070,0 0,-3.280 2.070,0 0,-2.130 c 0,-2.894 1.248,-4.616 4.652,-4.616 l 3.922,0 0,3.549 -3.203,0 c -0.950,-0.001 -1.068,0.495 -1.068,1.421 l -0.005,1.775 4.297,0 -0.568,3.280 0,2.34e-4 z" />',
-			'twitter' : '<path d="M 25.941,9.885 C 25.221,10.205 24.448,10.422 23.637,10.520 24.465,10.020 25.101,9.230 25.401,8.288 24.626,8.750 23.768,9.086 22.854,9.267 22.122,8.483 21.080,7.993 19.926,7.993 c -2.215,0 -4.011,1.806 -4.011,4.034 0,0.316 0.035,0.623 0.103,0.919 -3.333,-0.168 -6.288,-1.774 -8.267,-4.215 -0.345,0.596 -0.542,1.289 -0.542,2.028 0,1.399 0.708,2.634 1.784,3.358 -0.657,-0.020 -1.276,-0.202 -1.816,-0.504 -3.98e-4,0.016 -3.98e-4,0.033 -3.98e-4,0.050 0,1.954 1.382,3.585 3.217,3.955 -0.336,0.092 -0.690,0.141 -1.056,0.141 -0.258,0 -0.509,-0.025 -0.754,-0.072 0.510,1.602 1.991,2.769 3.746,2.801 -1.372,1.082 -3.102,1.726 -4.981,1.726 -0.323,0 -0.642,-0.019 -0.956,-0.056 1.775,1.144 3.883,1.812 6.148,1.812 7.377,0 11.411,-6.147 11.411,-11.478 0,-0.174 -0.004,-0.348 -0.011,-0.522 0.783,-0.569 1.463,-1.279 2.001,-2.088 z" />',
-			'email' : '<path d="m 8.030,8.998 15.920,0 c 0.284,0 0.559,0.053 0.812,0.155 l -8.773,9.025 -8.773,-9.026 c 0.253,-0.101 0.528,-0.155 0.812,-0.155 z m -1.990,12.284 0,-10.529 c 0,-0.036 0.002,-0.073 0.004,-0.109 l 5.835,6.003 -5.771,5.089 c -0.045,-0.146 -0.068,-0.298 -0.069,-0.453 z m 17.910,1.754 -15.920,0 c -0.175,0 -0.348,-0.020 -0.514,-0.060 l 5.662,-4.993 2.811,2.892 2.811,-2.892 5.662,4.993 c -0.165,0.039 -0.338,0.060 -0.514,0.060 z m 1.990,-1.754 c 0,0.155 -0.023,0.307 -0.068,0.453 l -5.771,-5.089 5.835,-6.003 c 0.002,0.036 0.004,0.073 0.004,0.109 z" />',
-			'download' : '<path d="M 6,6 26,6 16,26 z" /><rect x="6" y="22" width="20" height="4" />',
-		},
 		count_element : 0,
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
@@ -440,12 +464,6 @@ window.OndeMiroirAudio = function() {
 			audiotag.pause();
 			event.preventDefault();
 		},
-		populate_template : function(inner, entry) {
-			for (var key in entry) {
-				inner = inner.replace(RegExp('{{'+key+'}}','g'), entry[key]);
-			}
-			return inner;
-		},
 		element_attribute : function(element, key, missing) {
 			return (element.attributes[key] === undefined) ? missing : element.attributes[key].value;
 		},
@@ -455,19 +473,11 @@ window.OndeMiroirAudio = function() {
 			}
 			var out = {
 				// keys are stringed, as we need them not being modified
-				'title'     	: element.title === '' ? ('<em>'+self.__['(no title)']+'</em>') : element.title,
-				'canonical' 	: self.absolutize_url(element.dataset.canonical),
-				'poster' 		: self.absolutize_url(self.element_attribute(element,'poster', self.poster_fallback)),
-				'classname' 	: self.container.classname,
-				'playlister'	: self.playlister
-			}
-			// we now add locales
-			for (var key in self.__) {
-				out[key] = self.__[key];
-			}
-			// and svg traves
-			for (var key in self._traces) {
-				out['svg:'+key] = '<svg viewBox="0 0 32 32">'+self._traces[key]+'</svg>';
+				'{{title}}'     	: element.title === '' ? ('<em>'+__.s('untitled')+'</em>') : element.title,
+				'{{canonical}}' 	: self.absolutize_url(element.dataset.canonical),
+				'{{poster}}' 		: self.absolutize_url(self.element_attribute(element,'poster', self.poster_fallback)),
+				'{{classname}}' 	: self.container.classname,
+				'{{playlister}}'	: self.playlister
 			}
 			return out;
 		},
@@ -504,7 +514,10 @@ window.OndeMiroirAudio = function() {
 		build_controller : function(container, audiotag) {
 			container.dataset.ondeplayer = audiotag.id;
 			container.className = self.container.classname;
-			container.innerHTML = self.populate_template(cpu_template, self.get_params_for_template(audiotag));
+			container.innerHTML = __.populate(
+									__.populate(cpu_template),
+									self.get_params_for_template(audiotag)
+									);
 			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
 			self.add_related_controller(audiotag, container);
 			var cliquables = {
@@ -590,7 +603,7 @@ window.OndeMiroirAudio = function() {
 			if (self.is_in_playlist) {
 				cpu_style += ' .{{classname}}-playlist { display : none; }';
 			}
-			element.innerHTML = self.populate_template(cpu_style, self.get_params_for_template(element));
+			element.innerHTML = __.populate(cpu_style, self.get_params_for_template(element));
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
 		},
