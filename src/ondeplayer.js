@@ -77,7 +77,13 @@ window.OndeMiroirAudio = function() {
 			'e-mail' : 'Partager par e-mail',
 			'playlist' : 'Écouter plus tard',
 			'download' : 'Télécharger',
-			'back' : 'Annuler'
+			'back' : 'Annuler',
+
+			'media_err_aborted' : 'Vous avez annulé la lecture.',
+			'media_err_network' : 'Une erreur réseau a causé l\'interruption du téléchargement.',
+			'media_err_decode' : 'La lecture du sonore a été annulée suite à des problèmes de corruption ou de fonctionnalités non supportés par votre navigateur.',
+			'media_err_src_not_supported' : 'Le sonore n\'a pu être chargé, soit à cause de sourcis sur le serveur, le réseau ou parce que le format n\'est pas supporté.',
+			'media_err_unknow' : 'Erreur due à une raison inconnue'
 		},
 		'en' : {
 			'untitled' : '(untitled)',
@@ -88,7 +94,13 @@ window.OndeMiroirAudio = function() {
 			'e-mail' : 'Share by e-mail',
 			'playlist' : 'Listen later',
 			'download' : 'Download',
-			'back' : 'Back'
+			'back' : 'Back',
+
+			'media_err_aborted' : 'You aborted the video playback.',
+			'media_err_network' : 'A network error caused the audio download to fail.',
+			'media_err_decode' : 'The audio playback was aborted due to a corruption problem or because the video used features your browser did not support.',
+			'media_err_src_not_supported' : 'The video audio not be loaded, either because the server or network failed or because the format is not supported.',
+			'media_err_unknow' : 'Erreur due à une raison inconnue'
 		},
 	}
 
@@ -332,19 +344,19 @@ window.OndeMiroirAudio = function() {
 
 				   switch (audiotag.error.code) {
 						case audiotag.error.MEDIA_ERR_ABORTED:
-							alert('You aborted the video playback.');
+							alert(__.s('media_err_aborted'));
 							break;
 						case audiotag.error.MEDIA_ERR_NETWORK:
-							alert('A network error caused the audio download to fail.');
+							alert(__.s('media_err_network'));
 							break;
 						case audiotag.error.MEDIA_ERR_DECODE:
-							alert('The audio playback was aborted due to a corruption problem or because the video used features your browser did not support.');
+							alert(__.s('media_err_decode'));
 							break;
 						case audiotag.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-							alert('The video audio not be loaded, either because the server or network failed or because the format is not supported.');
+							alert(__.s('media_err_src_not_supported'));
 							break;
 						default:
-							alert('An unknown error occurred.');
+							alert(__.s('media_err_unknow'));
 							break;
 				   	}
 					return;
