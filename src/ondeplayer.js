@@ -22,12 +22,16 @@
 
  */
 
+'use strict';
+
 import cpu_style from './ondeplayer.css.js';
 import cpu_template from './ondeplayer.html.js';
+import cpu_i18n from './ondeplayer.i18n.js';
 import __ from './__/__.js';
+import cpu_svg from './ondeplayer.svg.js';
+
 
 window.OndeMiroirAudio = function() {
-	'use strict';
 
     // WATCH OUT ! You should NOT use this script in a unsecure domain name
     if (document.domain !== '') {
@@ -54,62 +58,14 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
-	var traces = {
-		'play' : '<path d="M 6,6 6,26 26,16 z" />',
-		'stop' : '<path d="M 6,6 6,26 26,26 26,6 z" />',
-		'pause' : '<path d="M 6,6 12.667,6 12.667,26 6,26 z" /><path d="M 19.333,6 26,6 26,26 19.333,26 z" />',
-		'loading' : '<circle cx="6" cy="22" r="4" fill="#777777" /><circle cx="16" cy="22" r="4" fill="#777777" /><circle cx="26" cy="22" r="4" fill="#777777" />',
-		'share' : '<circle cx="12" cy="10" r="4" /><circle cx="12" cy="22" r="4" /><circle cx="23" cy="16" r="4" /><polygon points="12,8 24,14 24,18 12,12"/><polygon points="12,20 24,14 24,18 12,24"/>',
-		'facebook' : '<path d="m 21.117,16.002 -3.728,0 0,10.027 -4.297,0 0,-10.027 -2.070,0 0,-3.280 2.070,0 0,-2.130 c 0,-2.894 1.248,-4.616 4.652,-4.616 l 3.922,0 0,3.549 -3.203,0 c -0.950,-0.001 -1.068,0.495 -1.068,1.421 l -0.005,1.775 4.297,0 -0.568,3.280 0,2.34e-4 z" />',
-		'twitter' : '<path d="M 25.941,9.885 C 25.221,10.205 24.448,10.422 23.637,10.520 24.465,10.020 25.101,9.230 25.401,8.288 24.626,8.750 23.768,9.086 22.854,9.267 22.122,8.483 21.080,7.993 19.926,7.993 c -2.215,0 -4.011,1.806 -4.011,4.034 0,0.316 0.035,0.623 0.103,0.919 -3.333,-0.168 -6.288,-1.774 -8.267,-4.215 -0.345,0.596 -0.542,1.289 -0.542,2.028 0,1.399 0.708,2.634 1.784,3.358 -0.657,-0.020 -1.276,-0.202 -1.816,-0.504 -3.98e-4,0.016 -3.98e-4,0.033 -3.98e-4,0.050 0,1.954 1.382,3.585 3.217,3.955 -0.336,0.092 -0.690,0.141 -1.056,0.141 -0.258,0 -0.509,-0.025 -0.754,-0.072 0.510,1.602 1.991,2.769 3.746,2.801 -1.372,1.082 -3.102,1.726 -4.981,1.726 -0.323,0 -0.642,-0.019 -0.956,-0.056 1.775,1.144 3.883,1.812 6.148,1.812 7.377,0 11.411,-6.147 11.411,-11.478 0,-0.174 -0.004,-0.348 -0.011,-0.522 0.783,-0.569 1.463,-1.279 2.001,-2.088 z" />',
-		'email' : '<path d="m 8.030,8.998 15.920,0 c 0.284,0 0.559,0.053 0.812,0.155 l -8.773,9.025 -8.773,-9.026 c 0.253,-0.101 0.528,-0.155 0.812,-0.155 z m -1.990,12.284 0,-10.529 c 0,-0.036 0.002,-0.073 0.004,-0.109 l 5.835,6.003 -5.771,5.089 c -0.045,-0.146 -0.068,-0.298 -0.069,-0.453 z m 17.910,1.754 -15.920,0 c -0.175,0 -0.348,-0.020 -0.514,-0.060 l 5.662,-4.993 2.811,2.892 2.811,-2.892 5.662,4.993 c -0.165,0.039 -0.338,0.060 -0.514,0.060 z m 1.990,-1.754 c 0,0.155 -0.023,0.307 -0.068,0.453 l -5.771,-5.089 5.835,-6.003 c 0.002,0.036 0.004,0.073 0.004,0.109 z" />',
-		'download' : '<path d="M 6,6 26,6 16,26 z" /><rect x="6" y="22" width="20" height="4" />'
-	}
+	function prepare_i18n() {
+		for (var key in cpu_svg) {
+				cpu_i18n['-']['svg:'+key] = '<svg viewBox="0 0 32 32">'+cpu_svg[key]+'</svg>';
+			}
 
-	var i18n_default = {
-		'-' : {},
-		'fr' : {
-			'untitled' : '(sans titre)',
-			'cover' : 'pochette',
-			'more' : 'Partager',
-			'twitter' : 'Partager sur Twitter',
-			'facebook' : 'Partager sur Facebook',
-			'e-mail' : 'Partager par e-mail',
-			'playlist' : 'Écouter plus tard',
-			'download' : 'Télécharger',
-			'back' : 'Annuler',
-
-			'media_err_aborted' : 'Vous avez annulé la lecture.',
-			'media_err_network' : 'Une erreur réseau a causé l\'interruption du téléchargement.',
-			'media_err_decode' : 'La lecture du sonore a été annulée suite à des problèmes de corruption ou de fonctionnalités non supportés par votre navigateur.',
-			'media_err_src_not_supported' : 'Le sonore n\'a pu être chargé, soit à cause de sourcis sur le serveur, le réseau ou parce que le format n\'est pas supporté.',
-			'media_err_unknow' : 'Erreur due à une raison inconnue'
-		},
-		'en' : {
-			'untitled' : '(untitled)',
-			'cover' : 'cover',
-			'more' : 'Share',
-			'twitter' : 'Share on Twitter',
-			'facebook' : 'Share on Facebook',
-			'e-mail' : 'Share by e-mail',
-			'playlist' : 'Listen later',
-			'download' : 'Download',
-			'back' : 'Back',
-
-			'media_err_aborted' : 'You aborted the video playback.',
-			'media_err_network' : 'A network error caused the audio download to fail.',
-			'media_err_decode' : 'The audio playback was aborted due to a corruption problem or because the video used features your browser did not support.',
-			'media_err_src_not_supported' : 'The video audio not be loaded, either because the server or network failed or because the format is not supported.',
-			'media_err_unknow' : 'Erreur due à une raison inconnue'
-		},
-	}
-
-	for (var key in traces) {
-			i18n_default['-']['svg:'+key] = '<svg viewBox="0 0 32 32">'+traces[key]+'</svg>';
+		if (!__.merge_source(cpu_i18n)) {
+		    __._add_locale('en', cpu_i18n);
 		}
-
-	if (!__.merge_source(i18n_default)) {
-	    __._add_locale('en', i18n_default);
 	}
 
 	var self = {
@@ -583,8 +539,8 @@ window.OndeMiroirAudio = function() {
 
 			// see https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events for list of events
 			[
-				'ready', 'load', 'loadeddata', 'canplay', 'suspend', 'abort', 'emptied',
-				'error', 'stalled',
+				'ready', 'load', 'loadeddata', 'canplay', 'abort', 
+				// 'error', 'stalled', 'suspend', 'emptied',
 				'play', 'playing', 'pause', 'suspend', 'ended',
 				'durationchange',  'loadedmetadata', 'progress', 'timeupdate', 'waiting'
 			].forEach( function(on){ audiotag.addEventListener(on, self.update); } );
@@ -619,36 +575,40 @@ window.OndeMiroirAudio = function() {
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(element);
 		},
-		querySelector_apply : function(selector, callback) {
-			// explication de cette construction : https://coderwall.com/p/jcmzxw
-			[].forEach.call(document.querySelectorAll(selector), callback);
-		},
 		launch : function() {
+			function querySelector_apply(selector, callback) {
+				// explication de cette construction : https://coderwall.com/p/jcmzxw
+				[].forEach.call(document.querySelectorAll(selector), callback);
+			}
+
+			function find_playlister_from_js_scr(element) {
+				var pos = element.src.indexOf('ondeplayer.js')
+				if (pos>-1) {
+					self.playlister = self.absolutize_url(element.src.substr(0, pos) + 'index.html');
+					if (self.playlister === document.location.href.replace(/#.*$/,'')) {
+						self.is_in_playlist = true;
+					}
+				}
+			}
+
 			if (document.getElementById(self.styleId) !== null) {
-				// injected <style> is already there
+				// injected <style> is already there, ondeplayer is maybe already loaded
 				return ;
 			}
 			if (!self.playlister) {
-				function find_playlister_from_js_scr(element) {
-					var pos = element.src.indexOf('ondeplayer.js')
-					if (pos>-1) {
-						self.playlister = self.absolutize_url(element.src.substr(0, pos) + 'index.html');
-						if (self.playlister === document.location.href.replace(/#.*$/,'')) {
-							self.is_in_playlist = true;
-						}
-					}
-				}
-				self.querySelector_apply('script[src]', find_playlister_from_js_scr);
+				querySelector_apply('script[src]', find_playlister_from_js_scr);
 			}
 			new CustomEvent(self.rebuild);
-			self.querySelector_apply(self.selector_media, self.build_for_audiotag);
-			self.querySelector_apply(self.selector_container, self.find_placeholders);
+			querySelector_apply(self.selector_media, self.build_for_audiotag);
+			querySelector_apply(self.selector_container, self.find_placeholders);
 			self.insertStyle();
-			self.querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
+			querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
 			self.hashOrder({ at_start : true });
 			window.addEventListener( 'hashchange', self.hashOrder, false);
 		}
 	};
+
+	prepare_i18n();
 
 	if (document.body !== null) {
 		self.launch();
