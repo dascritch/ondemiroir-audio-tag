@@ -15,6 +15,8 @@ java -jar /usr/share/java/closure-compiler.jar \
     --js src/ondeplayer.css.js \
     --js src/ondeplayer.html.js \
     --js src/__/__.js \
+    --js src/ondeplayer.i18n.js \
+    --js src/ondeplayer.svg.js \
     --entry_point src/ondeplayer.js \
  	   --language_in ECMASCRIPT_2017 \
     		--module_resolution BROWSER \
