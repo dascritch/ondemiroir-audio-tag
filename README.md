@@ -29,11 +29,22 @@ It will replace any `<audio control>` by an specialy crafted UI. Some attributes
 
 The script will link automatically to the playlister in the same repertory.
 
+Cloned player : You can invoke a cloned player by giving an id to the `<audio>` tag, then create an empty `<div>` with an `data-ondeplayer=` attribute, reffering to the id of the `<audio>` tag.
+
 Todo
 ----
 
 - Support for elapsed time / countdown time / total time
-- Explanation about cross domain . cf [CORS on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) and    [enable CORS](http://enable-cors.org/server_apache.html) . Or switch to [custom event based](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
+- Explanation about cross domain . cf [CORS on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) and [enable CORS](http://enable-cors.org/server_apache.html) . Or switch to [custom event based](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
+
+Build
+-----
+
+Any related source to the player is in `src/ondeplayer*.js`
+
+You will need Google's Closure compiler to produce distribuable files. Use `make.sh` to compile/backport code to ECMA 5.
+
+Ready to deploy files will be in `dist` repertory.
 
 Licence
 -------
@@ -58,6 +69,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Versions
 --------
+* August 2017 : 4 , i18n, modularization, clone
 * August 2015 : 3 , forking to ondemiroir-audio-tag
 * September 2014 : 2 , correcting to standard separator
 * September 2014 : 1 , public announcing
