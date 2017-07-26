@@ -447,7 +447,7 @@ window.OndeMiroirAudio = function() {
 			var url = (canonical === undefined ? '' : (remove_hash(canonical)) )
 						+ '#' +audiotag.id 
 						+ (audiotag.currentTime === 0 ? '' : ('&t='+self.convertSecondsInTime(audiotag.currentTime)));
-			console.log(url)
+
 			var _url = encodeURI(self.absolutize_url(url));
 			var _title = encodeURI(audiotag.title);
 			ahref('twitter', 'https://twitter.com/share?text='+_title+'&url='+_url+'&via=dascritch');
@@ -614,8 +614,8 @@ window.OndeMiroirAudio = function() {
 			self.add_id_to_audiotag(audiotag)
 
 			var container = document.createElement(self.container.tagname)
+			container.dataset.ondeplayer = audiotag.id;
 			audiotag.parentNode.insertBefore(container, audiotag);
-			container = self.build_controller(container, audiotag);
 
 			var lasttimecode = Number(localStorage.getItem(audiotag.currentSrc));
 			// TODO and no hashed time
@@ -631,7 +631,7 @@ window.OndeMiroirAudio = function() {
 				'play', 'playing', 'pause', 'suspend', 'ended',
 				'durationchange',  'loadedmetadata', 'progress', 'timeupdate', 'waiting'
 			].forEach( function(on){ audiotag.addEventListener(on, self.update); } );
-			audiotag.addEventListener('ondemiroir.rebuild', self.rebuild);
+			audiotag.addEventListener(self.rebuild_eventname, self.rebuild);
 
 			self.update({target : audiotag})
 			if (self.dontHideAudioTag === false) {
@@ -681,7 +681,7 @@ window.OndeMiroirAudio = function() {
 			if (!self.playlister) {
 				querySelector_apply('script[src]', find_playlister_from_js_scr);
 			}
-			new CustomEvent(self.rebuild);
+			//new CustomEvent(self.rebuild_eventname);
 			querySelector_apply(self.selector_media, self.build_for_audiotag);
 			querySelector_apply(self.selector_container, self.find_placeholders);
 			self.insertStyle();
