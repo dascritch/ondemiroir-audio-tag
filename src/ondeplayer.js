@@ -58,6 +58,12 @@ window.OndeMiroirAudio = function() {
 		}
 	}
 
+	function querySelector_apply(selector, callback, subtree) {
+		subtree = subtree === undefined ? document : subtree;
+		// explication de cette construction : https://coderwall.com/p/jcmzxw
+		[].forEach.call(subtree.querySelectorAll(selector), callback);
+	}
+
 	function prepare_i18n() {
 		for (var key in cpu_svg) {
 				cpu_i18n['-']['svg:'+key] = '<svg viewBox="0 0 32 32">'+cpu_svg[key]+'</svg>';
@@ -271,7 +277,7 @@ window.OndeMiroirAudio = function() {
 		},
 		update_line : function(audiotag, container, type, seconds) {
 			// type = 'elapsed', 'loading'
-			container.querySelector('.'+self.container.classname+'-'+type+'line').style.width = audiotag.duration === 0 ? 0 : (String(100 *seconds / audiotag.duration)+'%');
+			container._elements['line'].style.width = audiotag.duration === 0 ? 0 : (String(100 *seconds / audiotag.duration)+'%');
 		},
 		update_time : function(event, audiotag, container) {
 			var link_to = self.absolutize_url(audiotag.dataset.canonical)+'#';
@@ -279,7 +285,7 @@ window.OndeMiroirAudio = function() {
 			var timecode = self.convertSecondsInTime(audiotag.currentTime)
 			link_to += 't='+timecode;
 
-			var elapse_element = container.querySelector('.'+self.container.classname+'-elapse');
+			var elapse_element = container._elements['elapse'];
 			elapse_element.href = link_to;
 
 			var total_duration = '…';
@@ -341,8 +347,8 @@ window.OndeMiroirAudio = function() {
 				// do not try to show if no metadata
 				return;
 			}
-			var phylactere = container.querySelector('.'+self.container.classname+'-popup');
-			var elapse_element = container.querySelector('.'+self.container.classname+'-line');
+			var phylactere = container._elements['popup'];
+			var elapse_element = container._elements['line'];
 			var target_rect = elapse_element.getClientRects()[0];
 			var mid_height = (target_rect.top + target_rect.bottom )/2;
 			var x = target_rect.left + elapse_element.clientWidth * seeked_time / audiotag.duration;
@@ -353,7 +359,7 @@ window.OndeMiroirAudio = function() {
 			phylactere.innerHTML = self.convertSecondsInTime(seeked_time);
 		},
 		hide_throbber : function(container) {
-			var phylactere = container.querySelector('.'+self.container.classname+'-popup');
+			var phylactere = container._elements['popup'];
 			phylactere.style.opacity = 0;
 		},
 		do_hover : function(event) {
@@ -435,14 +441,14 @@ window.OndeMiroirAudio = function() {
 		},
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
-			container.querySelector('.'+self.container.classname+'-pagemain').style.display  = 'none';
-			container.querySelector('.'+self.container.classname+'-pageshare').style.display  = 'flex';
-			self.update_links(document.getElementById(container.dataset.ondeplayer), container.querySelector('.'+self.container.classname+'-share'))
+			container._elements['pagemain'].style.display  = 'none';
+			container._elements['pageshare'].style.display  = 'flex';
+			self.update_links(document.getElementById(container.dataset.ondeplayer), container._elements['share'])
 		},
 		show_main : function(event) {
 			var container = self.find_container(event.target);
-			container.querySelector('.'+self.container.classname+'-pagemain').style.display = 'flex';
-			container.querySelector('.'+self.container.classname+'-pageshare').style.display = 'none';
+			container._elements['pagemain'].style.display = 'flex';
+			container._elements['pageshare'].style.display = 'none';
 		},
 		push_in_playlist : function(params) {
 			// loosy, but sunday morning, we'll clean it later
@@ -515,12 +521,25 @@ window.OndeMiroirAudio = function() {
 
 		build_controller : function(container, audiotag) {
 			container.dataset.ondeplayer = audiotag.id;
-			container.className = self.container.classname;
+			container.classList.add(self.container.classname);
 			container.innerHTML = __.populate(
 									__.populate(cpu_template),
 									self.get_params_for_template(audiotag)
 									);
 			container.tabIndex = 0 // see http://snook.ca/archives/accessibility_and_usability/elements_focusable_with_tabindex and http://www.456bereastreet.com/archive/201302/making_elements_keyboard_focusable_and_clickable/
+
+			// the following mess is to simplify sub element declaration and selection
+			container._elements = {};
+			querySelector_apply('*', function(element){
+				element.classList.forEach(function(this_class) {
+					if (this_class.indexOf(self.container.classname+'-')> -1) {
+						var key  = this_class.substr(self.container.classname.length +1);
+						container._elements[key] = element;
+					}
+				});
+			}, container);
+			console.log(container._elements)
+
 			self.add_related_controller(audiotag, container);
 			var cliquables = {
 				'pause'		: self.do_play,
@@ -532,12 +551,12 @@ window.OndeMiroirAudio = function() {
 				'playlist'	: self.add_playlist
 			};
 			for (var that in cliquables) {
-				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
+				container._elements[that].addEventListener('click', cliquables[that]);
 			}
 			// key management
 			container.addEventListener('keydown', self.do_onkey);
 			// throbber management
-			var timeline_element = container.querySelector('.'+self.container.classname+'-time');
+			var timeline_element = container._elements['time'];
 			timeline_element.addEventListener('mouseover', self.do_hover);
 			timeline_element.addEventListener('mousemove', self.do_hover);
 			timeline_element.addEventListener('mouseout', self.do_out);
@@ -617,10 +636,6 @@ window.OndeMiroirAudio = function() {
 			head.appendChild(element);
 		},
 		launch : function() {
-			function querySelector_apply(selector, callback) {
-				// explication de cette construction : https://coderwall.com/p/jcmzxw
-				[].forEach.call(document.querySelectorAll(selector), callback);
-			}
 
 			function find_playlister_from_js_scr(element) {
 				var pos = element.src.indexOf('ondeplayer.js')
