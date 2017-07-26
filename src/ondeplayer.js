@@ -277,7 +277,7 @@ window.OndeMiroirAudio = function() {
 		},
 		update_line : function(audiotag, container, type, seconds) {
 			// type = 'elapsed', 'loading'
-			container._elements['line'].style.width = audiotag.duration === 0 ? 0 : (String(100 *seconds / audiotag.duration)+'%');
+			container._elements['elapsedline'].style.width = audiotag.duration === 0 ? 0 : (String(100 *seconds / audiotag.duration)+'%');
 		},
 		update_time : function(event, audiotag, container) {
 			var link_to = self.absolutize_url(audiotag.dataset.canonical)+'#';
