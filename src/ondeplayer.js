@@ -335,6 +335,40 @@ window.OndeMiroirAudio = function() {
 			}
 			return (child.className === self.container.classname) ? child : self.find_container(child.parentNode);
 		},
+		show_thobber_at : function(container, seeked_time) {
+			var audiotag = document.getElementById(container.dataset.ondeplayer);
+			if (audiotag.duration < 1) {
+				// do not try to show if no metadata
+				return;
+			}
+			var phylactere = container.querySelector('.'+self.container.classname+'-popup');
+			var elapse_element = container.querySelector('.'+self.container.classname+'-line');
+			var target_rect = elapse_element.getClientRects()[0];
+			var mid_height = (target_rect.top + target_rect.bottom )/2;
+			var x = target_rect.left + elapse_element.clientWidth * seeked_time / audiotag.duration;
+			/* 30 pixels out, the Part Of Gad in the CSS */
+			phylactere.style.opacity = 1;
+			phylactere.style.left = (x - ( /* :before shifted */ 20 + /* margin */ 4 * 2) ) +'px';
+			phylactere.style.top = ( mid_height + 16)+'px';
+			phylactere.innerHTML = self.convertSecondsInTime(seeked_time);
+		},
+		hide_throbber : function(container) {
+			var phylactere = container.querySelector('.'+self.container.classname+'-popup');
+			phylactere.style.opacity = 0;
+		},
+		do_hover : function(event) {
+			var target_rect = event.target.getClientRects()[0];
+			var relLeft = target_rect.left;
+			var ratio = (event.clientX - relLeft) / event.target.clientWidth;
+			var container = self.find_container(event.originalTarget);
+			var audiotag = document.getElementById(container.dataset.ondeplayer);
+			var seeked_time = ratio * audiotag.duration;
+			self.show_thobber_at(container, seeked_time);
+		},
+		do_out : function(event) {
+			self.hide_throbber(self.find_container(event.originalTarget));
+		},
+
 		do_throbble : function(event) {
 			var container = self.find_container(event.target);
 			var audiotag = document.getElementById(container.dataset.ondeplayer);
@@ -500,7 +534,14 @@ window.OndeMiroirAudio = function() {
 			for (var that in cliquables) {
 				container.querySelector('.'+self.container.classname+'-'+that).addEventListener('click', cliquables[that]);
 			}
+			// key management
 			container.addEventListener('keydown', self.do_onkey);
+			// throbber management
+			var timeline_element = container.querySelector('.'+self.container.classname+'-time');
+			timeline_element.addEventListener('mouseover', self.do_hover);
+			timeline_element.addEventListener('mousemove', self.do_hover);
+			timeline_element.addEventListener('mouseout', self.do_out);
+			// throw simplified event
 			self.show_main({target : container.querySelector('a')});
 			self.update({target : audiotag});
 			return container;

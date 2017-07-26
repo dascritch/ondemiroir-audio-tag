@@ -248,5 +248,33 @@ var cpu_style= `
 	}
 }
 
+.{{classname}}-popup {
+	position: absolute;
+	height: 12px;
+	min-width : 40px;
+	font-size : 11px;
+	text-align : center;
+	padding : 4px;
+	border-radius: 4px;
+	background : #ccc;
+	color : #555;
+	opacity : 0;
+	transition : opacity 1s;
+	pointer-events : none;
+} 
+
+.{{classname}}-popup:before {
+	content:"";
+	position: absolute;
+	left: 20px;
+	top: -16px;
+	height : 0;
+	width: 0;
+	border-bottom: 16px solid #ccc;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	pointer-events : none;
+} 
+
 `
 export default cpu_style;

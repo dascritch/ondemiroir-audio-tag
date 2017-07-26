@@ -2,8 +2,8 @@
 
 rm dist/*
 
-# compilation_level='WHITESPACE_ONLY'
 compilation_level='SIMPLE_OPTIMIZATIONS'
+# compilation_level='WHITESPACE_ONLY'
 
 # Build player lib
 

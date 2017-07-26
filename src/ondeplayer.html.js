@@ -31,5 +31,6 @@ var cpu_template= `
 		<a class="{{classname}}-back" title="{{back}}">{{back}}</a>
 	</div>
 </div>
+<time class="{{classname}}-popup">--:--</time>
 `
 export default cpu_template;
