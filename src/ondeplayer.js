@@ -357,6 +357,15 @@ window.OndeMiroirAudio = function() {
 			var phylactere = container._elements['popup'];
 			phylactere.style.opacity = 0;
 		},
+		hide_throbber_later : function(container) {
+			var phylactere = container._elements['popup'];
+			if (phylactere._hider) {
+				window.clearTimeout(phylactere._hider);
+			}
+			phylactere._hider = window.setTimeout(self.hide_throbber, 1000, container);
+
+		},
+
 		do_hover : function(event) {
 			var target_rect = event.target.getClientRects()[0];
 			var relLeft = target_rect.left;
@@ -388,6 +397,13 @@ window.OndeMiroirAudio = function() {
 			document.getElementById(container.dataset.ondeplayer).play();
 		},
 		do_onkey : function(event) {
+			function seek_relative(seconds) {
+				var seek_for = audiotag.currentTime + seconds;
+				self.seekElementAt(audiotag, seek_for);
+				self.show_thobber_at(container, seek_for);
+				self.hide_throbber_later(container);
+			}
+
 			var container = self.find_container(event.target);
 			var audiotag = document.getElementById(container.dataset.ondeplayer);
 			switch(event.keyCode) {
@@ -406,10 +422,10 @@ window.OndeMiroirAudio = function() {
 					self.seekElementAt(audiotag, 0);
 					break;
 				case 37 : // ←
-					self.seekElementAt(audiotag, audiotag.currentTime - self.keymove);
+					seek_relative(- self.keymove);
 					break;
 				case 39 : // →
-					self.seekElementAt(audiotag, audiotag.currentTime + self.keymove);
+					seek_relative(+ self.keymove);
 					break;
 			}
 		},
