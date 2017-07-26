@@ -169,6 +169,7 @@ var cpu_style= `
 	display : block;
 	border-radius : 4px;
 	position : relative;
+	cursor:none;
 }
 .{{classname}}-loadingline,
 .{{classname}}-elapsedline {
