@@ -9,6 +9,10 @@ var cpu_style= `
 	padding : 0;
 	margin : 0;
 	transition : none;
+	moz-user-select: none;
+	ms-user-select: none;
+	webkit-user-select: none;
+	user-select: none;
 }
 .{{classname}} {
 	display : flex;
@@ -142,10 +146,10 @@ var cpu_style= `
 }
 .{{classname}}-titleline {
 	display : flex;
-	position : relative;
 }
 .{{classname}}-about, .{{classname}}-title {
 	flex : 1 1 100%;
+	position : relative;
 }
 .{{classname}}-title a {
     display : block;
@@ -250,7 +254,8 @@ var cpu_style= `
 
 .{{classname}}-popup {
 	position: absolute;
-	height: 12px;
+	transform: translate(-26px, 20px);
+	z-index : 127;
 	min-width : 40px;
 	font-size : 11px;
 	text-align : center;
@@ -261,6 +266,11 @@ var cpu_style= `
 	opacity : 0;
 	transition : opacity 1s;
 	pointer-events : none;
+	/* absolute pos, need to repeat it →  https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
+	moz-user-select: none;
+	ms-user-select: none;
+	webkit-user-select: none;
+	user-select: none;
 } 
 
 .{{classname}}-popup:before {

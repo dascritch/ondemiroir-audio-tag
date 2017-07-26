@@ -347,13 +347,10 @@ window.OndeMiroirAudio = function() {
 			}
 			var phylactere = container._elements['popup'];
 			var elapse_element = container._elements['line'];
-			var target_rect = elapse_element.getClientRects()[0];
-			var mid_height = (target_rect.top + target_rect.bottom )/2;
-			var x = target_rect.left + elapse_element.clientWidth * seeked_time / audiotag.duration;
+
 			/* 30 pixels out, the Part Of Gad in the CSS */
 			phylactere.style.opacity = 1;
-			phylactere.style.left = (x - ( /* :before shifted */ 20 + /* margin */ 4 * 2) ) +'px';
-			phylactere.style.top = ( mid_height + 16)+'px';
+			phylactere.style.left = (100 * seeked_time / audiotag.duration ) +'%';
 			phylactere.innerHTML = self.convertSecondsInTime(seeked_time);
 		},
 		hide_throbber : function(container) {
@@ -554,9 +551,20 @@ window.OndeMiroirAudio = function() {
 			container.addEventListener('keydown', self.do_onkey);
 			// throbber management
 			var timeline_element = container._elements['time'];
-			timeline_element.addEventListener('mouseover', self.do_hover);
-			timeline_element.addEventListener('mousemove', self.do_hover);
-			timeline_element.addEventListener('mouseout', self.do_out);
+			var do_events = {
+				'mouseover' : true,
+				'mousemove' : true,
+				'mouseout'  : false,
+
+				'touchstart'  : true,
+				// 'touchmove'   : true,
+				'touchend'    : false,
+				'touchcancel' : false,
+			}
+			for( var event_name in do_events) {
+				timeline_element.addEventListener(event_name, do_events[event_name] ? self.do_hover : self.do_out);				
+			}
+
 			// throw simplified event
 			self.show_main({target : container.querySelector('a')});
 			self.update({target : audiotag});

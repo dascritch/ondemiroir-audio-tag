@@ -16,8 +16,10 @@ var cpu_template= `
 			<div class="{{classname}}-time">
 				<div class="{{classname}}-loadingline"></div>
 				<div class="{{classname}}-elapsedline"></div>
+				<time class="{{classname}}-popup">--:--</time>
 			</div>
 		</div>
+
 	</div>
 	<a class="{{classname}}-actions">{{svg:share}}</a>
 </div>
@@ -31,6 +33,5 @@ var cpu_template= `
 		<a class="{{classname}}-back" title="{{back}}">{{back}}</a>
 	</div>
 </div>
-<time class="{{classname}}-popup">--:--</time>
 `
 export default cpu_template;
