@@ -300,7 +300,6 @@ window.OndeMiroirAudio = function() {
 				var container = document.getElementById(container_id);
 				var event = this;
 				var audiotag = event.target;
-				// console.log(event, audiotag.error, audiotag.readyState);
 				if (audiotag.error === 'error') {
 					self.update_act_container('error', container);
 
@@ -328,7 +327,6 @@ window.OndeMiroirAudio = function() {
 		},
 		update : function(event) {
 			var audiotag = event.target;
-			//console.log(event.type, event);
 			audiotag._ondemiroir.forEach(self.update_id_container_infos, event);
 			if (!audiotag.paused) {
 				localStorage.setItem(audiotag.currentSrc, String(audiotag.currentTime));
@@ -538,7 +536,6 @@ window.OndeMiroirAudio = function() {
 					}
 				});
 			}, container);
-			console.log(container._elements)
 
 			self.add_related_controller(audiotag, container);
 			var cliquables = {
