@@ -434,27 +434,33 @@ window.OndeMiroirAudio = function() {
 			test_element.href = url;
 			return test_element.href;
 		},
-		update_links : function(player, zone) {
+		update_links : function(audiotag, container) {
 			function ahref(category, href) {
-				zone.querySelector('.'+self.container.classname+'-'+category).href = href;
+				container._elements[category].href = href;
 			}
-			var canonical = player.dataset.canonical
-			var url = (canonical === undefined ? '' : canonical )
-						+'#'+ player.id 
-						+ (player.currentTime === 0 ? '' : (self.separator+self.convertSecondsInTime(player.currentTime)));
+			function remove_hash(canonical) {
+				var hash_at = canonical.indexOf('#');
+				return hash_at === -1 ? canonical : canonical.substr(0,hash_at);
+			}
+
+			var canonical = audiotag.dataset.canonical
+			var url = (canonical === undefined ? '' : (remove_hash(canonical)) )
+						+ '#' +audiotag.id 
+						+ (audiotag.currentTime === 0 ? '' : ('&t='+self.convertSecondsInTime(audiotag.currentTime)));
+			console.log(url)
 			var _url = encodeURI(self.absolutize_url(url));
-			var _title = encodeURI(player.title);
+			var _title = encodeURI(audiotag.title);
 			ahref('twitter', 'https://twitter.com/share?text='+_title+'&url='+_url+'&via=dascritch');
 			ahref('facebook', 'https://www.facebook.com/sharer.php?t='+_title+'&u='+_url);
 			ahref('email', 'mailto:?subject='+_title+'&body='+_url);
-			ahref('link', player.currentSrc);
+			ahref('link', audiotag.currentSrc);
 			ahref('playlist', self.playlister);
 		},
 		show_actions : function(event) {
 			var container = self.find_container(event.target);
 			container._elements['pagemain'].style.display  = 'none';
 			container._elements['pageshare'].style.display  = 'flex';
-			self.update_links(document.getElementById(container.dataset.ondeplayer), container._elements['share'])
+			self.update_links(document.getElementById(container.dataset.ondeplayer), container)
 		},
 		show_main : function(event) {
 			var container = self.find_container(event.target);
