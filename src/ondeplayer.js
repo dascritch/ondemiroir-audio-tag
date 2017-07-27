@@ -209,10 +209,10 @@ window.OndeMiroirAudio = function() {
 			self.update({target : audiotag});
 		},
 		hashOrder : function(hashcode,callback_fx){
-			var at_start = false;
+			var at_start = true;
 			if (typeof hashcode !== 'string') {
 				at_start = 'at_start' in hashcode;
-				hashcode = document.location.hash.substr(1);
+				hashcode = location.hash.substr(1);
 			}
 			var hash = '';
 			var timecode = '';
