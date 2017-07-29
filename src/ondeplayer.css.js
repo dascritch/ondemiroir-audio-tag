@@ -270,9 +270,9 @@ var cpu_style= `
 
 .{{classname}}-popup {
 	position: absolute;
-	transform: translate(-26px, 20px);
+	transform: translate(-25px, 20px);
 	z-index : 127;
-	min-width : 40px;
+	min-width : 50px;
 	font-size : 11px;
 	text-align : center;
 	padding : 4px;
