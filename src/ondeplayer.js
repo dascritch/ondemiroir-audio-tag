@@ -75,18 +75,18 @@ window.OndeMiroirAudio = function() {
 	}
 
 	var self = {
-		dontHideAudioTag : false,
 		selector_media : 'audio[controls]',
 		selector_fallback : 'audio[data-ondeplayer]',
 		selector_container : 'div[data-ondeplayer]',
 		dynamicallyAllocatedIdPrefix : 'OndeMiroirAudio-tag-',
-		menuId : 'OndeMiroirAudio-menu',
-		styleId : 'OndeMiroirAudio-style',
 		container :  {
 			tagname :'div',
 			idPrefix : 'OndeMiroirAudio-Player-',
 			classname : 'OndeMiroirAudio-Player'
 		},
+		dontHideAudioTag : false,
+		menuId : 'OndeMiroirAudio-menu',
+		styleId : 'OndeMiroirAudio-style',
 		poster_fallback : '//dascritch.net/themes/DSN13/img/entete1.svg',
 		playlister : false,
 		playlist_window : false,
@@ -94,6 +94,7 @@ window.OndeMiroirAudio = function() {
 		rebuild_eventname : 'ondemiroir.rebuild',
 		keymove : 5,
 		count_element : 0,
+		current_audiotag_playing : null,
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
 			if (/^\d+$/.test(givenTime)) {
@@ -233,6 +234,8 @@ window.OndeMiroirAudio = function() {
 						case 't':
 							// is a time index
 							timecode = p_value;
+							// we make autoplay at requested timecode, simplier of the user
+							autoplay = true;
 							break;
 						case 'autoplay':
 							if (p_value='1') {
@@ -251,10 +254,11 @@ window.OndeMiroirAudio = function() {
 
 			if ((timecode === '') || ((at_start) && (!autoplay))) {
 				onDebug(callback_fx);
-				return ;
+				return false;
 			}
 			self.jumpIdAt(hash,timecode,callback_fx);
 			document.location.hash = '#'+hash;
+			return true;
 		},
 		update_act_container : function (act, container) {
 			container.classList.remove(
@@ -391,10 +395,15 @@ window.OndeMiroirAudio = function() {
 			var audiotag = document.getElementById(container.dataset.ondeplayer);
 			audiotag.pause();
 			localStorage.removeItem(audiotag.currentSrc);
+			self.current_audiotag_playing = null;
 		},
-		do_play : function(event) {
-			var container = self.find_container(event.target);
-			document.getElementById(container.dataset.ondeplayer).play();
+		do_play : function(event, audiotag) {
+			if (audiotag === undefined) {
+				var container = self.find_container(event.target);
+				var audiotag = document.getElementById(container.dataset.ondeplayer);
+			}
+			audiotag.play();
+			self.current_audiotag_playing = audiotag.id;
 		},
 		do_onkey : function(event) {
 			function seek_relative(seconds) {
@@ -563,7 +572,7 @@ window.OndeMiroirAudio = function() {
 				'time'		: self.do_throbble,
 				'actions'	: self.show_actions,
 				'back' 		: self.show_main,
-				'cover'		: self.show_main,
+				'poster'	: self.show_main,
 				'playlist'	: self.add_playlist
 			};
 			for (var that in cliquables) {
@@ -602,6 +611,18 @@ window.OndeMiroirAudio = function() {
 			self.add_related_controller(audiotag, container);
 			self.build_controller(container, audiotag);
 		},
+		recall_stored_play : function(event) {
+			if (self.current_audiotag_playing !== null) {
+				return;
+			} 
+			var audiotag = event.target;
+			var lasttimecode = Number(localStorage.getItem(audiotag.currentSrc));
+			// TODO and no hashed time
+			if (lasttimecode > 0) {
+				self.seekElementAt(audiotag, lasttimecode);
+				self.do_play(undefined, audiotag);
+			}
+		},
 		build_for_audiotag : function(audiotag) {
 			if (audiotag._ondemiroir === undefined) {
 				audiotag._ondemiroir = []
@@ -617,13 +638,6 @@ window.OndeMiroirAudio = function() {
 			container.dataset.ondeplayer = audiotag.id;
 			audiotag.parentNode.insertBefore(container, audiotag);
 
-			var lasttimecode = Number(localStorage.getItem(audiotag.currentSrc));
-			// TODO and no hashed time
-			if (lasttimecode > 0) {
-				self.seekElementAt(audiotag, lasttimecode);
-				audiotag.play();
-			}
-
 			// see https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events for list of events
 			[
 				'ready', 'load', 'loadeddata', 'canplay', 'abort', 
@@ -633,14 +647,18 @@ window.OndeMiroirAudio = function() {
 			].forEach( function(on){ audiotag.addEventListener(on, self.update); } );
 			audiotag.addEventListener(self.rebuild_eventname, self.rebuild);
 
+			audiotag.addEventListener('loadedmetadata', self.recall_stored_play);
+			audiotag.addEventListener('ready', self.recall_stored_play);
+
 			self.update({target : audiotag})
+			self.recall_stored_play({target : audiotag})
+
 			if (self.dontHideAudioTag === false) {
 				audiotag.hidden = true;
 				// PHRACK SAFARI
 				audiotag.removeAttribute('controls');
 				audiotag.setAttribute('data-ondeplayer','');
-			}
-			
+			}	
 		},
 		prevent_link_on_same_page : function(event) {
 			if (self.absolutize_url( document.location.href ) !== self.absolutize_url(event.target.href)) {
@@ -686,7 +704,9 @@ window.OndeMiroirAudio = function() {
 			querySelector_apply(self.selector_container, self.find_placeholders);
 			self.insertStyle();
 			querySelector_apply('.'+self.container.classname+'-canonical', self.element_prevent_link_on_same_page);
-			self.hashOrder({ at_start : true });
+
+			self.hashOrder({ at_start : true })
+
 			window.addEventListener( 'hashchange', self.hashOrder, false);
 		}
 	};
