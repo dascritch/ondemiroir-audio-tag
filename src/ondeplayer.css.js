@@ -1,9 +1,12 @@
 
 var cpu_style= `
 
-.{{classname}}, .{{classname}} *, .{{classname}}-cover img {
+.{{classname}} {
 	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-	font-size : 15px;
+	font-size : 15px;	
+}
+
+.{{classname}}, .{{classname}} * {
 	line-height : 1.2;
 	border : none;
 	padding : 0;
@@ -219,9 +222,12 @@ var cpu_style= `
 .{{classname}}-link {background : #77F}
 
 @media screen and (max-width: 640px) {
+
 	.{{classname}} {
 		height : 32px;
+		font-size : 12px;
 	}
+
   	.{{classname}}-nosmall {
 		display : none;
   	}
