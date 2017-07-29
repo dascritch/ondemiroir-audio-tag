@@ -262,6 +262,12 @@ var cpu_style= `
 	}
 }
 
+@media print {
+	.{{classname}} {
+		display : none;
+	}
+}
+
 .{{classname}}-popup {
 	position: absolute;
 	transform: translate(-26px, 20px);
