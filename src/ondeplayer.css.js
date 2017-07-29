@@ -132,9 +132,12 @@ var cpu_style= `
     }
 }
 
-.{{classname}}-cover img {
+.{{classname}}-cover {
 	width : 64px;
-    max-width: 100%;
+ }
+
+.{{classname}}-poster {
+	width : 64px;
 	height : 64px;
 	object-fit: contain;
 }

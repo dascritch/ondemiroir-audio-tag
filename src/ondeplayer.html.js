@@ -1,8 +1,6 @@
 
 var cpu_template= `
-<div class="{{classname}}-cover {{classname}}-nosmall">
-	<img src="{{poster}}"  class="{{classname}}-poster" alt="{{cover}}" />
-</div>
+<img class="{{classname}}-poster {{classname}}-nosmall" src="{{poster}}" alt="{{cover}}" />
 <div class="{{classname}}-pagemain">
 	<div class="{{classname}}-loading">{{svg:loading}}</div>
 	<a class="{{classname}}-play">{{svg:play}}</a>
