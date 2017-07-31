@@ -43,6 +43,12 @@ window.OndeMiroirAudio = function() {
 		// don't even think about it : probably MSIE < 8
 		return undefined;
 	}
+	if (!window.matchMedia("screen").matches) {
+		// I'm not in a screen context, as a braille surface
+		// Sorry, but your browser's native controls are surely more accessible
+		return undefined;
+	}
+
 
 	var _units = {
 		'd' : 86400,
@@ -94,6 +100,7 @@ window.OndeMiroirAudio = function() {
 		rebuild_eventname : 'ondemiroir.rebuild',
 		keymove : 5,
 		count_element : 0,
+		only_play_one_audiotag : true,
 		current_audiotag_playing : null,
 		convertTimeInSeconds : function(givenTime) {
 			var seconds = 0;
@@ -390,20 +397,25 @@ window.OndeMiroirAudio = function() {
 			var ratio = (event.clientX - relLeft) / event.target.clientWidth;
 			self.seekElementAt(audiotag, ratio * audiotag.duration)
 		},
-		do_pause : function(event) {
-			var container = self.find_container(event.target);
-			var audiotag = document.getElementById(container.dataset.ondeplayer);
+		do_pause : function(event, audiotag) {
+			if (audiotag === undefined) {
+				var container = self.find_container(event.target);
+				var audiotag = document.getElementById(container.dataset.ondeplayer);
+			}
 			audiotag.pause();
-			localStorage.removeItem(audiotag.currentSrc);
 			self.current_audiotag_playing = null;
+			localStorage.removeItem(audiotag.currentSrc);
 		},
 		do_play : function(event, audiotag) {
 			if (audiotag === undefined) {
 				var container = self.find_container(event.target);
 				var audiotag = document.getElementById(container.dataset.ondeplayer);
 			}
-			audiotag.play();
+			if ( (self.only_play_one_audiotag) && (self.current_audiotag_playing) ) {
+				self.do_pause(undefined, document.getElementById(self.current_audiotag_playing))
+			}
 			self.current_audiotag_playing = audiotag.id;
+			audiotag.play();
 		},
 		do_onkey : function(event) {
 			function seek_relative(seconds) {
@@ -710,11 +722,6 @@ window.OndeMiroirAudio = function() {
 			window.addEventListener( 'hashchange', self.hashOrder, false);
 		}
 	};
-
-	if (!window.matchMedia("screen").matches) {
-		// I a not screen context, as a braille surface
-		return false;
-	}
 
 	prepare_i18n();
 	if (document.body !== null) {
