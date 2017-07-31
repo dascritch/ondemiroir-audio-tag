@@ -660,7 +660,9 @@ window.OndeMiroirAudio = function() {
 			audiotag.addEventListener(self.rebuild_eventname, self.rebuild);
 
 			audiotag.addEventListener('loadedmetadata', self.recall_stored_play);
+			// those ↓ for PHRACKING SAFARI
 			audiotag.addEventListener('ready', self.recall_stored_play);
+			audiotag.addEventListener('canplay', self.recall_stored_play);
 
 			self.update({target : audiotag})
 			self.recall_stored_play({target : audiotag})
