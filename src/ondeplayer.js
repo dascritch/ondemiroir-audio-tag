@@ -711,8 +711,12 @@ window.OndeMiroirAudio = function() {
 		}
 	};
 
-	prepare_i18n();
+	if (!window.matchMedia("screen").matches) {
+		// I a not screen context, as a braille surface
+		return false;
+	}
 
+	prepare_i18n();
 	if (document.body !== null) {
 		self.launch();
 	} else {
