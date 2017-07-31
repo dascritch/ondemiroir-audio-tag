@@ -22,8 +22,9 @@ java -jar /usr/share/java/closure-compiler.jar \
     		--module_resolution BROWSER \
     		--js_module_root src --jscomp_off internetExplorerChecks \
     --js_output_file dist/ondeplayer.js \
-    	--language_out ECMASCRIPT5_STRICT
-    
+    	--language_out ECMASCRIPT5_STRICT \
+    --create_source_map dist/ondeplayer.js.map 
+
 
 # Copy playlist service
 
