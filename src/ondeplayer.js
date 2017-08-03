@@ -639,11 +639,6 @@ window.OndeMiroirAudio = function() {
 			if (audiotag._ondemiroir === undefined) {
 				audiotag._ondemiroir = []
 			}
-			// ask ASAP metadata about media
-			// we have to set in HTML code preload="none" due to a bug in Chrome very lagging in HTTP2
-			// https://stackoverflow.com/questions/14479413/chrome-ignoring-audio-preload-metadata
-			//audiotag.preload = 'metadata';
-			audiotag.load();
 			self.add_id_to_audiotag(audiotag)
 
 			var container = document.createElement(self.container.tagname)
@@ -663,6 +658,14 @@ window.OndeMiroirAudio = function() {
 			// those ↓ for PHRACKING SAFARI
 			audiotag.addEventListener('ready', self.recall_stored_play);
 			audiotag.addEventListener('canplay', self.recall_stored_play);
+
+			// ask ASAP metadata about media
+			// we have to set in HTML code preload="none" due to a very laggy behaviour in HTTP2
+			// https://stackoverflow.com/questions/14479413/chrome-ignoring-audio-preload-metadata
+			if (audiotag.preload === '') {
+				audiotag.preload = 'metadata';
+			}
+			audiotag.load();
 
 			self.update({target : audiotag})
 			self.recall_stored_play({target : audiotag})
