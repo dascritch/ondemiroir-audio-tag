@@ -2,21 +2,22 @@
 var cpu_style= `
 
 .{{classname}} {
-	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-	font-size : 15px;	
+	font-family : Lato, "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif !important;
+	font-size : 15px !important;
 }
 
 .{{classname}}, .{{classname}} * {
-	line-height : 1.2;
-	border : none;
-	padding : 0;
-	margin : 0;
-	transition : none;
+	line-height : 1.2 !important;
+	border : none !important;
+	padding : 0 !important;
+	margin : 0 !important;
+	transition : none !important;
 	moz-user-select: none;
 	ms-user-select: none;
 	webkit-user-select: none;
 	user-select: none;
 }
+
 .{{classname}} {
 	display : flex;
 	background : #555;
