@@ -166,7 +166,7 @@ var cpu_style= `
 
 }
 .{{classname}}-elapse {
-	flex : 1 0 120px;
+	flex : 1 0 180px;
 	text-align : right;
 }
 .{{classname}}-time {
@@ -249,7 +249,7 @@ var cpu_style= `
 	}
 
   	.{{classname}}-elapse {
-  		flex : 1 0 80px;
+  		flex : 1 0 90px;
 		max-height : 16px;
   	}
 
